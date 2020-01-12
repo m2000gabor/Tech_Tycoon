@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Tech Tycoon</string>
+    <string name="menuitem_add_a_company">Add a company</string>
+    <string name="title_activity_all_devices">AllDevices</string>
+    <string name="title_activity_add_new_device">AddNewDevice</string>
+    <string name="title_activity_details_of_one_device">DetailsOfOneDevice</string>
+    <string name="title_activity_details_of_one_company">DetailsOfOnecompany</string>
+</resources>

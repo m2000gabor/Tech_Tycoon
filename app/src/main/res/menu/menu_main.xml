@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.techtycoon.MainActivity">
+    <item
+        android:id="@+id/menuitem_add_a_company"
+        android:orderInCategory="100"
+        android:title="@string/menuitem_add_a_company"
+        app:showAsAction="never" />
+</menu>

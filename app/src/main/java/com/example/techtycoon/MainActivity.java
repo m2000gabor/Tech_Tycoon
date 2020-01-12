@@ -1,0 +1,135 @@
+package com.example.techtycoon;
+
+import android.content.Intent;
+import android.os.Bundle;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProviders;
+
+import android.view.View;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Toast;
+
+public class MainActivity extends AppCompatActivity {
+    public static final String NAME_FIELD ="name" ;
+    public static final String MAIN_MONETARIAL_INFO ="profit" ;
+    public static final String TASK_OF_RECYCLER_VIEW ="dataSource" ;
+    public static final String DEVICE_COMPANY_ID ="companyId" ;
+
+
+    public static final int DISPLAY_DEVICES_REQUEST_CODE =1;
+    public static final int DISPLAY_COMPANIES_REQUEST_CODE =2;
+    public static final int NEW_DEVICE_ACTIVITY_REQUEST_CODE = 1;
+    public static final int NEW_COMPANY_ACTIVITY_REQUEST_CODE = 2;
+
+    DeviceViewModel deviceViewModel;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startAddNewDeviceActivity();
+            }
+        });
+
+        //create db
+        AppDatabase db = AppDatabase.getDatabase(getApplicationContext());
+
+        // Get a new or existing ViewModel from the ViewModelProvider.
+        deviceViewModel = ViewModelProviders.of(this).get(DeviceViewModel.class);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.menuitem_add_a_company) {
+            startAddNewCompanyActivity();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    /** Called when the user touches the List Items button */
+    public void listItems(View view) {
+        Intent intent = new Intent();
+        intent.setClass(getApplicationContext(),AllDevices.class);
+        intent.putExtra(TASK_OF_RECYCLER_VIEW,DISPLAY_DEVICES_REQUEST_CODE);
+        startActivity(intent);
+    }
+
+    public void listCompanies(View view){
+        Intent intent = new Intent();
+        intent.setClass(getApplicationContext(),AllDevices.class);
+        intent.putExtra(TASK_OF_RECYCLER_VIEW,DISPLAY_COMPANIES_REQUEST_CODE);
+        startActivity(intent);
+    }
+
+    public void start_simulation(View view){
+
+        Simulator simulator=new Simulator(deviceViewModel);
+        simulator.simulate();
+    }
+
+    public void startAddNewDeviceActivity(){
+        Intent addNewDevice = new Intent(getApplicationContext(),AddNewDevice.class);
+        startActivityForResult(addNewDevice,NEW_DEVICE_ACTIVITY_REQUEST_CODE);
+    }
+
+    public void startAddNewCompanyActivity(){
+        Intent addNewCompany = new Intent(getApplicationContext(),AddNewCompany.class);
+        startActivityForResult(addNewCompany,NEW_COMPANY_ACTIVITY_REQUEST_CODE);
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        String name=data.getStringExtra(NAME_FIELD);
+        int monetary=data.getIntExtra(MAIN_MONETARIAL_INFO,0);
+
+        if (resultCode == RESULT_OK){
+            switch (requestCode){
+                case NEW_DEVICE_ACTIVITY_REQUEST_CODE:
+                    /*Device d = new Device(name,monetary);
+                    deviceViewModel.insertDevice(d);*/
+                    //Toast.makeText(getApplicationContext(), "SIKERULT hozzaadni", Toast.LENGTH_LONG).show();
+                    break;
+                case NEW_COMPANY_ACTIVITY_REQUEST_CODE:
+                    Company c = new Company(name,monetary);
+                    deviceViewModel.insertCompany(c);
+                    Toast.makeText(
+                            getApplicationContext(),
+                            "SIKERULT hozzaadni",
+                            Toast.LENGTH_LONG).show();
+                    break;
+            }
+        }else{
+            Toast.makeText(
+                    getApplicationContext(),
+                    "NEM sikerult hozzaadni",
+                    Toast.LENGTH_LONG).show();
+        }
+    }
+}

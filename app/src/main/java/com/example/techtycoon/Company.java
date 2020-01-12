@@ -1,0 +1,24 @@
+package com.example.techtycoon;
+
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity
+public class Company {
+    @PrimaryKey(autoGenerate = true)
+    public int companyId;
+
+    @ColumnInfo(name = "name")
+    public String name;
+
+    @ColumnInfo(name = "money")
+    public int money;
+
+    public Company(String name,int money) {
+        this.name = name;
+        this.money = money;}
+
+    public String getCompanyName(){return this.name;}
+    public int  getCompanyId(){return this.companyId;}
+}
