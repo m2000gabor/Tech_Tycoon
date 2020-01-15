@@ -24,7 +24,7 @@ public class DetailsOfOneCompany extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //find views
-        TextView nevTextV =findViewById(R.id.nev);
+        TextView nevTextV =findViewById(R.id.name);
         TextView moneyTextV =findViewById(R.id.money);
         TextView companyIDTextV =findViewById(R.id.companyId);
 

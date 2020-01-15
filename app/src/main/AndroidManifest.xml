@@ -10,6 +10,24 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".ChooseMemoryActivity"
+            android:label="@string/title_activity_choose_memory"
+            android:parentActivityName=".DeviceCreator"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.techtycoon.DeviceCreator" />
+        </activity>
+        <activity
+            android:name=".DeviceCreator"
+            android:label="@string/title_activity_device_creator"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.techtycoon.MainActivity" />
+        </activity>
+        <activity
             android:name=".DetailsOfOneDevice"
             android:label="@string/title_activity_details_of_one_device"
             android:parentActivityName=".AllDevices"
@@ -26,15 +44,6 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.techtycoon.AllDevices" />
-        </activity>
-        <activity
-            android:name=".AddNewDevice"
-            android:label="@string/title_activity_add_new_device"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.techtycoon.MainActivity" />
         </activity>
         <activity
             android:name=".AllDevices"

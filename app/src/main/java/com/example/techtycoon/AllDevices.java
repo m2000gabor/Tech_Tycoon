@@ -100,12 +100,14 @@ public class AllDevices extends AppCompatActivity {
                     //get device fields
                     String nev = Objects.requireNonNull(devices.getValue()).get(itemPosition).name;
                     int id = devices.getValue().get(itemPosition).id;
+                    int price = devices.getValue().get(itemPosition).getPrice();
                     int profit = devices.getValue().get(itemPosition).profit;
                     int companyId = devices.getValue().get(itemPosition).ownerCompanyId;
 
                     //make intent
                     Intent intent = new Intent();
                     intent.putExtra(MainActivity.NAME_FIELD, nev);
+                    intent.putExtra(MainActivity.DEVICE_PRICE, price);
                     intent.putExtra(MainActivity.MAIN_MONETARIAL_INFO, profit);
                     intent.putExtra(MainActivity.DEVICE_COMPANY_ID, companyId);
                     intent.putExtra("ID", id);

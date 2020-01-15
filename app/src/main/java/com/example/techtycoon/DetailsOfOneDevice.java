@@ -24,10 +24,11 @@ public class DetailsOfOneDevice extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //find views
-        TextView nevTextV =findViewById(R.id.nev);
+        TextView nevTextV =findViewById(R.id.name);
         TextView profitTextV =findViewById(R.id.profit);
         TextView deviceIDTextV =findViewById(R.id.deviceID);
         TextView ownerIDTextV =findViewById(R.id.ownerID);
+        TextView priceTextV =findViewById(R.id.price);
 
 
         //get data from previous activity
@@ -35,11 +36,13 @@ public class DetailsOfOneDevice extends AppCompatActivity {
         String nev = intent.getStringExtra(MainActivity.NAME_FIELD);
         int profit=intent.getIntExtra(MainActivity.MAIN_MONETARIAL_INFO,0);
         int companyId=intent.getIntExtra(MainActivity.DEVICE_COMPANY_ID,0);
+        int price=intent.getIntExtra(MainActivity.DEVICE_PRICE,0);
 
         id=intent.getIntExtra("ID",-1);
 
         //display data
-        nevTextV.setText(nev);
+        nevTextV.setText("Nev: "+nev);
+        priceTextV.setText(String.format(Locale.getDefault(),"Price: %d",price));
         profitTextV.setText(String.format(Locale.getDefault(),"Profit: %d",profit));
         deviceIDTextV.setText(String.format(Locale.getDefault(),"Device ID: %d",id));
         ownerIDTextV.setText(String.format(Locale.getDefault(),"Owner id: %d",companyId));

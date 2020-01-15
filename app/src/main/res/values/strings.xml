@@ -5,4 +5,8 @@
     <string name="title_activity_add_new_device">AddNewDevice</string>
     <string name="title_activity_details_of_one_device">DetailsOfOneDevice</string>
     <string name="title_activity_details_of_one_company">DetailsOfOnecompany</string>
+    <string name="title_devicecomponent_list">DeviceComponents</string>
+    <string name="title_devicecomponent_detail">DeviceComponent Detail</string>
+    <string name="title_activity_device_creator">DeviceCreator</string>
+    <string name="title_activity_choose_memory">ChooseMemoryActivity</string>
 </resources>

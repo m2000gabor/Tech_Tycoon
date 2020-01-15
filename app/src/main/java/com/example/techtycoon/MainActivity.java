@@ -19,11 +19,12 @@ public class MainActivity extends AppCompatActivity {
     public static final String MAIN_MONETARIAL_INFO ="profit" ;
     public static final String TASK_OF_RECYCLER_VIEW ="dataSource" ;
     public static final String DEVICE_COMPANY_ID ="companyId" ;
+    public static final String DEVICE_PRICE ="price" ;
 
 
     public static final int DISPLAY_DEVICES_REQUEST_CODE =1;
     public static final int DISPLAY_COMPANIES_REQUEST_CODE =2;
-    public static final int NEW_DEVICE_ACTIVITY_REQUEST_CODE = 1;
+    public static final int NEW_DEVICE_ACTIVITY_REQUEST_CODE = 1; //now independent from mainactivity
     public static final int NEW_COMPANY_ACTIVITY_REQUEST_CODE = 2;
 
     DeviceViewModel deviceViewModel;
@@ -94,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void startAddNewDeviceActivity(){
-        Intent addNewDevice = new Intent(getApplicationContext(),AddNewDevice.class);
+        Intent addNewDevice = new Intent(getApplicationContext(), DeviceCreator.class);
         startActivityForResult(addNewDevice,NEW_DEVICE_ACTIVITY_REQUEST_CODE);
     }
 
@@ -106,17 +107,14 @@ public class MainActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        String name=data.getStringExtra(NAME_FIELD);
-        int monetary=data.getIntExtra(MAIN_MONETARIAL_INFO,0);
-
         if (resultCode == RESULT_OK){
             switch (requestCode){
                 case NEW_DEVICE_ACTIVITY_REQUEST_CODE:
-                    /*Device d = new Device(name,monetary);
-                    deviceViewModel.insertDevice(d);*/
-                    //Toast.makeText(getApplicationContext(), "SIKERULT hozzaadni", Toast.LENGTH_LONG).show();
+                    //now independent from mainactivity
                     break;
                 case NEW_COMPANY_ACTIVITY_REQUEST_CODE:
+                    String name=data.getStringExtra(NAME_FIELD);
+                    int monetary=data.getIntExtra(MAIN_MONETARIAL_INFO,0);
                     Company c = new Company(name,monetary);
                     deviceViewModel.insertCompany(c);
                     Toast.makeText(

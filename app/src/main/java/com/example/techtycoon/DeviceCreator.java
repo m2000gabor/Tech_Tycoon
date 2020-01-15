@@ -4,8 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
-
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
@@ -18,11 +19,19 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
-public class AddNewDevice extends AppCompatActivity {
+public class DeviceCreator extends AppCompatActivity {
 
+    private static final int CHOOSE_MEMORY_REQUEST = 1;
+    boolean isMemorySetted=false;
+    int ram;
+    int memory;
+    int cost=0;
 
+    //from newdeviceBasics
     private EditText deviceNameField;
     private EditText profitField;
     String[] nameOfCompanies;
@@ -32,23 +41,13 @@ public class AddNewDevice extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_new_device);
+        setContentView(R.layout.activity_device_creator);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         //find fields
         deviceNameField = findViewById(R.id.deviceNameInputField);
         profitField = findViewById(R.id.profitInputField);
-
-
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addDevice(view);
-            }
-        });
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         deviceViewModel = ViewModelProviders.of(this).get(DeviceViewModel.class);
         companies=deviceViewModel.getAllCompaniesList();
@@ -58,9 +57,28 @@ public class AddNewDevice extends AppCompatActivity {
         nameOfCompanies =tmp;
         new MySpinnerAdapter();
 
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(isMemorySetted){
+                    addDevice();
+                }else {
+                    Toast.makeText(getApplicationContext(),"All parameters have to be specified!",
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
     }
 
-    protected void addDevice(View view) {
+    public void startMemoryChooser(View view){
+        Intent chooseMemory = new Intent(getApplicationContext(),ChooseMemoryActivity.class);
+        startActivityForResult(chooseMemory,CHOOSE_MEMORY_REQUEST);
+    }
+
+    protected void addDevice() {
 
         Intent replyIntent = new Intent();
         if (TextUtils.isEmpty(deviceNameField.getText()) || TextUtils.isEmpty(profitField.getText())) {
@@ -71,19 +89,31 @@ public class AddNewDevice extends AppCompatActivity {
             Spinner sp=findViewById(R.id.spinner);
             int maker=companies.get(sp.getSelectedItemPosition()).companyId;
 
-            deviceViewModel.insertDevice(new Device(deviceName,profit,maker));
+            deviceViewModel.insertDevice(new Device(deviceName,profit,cost,maker));
 
-            /*replyIntent.putExtra(MainActivity.NAME_FIELD, deviceName);
-            replyIntent.putExtra(MainActivity.MAIN_MONETARIAL_INFO, profit);*/
-            setResult(RESULT_OK, replyIntent);
+            setResult(RESULT_OK);
         }
         finish();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK){
+            switch (requestCode){
+                case CHOOSE_MEMORY_REQUEST:
+                    ram=data.getIntExtra("amountOfRam",0);
+                    memory=data.getIntExtra("amountOfMemory",0);
+                    cost+=data.getDoubleExtra("costs",99);
+                    Toast.makeText(this,Integer.toString(cost),Toast.LENGTH_LONG).show();
+                    isMemorySetted=true;
+                    break;
+            }
+        }
+    }
+
     public class MySpinnerAdapter implements
             AdapterView.OnItemSelectedListener {
-
-
 
         public MySpinnerAdapter() {
             //Getting the instance of Spinner and applying OnItemSelectedListener on it

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".DeviceCreator"
+    tools:showIn="@layout/activity_device_creator">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10sp"/>
+
+        <EditText
+            android:id="@+id/deviceNameInputField"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Nev"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            android:layout_margin="10sp"/>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10sp"
+            android:onClick="startMemoryChooser"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Memory and RAM"
+                android:id="@+id/startMemoryChooserTextView"
+                android:textSize="22sp"
+                android:layout_margin="10sp"
+                android:gravity="start"
+                />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@id/startMemoryChooserTextView"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="10sp"
+                android:src="@drawable/ic_check_green_24dp" />
+
+        </RelativeLayout>
+
+
+        <EditText
+            android:id="@+id/profitInputField"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Profit"
+            android:importantForAutofill="no"
+            android:inputType="numberDecimal"
+            android:layout_margin="10sp"/>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
