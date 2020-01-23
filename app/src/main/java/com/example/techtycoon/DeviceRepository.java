@@ -83,6 +83,13 @@ class DeviceRepository {
         });
     }
 
+    void updateDevices(Device... devices){
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            mDao.updateDevices(devices);
+        });
+    }
+
+
     void deleteOneDeviceById(int id){
         AppDatabase.databaseWriteExecutor.execute(() -> {
             mDao.deleteOneDeviceById(id);

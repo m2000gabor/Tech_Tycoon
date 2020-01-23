@@ -18,7 +18,7 @@ public class CompanyListAdapter extends RecyclerView.Adapter<CompanyListAdapter.
 
         private CompanyViewHolder(View itemView) {
             super(itemView);
-            companyNameItemView = itemView.findViewById(R.id.textView);
+            companyNameItemView = itemView.findViewById(R.id.deviceNameTextView);
         }
     }
 

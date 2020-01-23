@@ -103,6 +103,11 @@ public class AllDevices extends AppCompatActivity {
                     int price = devices.getValue().get(itemPosition).getPrice();
                     int profit = devices.getValue().get(itemPosition).profit;
                     int companyId = devices.getValue().get(itemPosition).ownerCompanyId;
+                    int ram = devices.getValue().get(itemPosition).ram;
+                    int memory = devices.getValue().get(itemPosition).memory;
+                    int cost = devices.getValue().get(itemPosition).cost;
+
+
 
                     //make intent
                     Intent intent = new Intent();
@@ -110,6 +115,9 @@ public class AllDevices extends AppCompatActivity {
                     intent.putExtra(MainActivity.DEVICE_PRICE, price);
                     intent.putExtra(MainActivity.MAIN_MONETARIAL_INFO, profit);
                     intent.putExtra(MainActivity.DEVICE_COMPANY_ID, companyId);
+                    intent.putExtra(MainActivity.DEVICE_RAM, ram);
+                    intent.putExtra(MainActivity.DEVICE_MEMORY, memory);
+                    intent.putExtra(MainActivity.DEVICE_COST, cost);
                     intent.putExtra("ID", id);
                     intent.setClass(getBaseContext(), DetailsOfOneDevice.class);
 

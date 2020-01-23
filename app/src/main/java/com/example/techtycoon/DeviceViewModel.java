@@ -31,6 +31,7 @@ public class DeviceViewModel extends AndroidViewModel {
     public void insertCompany(Company company) { mRepository.insertCompany(company); }
 
     public void updateCompanies(Company... companies) { mRepository.updateCompanies(companies); }
+    public void updateDevices(Device... devices) { mRepository.updateDevices(devices); }
 
     public void delOneDeviceById(int id) { mRepository.deleteOneDeviceById(id); }
     public void delOneCompanyById(int id) { mRepository.delOneCompanyById(id); }

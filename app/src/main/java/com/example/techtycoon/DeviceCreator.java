@@ -17,11 +17,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Locale;
 
 public class DeviceCreator extends AppCompatActivity {
 
@@ -34,6 +36,7 @@ public class DeviceCreator extends AppCompatActivity {
     //from newdeviceBasics
     private EditText deviceNameField;
     private EditText profitField;
+    private TextView currentCostField;
     String[] nameOfCompanies;
     List<Company> companies;
     DeviceViewModel deviceViewModel;
@@ -48,6 +51,8 @@ public class DeviceCreator extends AppCompatActivity {
         //find fields
         deviceNameField = findViewById(R.id.deviceNameInputField);
         profitField = findViewById(R.id.profitInputField);
+        currentCostField = findViewById(R.id.currentCostTextView);
+
 
         deviceViewModel = ViewModelProviders.of(this).get(DeviceViewModel.class);
         companies=deviceViewModel.getAllCompaniesList();
@@ -89,7 +94,7 @@ public class DeviceCreator extends AppCompatActivity {
             Spinner sp=findViewById(R.id.spinner);
             int maker=companies.get(sp.getSelectedItemPosition()).companyId;
 
-            deviceViewModel.insertDevice(new Device(deviceName,profit,cost,maker));
+            deviceViewModel.insertDevice(new Device(deviceName,profit,cost,maker,ram,memory));
 
             setResult(RESULT_OK);
         }
@@ -104,7 +109,8 @@ public class DeviceCreator extends AppCompatActivity {
                 case CHOOSE_MEMORY_REQUEST:
                     ram=data.getIntExtra("amountOfRam",0);
                     memory=data.getIntExtra("amountOfMemory",0);
-                    cost+=data.getDoubleExtra("costs",99);
+                    cost+=data.getIntExtra("costs",99);
+                    currentCostField.setText(String.format(Locale.getDefault(),"The current cost is %d$",cost));
                     Toast.makeText(this,Integer.toString(cost),Toast.LENGTH_LONG).show();
                     isMemorySetted=true;
                     break;
@@ -115,7 +121,7 @@ public class DeviceCreator extends AppCompatActivity {
     public class MySpinnerAdapter implements
             AdapterView.OnItemSelectedListener {
 
-        public MySpinnerAdapter() {
+        MySpinnerAdapter() {
             //Getting the instance of Spinner and applying OnItemSelectedListener on it
             Spinner spin = (Spinner) findViewById(R.id.spinner);
             spin.setOnItemSelectedListener(this);
@@ -134,7 +140,6 @@ public class DeviceCreator extends AppCompatActivity {
         }
         @Override
         public void onNothingSelected(AdapterView<?> arg0) {
-            // TODO Auto-generated method stub
         }
     }
 }

@@ -27,14 +27,20 @@ public class Device {
     @ColumnInfo(name="memory")
     public int memory;
 
-    public Device(String name,int profit,int cost,int ownerCompanyId) {
+    @ColumnInfo(name="soldPieces")
+    public int soldPieces;
+
+    public Device(String name,int profit,int cost,int ownerCompanyId,int ram, int memory) {
         this.name = name;
         this.profit = profit;
         this.cost=cost;
         this.ownerCompanyId=ownerCompanyId;
+        this.ram=ram;
+        this.memory=memory;
+        this.soldPieces=0;
     }
 
-    public String getDeviceName(){return this.name;}
-    public int  getDeviceId(){return this.id;}
-    public int getPrice(){return cost+profit;}
+    String getDeviceName(){return this.name;}
+    //public int  getDeviceId(){return this.id;}
+    int getPrice(){return cost+profit;}
 }

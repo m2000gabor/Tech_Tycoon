@@ -30,12 +30,37 @@
             android:text="Price" />
 
         <TextView
+            android:id="@+id/cost"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="22sp"
+            android:layout_margin="10sp"
+            android:text="Cost" />
+
+        <TextView
             android:id="@+id/profit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="22sp"
             android:layout_margin="10sp"
             android:text="Profit" />
+
+        <TextView
+            android:id="@+id/ram"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="22sp"
+            android:layout_margin="10sp"
+            android:text="Ram" />
+
+
+        <TextView
+            android:id="@+id/memory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="22sp"
+            android:layout_margin="10sp"
+            android:text="Memory" />
 
         <TextView
             android:id="@+id/deviceID"

@@ -58,4 +58,6 @@ public interface DeviceDao {
     @Update
     void updateCompanies(Company... companies);
 
+    @Update
+    void updateDevices(Device... devices);
 }

@@ -20,6 +20,9 @@ public class MainActivity extends AppCompatActivity {
     public static final String TASK_OF_RECYCLER_VIEW ="dataSource" ;
     public static final String DEVICE_COMPANY_ID ="companyId" ;
     public static final String DEVICE_PRICE ="price" ;
+    public static final String DEVICE_RAM ="ram" ;
+    public static final String DEVICE_MEMORY ="memory" ;
+    public static final String DEVICE_COST ="cost" ;
 
 
     public static final int DISPLAY_DEVICES_REQUEST_CODE =1;
@@ -28,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
     public static final int NEW_COMPANY_ACTIVITY_REQUEST_CODE = 2;
 
     DeviceViewModel deviceViewModel;
+    Simulator simulator;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
 
         // Get a new or existing ViewModel from the ViewModelProvider.
         deviceViewModel = ViewModelProviders.of(this).get(DeviceViewModel.class);
+
+        simulator=new Simulator(deviceViewModel);
     }
 
     @Override
@@ -88,10 +95,18 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void start_simulation(View view){
+    public void start_again(View view){
+        deviceViewModel.deleteAll();
+        deviceViewModel.insertCompany(new Company("Apple",10));
+        deviceViewModel.insertCompany(new Company("Samsung",10));
+        deviceViewModel.insertCompany(new Company("Xiaomi",10));
+        deviceViewModel.insertCompany(new Company("Sony",10));
+        deviceViewModel.insertCompany(new Company("MyPhone",10));
+    }
 
-        Simulator simulator=new Simulator(deviceViewModel);
+    public void start_simulation(View view){
         simulator.simulate();
+        Toast.makeText(getApplicationContext(), "1 month simulated", Toast.LENGTH_SHORT).show();
     }
 
     public void startAddNewDeviceActivity(){

@@ -11,16 +11,19 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.Locale;
 
 
 public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.DeviceViewHolder> {
 
     class DeviceViewHolder extends RecyclerView.ViewHolder {
         private final TextView deviceNameItemView;
+        private final TextView deviceLastlySoldTextView;
 
         private DeviceViewHolder(View itemView) {
             super(itemView);
-            deviceNameItemView = itemView.findViewById(R.id.textView);
+            deviceNameItemView = itemView.findViewById(R.id.deviceNameTextView);
+            deviceLastlySoldTextView = itemView.findViewById(R.id.deviceLastlySoldTextView);
         }
     }
 
@@ -46,10 +49,12 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
     public void onBindViewHolder(DeviceViewHolder holder, int position) {
         if (devices != null) {
             Device current = devices.get(position);
-            holder.deviceNameItemView.setText(current.getDeviceName());
+            holder.deviceNameItemView.setText(current.name);
+            holder.deviceLastlySoldTextView.setText(String.format(Locale.getDefault(),"%d",current.soldPieces));
         } else {
             // Covers the case of data not being ready yet.
-            holder.deviceNameItemView.setText("No Word");
+            holder.deviceNameItemView.setText("No device name");
+            holder.deviceLastlySoldTextView.setText("0");
         }
     }
 
