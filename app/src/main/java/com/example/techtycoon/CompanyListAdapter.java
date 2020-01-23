@@ -9,16 +9,19 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.Locale;
 
 
 public class CompanyListAdapter extends RecyclerView.Adapter<CompanyListAdapter.CompanyViewHolder> {
 
     class CompanyViewHolder extends RecyclerView.ViewHolder {
         private final TextView companyNameItemView;
+        private final TextView companylastProfitItemView;
 
         private CompanyViewHolder(View itemView) {
             super(itemView);
             companyNameItemView = itemView.findViewById(R.id.deviceNameTextView);
+            companylastProfitItemView = itemView.findViewById(R.id.deviceLastlySoldTextView);
         }
     }
 
@@ -45,9 +48,10 @@ public class CompanyListAdapter extends RecyclerView.Adapter<CompanyListAdapter.
         if (companies != null) {
             Company current = companies.get(position);
             holder.companyNameItemView.setText(current.getCompanyName());
+            holder.companylastProfitItemView.setText(String.format(Locale.getDefault(),"%d$",current.lastProfit));
         } else {
             // Covers the case of data not being ready yet.
-            holder.companyNameItemView.setText("No Word");
+            holder.companyNameItemView.setText("Unknown");
         }
     }
 

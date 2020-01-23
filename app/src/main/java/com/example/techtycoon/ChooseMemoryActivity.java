@@ -14,9 +14,11 @@ import android.widget.TextView;
 
 import java.util.Locale;
 
+import static com.example.techtycoon.Simulator.log2;
+
 public class ChooseMemoryActivity extends AppCompatActivity {
-    private static final double MEMORY_PER_GB = 0.17;
-    private static final double RAM_PER_GB = 6.5;
+    public final static double MEMORY_PER_GB = 2; //0.17
+    public static final double RAM_PER_GB = 4; //6.5
     int mRam=1;
     int mMemory=1;
 
@@ -34,7 +36,7 @@ public class ChooseMemoryActivity extends AppCompatActivity {
                 Intent replyIntent=new Intent();
                 replyIntent.putExtra("amountOfRam",mRam);
                 replyIntent.putExtra("amountOfMemory",mMemory);
-                replyIntent.putExtra("costs",(int) Math.round(mMemory*MEMORY_PER_GB+mRam*RAM_PER_GB));
+                replyIntent.putExtra("costs",(int) Math.round((log2(mMemory)+1)*MEMORY_PER_GB+(log2(mRam)+1)*RAM_PER_GB));
                 setResult(RESULT_OK,replyIntent);
                 finish();
             }
@@ -54,7 +56,7 @@ public class ChooseMemoryActivity extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 mRam=(int) Math.round(Math.pow(2,progress));
                 ramCounter.setText(String.format(Locale.getDefault(),"%d GB",mRam ));
-                ramCost.setText(String.format(Locale.getDefault(),"%.2f$",mRam*RAM_PER_GB));
+                ramCost.setText(String.format(Locale.getDefault(),"%.2f$",(log2(mRam)+1)*RAM_PER_GB));
             }
 
             @Override
@@ -78,7 +80,7 @@ public class ChooseMemoryActivity extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 mMemory=(int) Math.round(Math.pow(2,progress)) ;
                 memoryCounter.setText(String.format(Locale.getDefault(),"%d GB",mMemory) );
-                memoryCost.setText(String.format(Locale.getDefault(),"%.2f$",mMemory*MEMORY_PER_GB));
+                memoryCost.setText(String.format(Locale.getDefault(),"%.2f$",(log2(mMemory)+1)*MEMORY_PER_GB));
             }
 
             @Override

@@ -5,7 +5,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 class Simulator {
-    private static final int NUM_OF_DEVICE_FIELDS = 3;
     private DeviceViewModel deviceViewModel;
 
     Simulator(DeviceViewModel model){this.deviceViewModel=model;}
@@ -22,6 +21,13 @@ class Simulator {
             device.soldPieces=sold[i];
             deviceViewModel.updateDevices(device);
         }
+        //null companies last profit
+        for(int i=0;i<companyList.size();i++){
+            Company company =companyList.get(i);
+            company.lastProfit=0;
+            deviceViewModel.updateCompanies(company);
+        }
+
         earning(sold,deviceList,companyList);
         Company[] varargs =companyList.toArray(new Company[0]);
 
@@ -34,7 +40,7 @@ class Simulator {
         ///int[0] is the number of customers per month!
         ///custmNum,price,ram,mem
         //Profiles:
-        int[] midRange={100,5,3,2};
+        int[] midRange={100,5,6,5};
         sellingToOneProfile2(sold,deviceList,midRange);
 
         /*
@@ -74,10 +80,10 @@ class Simulator {
         double sumPoints=0;
         for (int i=0;i<length;i++){
             value=0;
-            price=weights[1]*fx(deviceList.get(i).getPrice(),avgPrice);
-            value+=weights[2]*log2(fx(deviceList.get(i).ram,avgRam));
-            value+=weights[3]*log2(fx(deviceList.get(i).memory,avgMemory));
-            point[i]=value/price;
+            price=1/Math.pow(fx(deviceList.get(i).getPrice(), avgPrice),weights[1]*0.1);
+            value+=weights[2]*fx(log2(deviceList.get(i).ram)+1, avgRam);
+            value+=weights[3]*fx(log2(deviceList.get(i).memory)+1, avgMemory);
+            point[i]=value*price;
             sumPoints+=point[i];
         }
 
@@ -94,24 +100,17 @@ class Simulator {
             int j=0;
             while(j<companyList.size() && companyList.get(j).companyId != deviceList.get(i).ownerCompanyId){j++;}
             companyList.get(j).money+=sold[i]*deviceList.get(i).profit;
+            companyList.get(j).lastProfit+=sold[i]*deviceList.get(i).profit;
         }
     }
 
-    private static int log2(int x) { return (int) (Math.log(x) / Math.log(2) + 1e-10); }
+    static int log2(int x) { return (int) Math.round(Math.log(x) / Math.log(2) + 1e-10); }
     private static double log2 (double x) { return (Math.log(x) / Math.log(2) + 1e-10); }
 
-    //egyenes aranyossaghoz pl:RAM
     private static double fx(double value,double average) {
         if(value<=average){
             return Math.pow(value,2);
-        }else{return Math.sqrt(value)+fx(average,average);}
-    }
-
-    //forditott aranyossaghoz pl: Price
-    private static double gx(double value,double average) {
-        if(value<=average){
-            return Math.pow(value,2);
-        }else{return Math.sqrt(value)+fx(average,average);}
+        }else{return Math.pow(value,0.5)+fx(average,average);}
     }
 
 }

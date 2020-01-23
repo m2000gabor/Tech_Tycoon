@@ -15,9 +15,13 @@ public class Company {
     @ColumnInfo(name = "money")
     public int money;
 
+    @ColumnInfo(name = "lastProfit")
+    public int lastProfit;
+
     public Company(String name,int money) {
         this.name = name;
-        this.money = money;}
+        this.money = money;
+        this.lastProfit=0;}
 
     public String getCompanyName(){return this.name;}
     public int  getCompanyId(){return this.companyId;}
