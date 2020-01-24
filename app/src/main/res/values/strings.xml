@@ -9,4 +9,5 @@
     <string name="title_devicecomponent_detail">DeviceComponent Detail</string>
     <string name="title_activity_device_creator">DeviceCreator</string>
     <string name="title_activity_choose_memory">ChooseMemoryActivity</string>
+    <string name="simulator_lastAvgPrice">LastAvgPrice</string>
 </resources>

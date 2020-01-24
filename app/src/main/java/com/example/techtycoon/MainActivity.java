@@ -1,6 +1,8 @@
 package com.example.techtycoon;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -58,7 +60,10 @@ public class MainActivity extends AppCompatActivity {
         // Get a new or existing ViewModel from the ViewModelProvider.
         deviceViewModel = ViewModelProviders.of(this).get(DeviceViewModel.class);
 
-        simulator=new Simulator(deviceViewModel);
+        //get sharedPrefs
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        float lastAvgPrice = sharedPref.getFloat(getString(R.string.simulator_lastAvgPrice), 5);
+        simulator=new Simulator(deviceViewModel,lastAvgPrice);
     }
 
     @Override
@@ -110,6 +115,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void start_simulation(View view){
         simulator.simulate();
+        float lastAvgPrice=(float) simulator.lastAvgPrice;
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putFloat(getString(R.string.simulator_lastAvgPrice), lastAvgPrice);
+        editor.apply();
         Toast.makeText(getApplicationContext(), "1 month simulated", Toast.LENGTH_SHORT).show();
     }
 

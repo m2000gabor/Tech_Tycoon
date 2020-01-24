@@ -5,17 +5,21 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 class Simulator {
-    ///Simulator 2.2.
+    ///Simulator 2.3.
     //TODO implement other profiles
     //maybe there should be zones defined by some percentage, or above a min value/price ratio
 
     private DeviceViewModel deviceViewModel;
+    double lastAvgPrice;
 
-    Simulator(DeviceViewModel model){this.deviceViewModel=model;}
+    Simulator(DeviceViewModel model,double lastAvgPr){this.deviceViewModel=model;this.lastAvgPrice=lastAvgPr;}
 
     void simulate(){
         List<Company> companyList =deviceViewModel.getAllCompaniesList();
         List<Device> deviceList=deviceViewModel.getAllDevicesList();
+
+        if(lastAvgPrice==0){lastAvgPrice=deviceList.get(0).getPrice();}
+
         int[] sold=new int[deviceList.size()];
         for(int i=0;i<deviceList.size();i++){sold[i]=0; deviceList.get(i).soldPieces=0;}
         selling(sold,deviceList);
@@ -44,7 +48,7 @@ class Simulator {
         ///int[0] is the number of customers per month!
         ///custmNum,price,ram,mem
         //Profiles:
-        int[] midRange={100,5,6,5};
+        int[] midRange={100,5,5,5};
         sellingToOneProfile2(sold,deviceList,midRange);
 
         /*
@@ -63,17 +67,17 @@ class Simulator {
         int length=deviceList.size();
         double[] point=new double[length];
         //sums
-        double avgPrice=0;
+        //double avgPrice=0;
         double avgRam=0;
         double avgMemory=0;
 
         //calculate avgs
         for (int i=0;i<length;i++){
-            avgPrice+=deviceList.get(i).getPrice();
-            avgRam+=log2(deviceList.get(i).ram);
-            avgMemory+=log2(deviceList.get(i).memory);
+            //avgPrice+=deviceList.get(i).getPrice();
+            avgRam+=log2(deviceList.get(i).ram)+1;
+            avgMemory+=log2(deviceList.get(i).memory)+1;
         }
-        avgPrice=avgPrice/length;
+        //avgPrice=avgPrice/length;
         avgRam=avgRam/length;
         avgMemory=avgMemory/length;
 
@@ -83,17 +87,18 @@ class Simulator {
         double value;
         double sumPoints=0;
         for (int i=0;i<length;i++){
-            value=0;
-            price=weights[1]/Math.pow(fx(deviceList.get(i).getPrice(), avgPrice),2);
-            value+=weights[2]*fx(log2(deviceList.get(i).ram)+1, avgRam);
-            value+=weights[3]*fx(log2(deviceList.get(i).memory)+1, avgMemory);
-            point[i]=value*price;
+            //price=1/Math.pow(fx(deviceList.get(i).getPrice(), lastAvgPrice)+1, 5);
+            price=(double) weights[1]*fx(deviceList.get(i).getPrice(), lastAvgPrice);
+            value=(double) weights[2]*fx(log2(deviceList.get(i).ram)+1, avgRam);
+            value=value + (double) weights[3]*fx(log2(deviceList.get(i).memory)+1, avgMemory);
+            if(value-price>0){point[i]=value-price;
+            }else{point[i]=0;}
             sumPoints+=point[i];
         }
         double avgSumPoints=sumPoints/length;
         sumPoints=0;
         for (int i=0;i<length;i++){
-            point[i]*=1+gauss(point[i],0.2,avgSumPoints);
+            point[i]*=1+gauss(point[i],3,avgSumPoints);
             sumPoints+=point[i];
         }
 
@@ -102,6 +107,11 @@ class Simulator {
         for (int i=0;i<length;i++){
             sold[i]+=(int) Math.round(customerNum*point[i]/sumPoints);
         }
+
+        //save shared pref
+        double sumPrice=0;
+        for (int i=0;i<length;i++){ sumPrice+=sold[i]*deviceList.get(i).getPrice(); }
+        lastAvgPrice=sumPrice/(customerNum);
     }
 
     private void earning(int[] sold, @NotNull List<Device> deviceList,@NotNull List<Company> companyList){
@@ -118,9 +128,11 @@ class Simulator {
     private static double log2 (double x) { return (Math.log(x) / Math.log(2) + 1e-10); }
 
     private static double fx(double value,double average) {
-        if(value<=average){
-            return Math.pow(value,2);
-        }else{return Math.pow(value,0.5)+fx(average,average);}
+        double norm=value/average;
+        if(norm<=1.0) {
+            return Math.pow(norm,2);
+        }else if(norm > 2.0){return fx(2*average,average);
+        }else{return Math.pow(norm-1,0.5)+fx(average,average);}
     }
 
     //x =ertek, szigma=meredekseg, mu kozeppont
