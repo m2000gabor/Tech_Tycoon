@@ -16,6 +16,8 @@ import java.util.Locale;
 
 import static com.example.techtycoon.Simulator.log2;
 
+//TODO dynamic costs
+
 public class ChooseMemoryActivity extends AppCompatActivity {
     public final static double MEMORY_PER_GB = 2; //0.17
     public static final double RAM_PER_GB = 4; //6.5

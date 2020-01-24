@@ -5,6 +5,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 class Simulator {
+    ///Simulator 2.2.
+    //TODO implement other profiles
+    //maybe there should be zones defined by some percentage, or above a min value/price ratio
+
     private DeviceViewModel deviceViewModel;
 
     Simulator(DeviceViewModel model){this.deviceViewModel=model;}
@@ -80,10 +84,16 @@ class Simulator {
         double sumPoints=0;
         for (int i=0;i<length;i++){
             value=0;
-            price=1/Math.pow(fx(deviceList.get(i).getPrice(), avgPrice),weights[1]*0.1);
+            price=weights[1]/Math.pow(fx(deviceList.get(i).getPrice(), avgPrice),2);
             value+=weights[2]*fx(log2(deviceList.get(i).ram)+1, avgRam);
             value+=weights[3]*fx(log2(deviceList.get(i).memory)+1, avgMemory);
             point[i]=value*price;
+            sumPoints+=point[i];
+        }
+        double avgSumPoints=sumPoints/length;
+        sumPoints=0;
+        for (int i=0;i<length;i++){
+            point[i]*=1+gauss(point[i],0.2,avgSumPoints);
             sumPoints+=point[i];
         }
 
@@ -111,6 +121,11 @@ class Simulator {
         if(value<=average){
             return Math.pow(value,2);
         }else{return Math.pow(value,0.5)+fx(average,average);}
+    }
+
+    //x =ertek, szigma=meredekseg, mu kozeppont
+    private static double gauss(double x, double szigma, double mu){
+        return (1/(szigma*Math.sqrt(2*Math.PI)))*(Math.exp((-1*Math.pow(x-mu,2))/(2*Math.pow(szigma,2))));
     }
 
 }

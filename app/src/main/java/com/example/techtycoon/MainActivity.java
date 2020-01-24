@@ -14,6 +14,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+//TODO time
+//TODO companies have a development route and cost limiting the available features
+//TODO detailed stats
+
 public class MainActivity extends AppCompatActivity {
     public static final String NAME_FIELD ="name" ;
     public static final String MAIN_MONETARIAL_INFO ="profit" ;

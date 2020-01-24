@@ -20,6 +20,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 import java.util.Objects;
 
+//TODO separate allDevices and allCompanies class
+//TODO sort by
+
 public class AllDevices extends AppCompatActivity {
     private DeviceViewModel deviceViewModel;
 

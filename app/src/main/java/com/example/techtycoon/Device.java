@@ -4,6 +4,8 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+//TODO new attributes
+
 @Entity
 public class Device {
     @PrimaryKey(autoGenerate = true)
