@@ -10,4 +10,7 @@
     <string name="title_activity_device_creator">DeviceCreator</string>
     <string name="title_activity_choose_memory">ChooseMemoryActivity</string>
     <string name="simulator_lastAvgPrice">LastAvgPrice</string>
+    <string name="simulator_lastAvgMemory">LastAvgMemory</string>
+    <string name="simulator_lastAvgRam">LastAvgRam</string>
+    <string name="title_activity_all_companies">allCompanies</string>
 </resources>

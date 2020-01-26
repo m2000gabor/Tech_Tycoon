@@ -2,18 +2,17 @@ package com.example.techtycoon;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.view.View;
 import android.widget.TextView;
 
 import java.util.Locale;
+import java.util.Objects;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 public class DetailsOfOneDevice extends AppCompatActivity {
     int id;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,7 +20,7 @@ public class DetailsOfOneDevice extends AppCompatActivity {
         setContentView(R.layout.activity_details_of_one_device);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         //find views
         TextView nevTextV =findViewById(R.id.name);

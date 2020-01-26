@@ -10,6 +10,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".allCompanies"
+            android:label="@string/title_activity_all_companies"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.techtycoon.MainActivity" />
+        </activity>
+        <activity
             android:name=".ChooseMemoryActivity"
             android:label="@string/title_activity_choose_memory"
             android:parentActivityName=".DeviceCreator"

@@ -4,17 +4,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.ViewModelProviders;
-
-import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.Toast;
+import androidx.lifecycle.ViewModelProvider;
 
 //TODO time
 //TODO companies have a development route and cost limiting the available features
@@ -33,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static final int DISPLAY_DEVICES_REQUEST_CODE =1;
     public static final int DISPLAY_COMPANIES_REQUEST_CODE =2;
-    public static final int NEW_DEVICE_ACTIVITY_REQUEST_CODE = 1; //now independent from mainactivity
+    public static final int NEW_DEVICE_ACTIVITY_REQUEST_CODE = 1;
     public static final int NEW_COMPANY_ACTIVITY_REQUEST_CODE = 2;
 
     DeviceViewModel deviceViewModel;
@@ -58,12 +57,14 @@ public class MainActivity extends AppCompatActivity {
         AppDatabase db = AppDatabase.getDatabase(getApplicationContext());
 
         // Get a new or existing ViewModel from the ViewModelProvider.
-        deviceViewModel = ViewModelProviders.of(this).get(DeviceViewModel.class);
+        deviceViewModel = new ViewModelProvider(this).get(DeviceViewModel.class);
 
         //get sharedPrefs
         SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
         float lastAvgPrice = sharedPref.getFloat(getString(R.string.simulator_lastAvgPrice), 5);
-        simulator=new Simulator(deviceViewModel,lastAvgPrice);
+        float lastAvgRam = sharedPref.getFloat(getString(R.string.simulator_lastAvgRam), 1);
+        float lastAvgMemory = sharedPref.getFloat(getString(R.string.simulator_lastAvgMemory), 1);
+        simulator=new Simulator(deviceViewModel,lastAvgPrice,lastAvgRam,lastAvgMemory);
     }
 
     @Override
@@ -89,18 +90,16 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /** Called when the user touches the List Items button */
-    public void listItems(View view) {
+    /** Called when the user touches the List Devices button */
+    public void listDevices(View view) {
         Intent intent = new Intent();
         intent.setClass(getApplicationContext(),AllDevices.class);
-        intent.putExtra(TASK_OF_RECYCLER_VIEW,DISPLAY_DEVICES_REQUEST_CODE);
         startActivity(intent);
     }
 
     public void listCompanies(View view){
         Intent intent = new Intent();
-        intent.setClass(getApplicationContext(),AllDevices.class);
-        intent.putExtra(TASK_OF_RECYCLER_VIEW,DISPLAY_COMPANIES_REQUEST_CODE);
+        intent.setClass(getApplicationContext(),allCompanies.class);
         startActivity(intent);
     }
 
@@ -119,6 +118,8 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putFloat(getString(R.string.simulator_lastAvgPrice), lastAvgPrice);
+        editor.putFloat(getString(R.string.simulator_lastAvgMemory),(float) simulator.lastAvgMemory);
+        editor.putFloat(getString(R.string.simulator_lastAvgRam),(float) simulator.lastAvgRam);
         editor.apply();
         Toast.makeText(getApplicationContext(), "1 month simulated", Toast.LENGTH_SHORT).show();
     }

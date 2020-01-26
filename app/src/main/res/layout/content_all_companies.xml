@@ -5,12 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".AllDevices"
-    tools:showIn="@layout/activity_all_devices">
+    tools:context=".allCompanies"
+    tools:showIn="@layout/activity_all_companies">
 
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/devicesRecyclerView"
+        android:id="@+id/companiesRecyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@android:color/darker_gray"
@@ -19,6 +19,5 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

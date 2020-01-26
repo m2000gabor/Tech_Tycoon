@@ -21,23 +21,22 @@ import androidx.recyclerview.widget.RecyclerView;
 
 //TODO sort by
 
-public class AllDevices extends AppCompatActivity {
+public class allCompanies extends AppCompatActivity {
     private DeviceViewModel deviceViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_all_devices);
+        setContentView(R.layout.activity_all_companies);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        RecyclerView recyclerView = findViewById(R.id.devicesRecyclerView);
+        RecyclerView recyclerView = findViewById(R.id.companiesRecyclerView);
 
-         //otherwise list all devices
+
             // Get a new or existing ViewModel from the ViewModelProvider.
-            deviceViewModel =new ViewModelProvider(this).get(DeviceViewModel.class);
-            LiveData<List<Device>> devices = deviceViewModel.getAllDevices();
-
+            deviceViewModel = new ViewModelProvider(this).get(DeviceViewModel.class);
+            LiveData<List<Company>> companies = deviceViewModel.getAllCompanies();
 
             //onclick
             View.OnClickListener mOnClickListener = new View.OnClickListener() {
@@ -47,34 +46,22 @@ public class AllDevices extends AppCompatActivity {
                     int itemPosition = recyclerView.getChildLayoutPosition(v);
 
                     //get device fields
-                    String nev = Objects.requireNonNull(devices.getValue()).get(itemPosition).name;
-                    int id = devices.getValue().get(itemPosition).id;
-                    int price = devices.getValue().get(itemPosition).getPrice();
-                    int profit = devices.getValue().get(itemPosition).profit;
-                    int companyId = devices.getValue().get(itemPosition).ownerCompanyId;
-                    int ram = devices.getValue().get(itemPosition).ram;
-                    int memory = devices.getValue().get(itemPosition).memory;
-                    int cost = devices.getValue().get(itemPosition).cost;
-
-
+                    String nev = Objects.requireNonNull(companies.getValue()).get(itemPosition).name;
+                    int id = companies.getValue().get(itemPosition).companyId;
+                    int money = companies.getValue().get(itemPosition).money;
 
                     //make intent
                     Intent intent = new Intent();
                     intent.putExtra(MainActivity.NAME_FIELD, nev);
-                    intent.putExtra(MainActivity.DEVICE_PRICE, price);
-                    intent.putExtra(MainActivity.MAIN_MONETARIAL_INFO, profit);
-                    intent.putExtra(MainActivity.DEVICE_COMPANY_ID, companyId);
-                    intent.putExtra(MainActivity.DEVICE_RAM, ram);
-                    intent.putExtra(MainActivity.DEVICE_MEMORY, memory);
-                    intent.putExtra(MainActivity.DEVICE_COST, cost);
+                    intent.putExtra(MainActivity.MAIN_MONETARIAL_INFO, money);
                     intent.putExtra("ID", id);
-                    intent.setClass(getBaseContext(), DetailsOfOneDevice.class);
+                    intent.setClass(getBaseContext(), DetailsOfOneCompany.class);
 
                     //start new activity
-                    startActivityForResult(intent, MainActivity.DISPLAY_DEVICES_REQUEST_CODE);
+                    startActivityForResult(intent, MainActivity.DISPLAY_COMPANIES_REQUEST_CODE);
                 }
             };
-            final DeviceListAdapter adapter = new DeviceListAdapter(this, mOnClickListener);
+            final CompanyListAdapter adapter = new CompanyListAdapter(this, mOnClickListener);
             recyclerView.setAdapter(adapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -82,14 +69,15 @@ public class AllDevices extends AppCompatActivity {
             // Add an observer on the LiveData returned by getAlphabetizedWords.
             // The onChanged() method fires when the observed data changes and the activity is
             // in the foreground.
-            deviceViewModel.getAllDevices().observe(this, new Observer<List<Device>>() {
+
+            deviceViewModel.getAllCompanies().observe(this, new Observer<List<Company>>() {
                 @Override
-                public void onChanged(@Nullable final List<Device> devs) {
+                public void onChanged(@Nullable final List<Company> comps) {
                     // Update the cached copy of the words in the adapter.
-                    adapter.setDevices(devs);
+                    adapter.setCompanies(comps);
                 }
             });
-            Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
 
@@ -121,9 +109,8 @@ public class AllDevices extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK && data.getBooleanExtra("IS_DELETE",false)) {
-            deviceViewModel.delOneDeviceById(data.getIntExtra("ID",-1));
-            Toast.makeText(getApplicationContext(), "SIKERULT torolni", Toast.LENGTH_LONG).show();
-        }
+            deviceViewModel.delOneCompanyById(data.getIntExtra("ID",-1));
+            Toast.makeText(getApplicationContext(), "SIKERULT torolni", Toast.LENGTH_LONG).show();}
     }
 
 }
