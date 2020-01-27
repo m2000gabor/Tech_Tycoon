@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider;
 //TODO time
 //TODO companies have a development route and cost limiting the available features
 //TODO detailed stats
+//TODO nem sikerult hozzaadni toast iin mainactivity
 
 public class MainActivity extends AppCompatActivity {
     public static final String NAME_FIELD ="name" ;
@@ -105,11 +106,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void start_again(View view){
         deviceViewModel.deleteAll();
-        deviceViewModel.insertCompany(new Company("Apple",10));
-        deviceViewModel.insertCompany(new Company("Samsung",10));
-        deviceViewModel.insertCompany(new Company("Xiaomi",10));
-        deviceViewModel.insertCompany(new Company("Sony",10));
-        deviceViewModel.insertCompany(new Company("MyPhone",10));
+        deviceViewModel.insertCompanies(new Company("Apple",10),
+                new Company("Samsung",10),
+                new Company("Xiaomi",10),
+                new Company("Sony",10),
+                new Company("MyPhone",10) );
     }
 
     public void start_simulation(View view){
@@ -146,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
                     String name=data.getStringExtra(NAME_FIELD);
                     int monetary=data.getIntExtra(MAIN_MONETARIAL_INFO,0);
                     Company c = new Company(name,monetary);
-                    deviceViewModel.insertCompany(c);
+                    deviceViewModel.insertCompanies(c);
                     Toast.makeText(
                             getApplicationContext(),
                             "SIKERULT hozzaadni",

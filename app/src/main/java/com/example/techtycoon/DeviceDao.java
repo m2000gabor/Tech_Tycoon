@@ -3,8 +3,8 @@ package com.example.techtycoon;
 import java.util.List;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
@@ -24,12 +24,28 @@ public interface DeviceDao {
     @Query("SELECT * FROM device")
     List<Device> getAllDevicesList();
 
+    //Ordered ones
+    @Query("SELECT * FROM device ORDER BY soldPieces DESC")
+    LiveData<List<Device>> orderedDevicesBy_SoldPieces();
+
+    @Query("SELECT * FROM device ORDER BY ram DESC")
+    LiveData<List<Device>> orderedDevicesBy_Ram();
+
+    @Query("SELECT * FROM device ORDER BY memory DESC")
+    LiveData<List<Device>> orderedDevicesBy_Memory();
+
+    //get all devices of one company
+    @Query("SELECT * FROM device WHERE ownerCompanyId IN (:ownerIds)")
+    LiveData<List<Device>> getAllDevices_byCompanyIDs(int[] ownerIds);
+
+    /*
     @Query("SELECT * FROM device WHERE id IN (:deviceIds)")
     LiveData<List<Device>> loadAllByIds(int[] deviceIds);
 
-    /*@Query("SELECT * FROM device WHERE name LIKE :first AND " +
+    @Query("SELECT * FROM device WHERE name LIKE :first AND " +
             "profit LIKE :last LIMIT 1")
     Device findByName(String first, String last);*/
+
     @Query("DELETE FROM device WHERE id = :Id")
     void deleteOneDeviceById(int Id);
 
@@ -40,12 +56,9 @@ public interface DeviceDao {
     void insertOneDevice(Device device);
 
     @Insert
-    void insertOneCompany(Company company);
+    void insertCompanies(Company... companies);
 
     /*
-    @Insert
-    void insertAll(Device... devices);
-
     @Delete
     void delete(Device device);*/
 

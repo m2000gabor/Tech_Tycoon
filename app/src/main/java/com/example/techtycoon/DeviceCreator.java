@@ -4,39 +4,39 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 public class DeviceCreator extends AppCompatActivity {
 
     private static final int CHOOSE_MEMORY_REQUEST = 1;
-    boolean isMemorySetted=false;
+    boolean isMemorySet=false;
     int ram;
     int memory;
-    int cost=0;
+    int memoryCost=0;
 
     //from newdeviceBasics
     private EditText deviceNameField;
     private EditText profitField;
     private TextView currentCostField;
+    private ImageView isSetMemoryImage;
     String[] nameOfCompanies;
     List<Company> companies;
     DeviceViewModel deviceViewModel;
@@ -52,9 +52,10 @@ public class DeviceCreator extends AppCompatActivity {
         deviceNameField = findViewById(R.id.deviceNameInputField);
         profitField = findViewById(R.id.profitInputField);
         currentCostField = findViewById(R.id.currentCostTextView);
+        isSetMemoryImage = findViewById(R.id.isSetMemory);
 
 
-        deviceViewModel = ViewModelProviders.of(this).get(DeviceViewModel.class);
+        deviceViewModel = new ViewModelProvider(this).get(DeviceViewModel.class);
         companies=deviceViewModel.getAllCompaniesList();
 
         String[] tmp=new String[companies.size()];
@@ -66,7 +67,7 @@ public class DeviceCreator extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(isMemorySetted){
+                if(isMemorySet){
                     addDevice();
                 }else {
                     Toast.makeText(getApplicationContext(),"All parameters have to be specified!",
@@ -74,7 +75,7 @@ public class DeviceCreator extends AppCompatActivity {
                 }
             }
         });
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
     }
 
@@ -94,7 +95,7 @@ public class DeviceCreator extends AppCompatActivity {
             Spinner sp=findViewById(R.id.spinner);
             int maker=companies.get(sp.getSelectedItemPosition()).companyId;
 
-            deviceViewModel.insertDevice(new Device(deviceName,profit,cost,maker,ram,memory));
+            deviceViewModel.insertDevice(new Device(deviceName,profit, getOverallCost(),maker,ram,memory));
 
             setResult(RESULT_OK);
         }
@@ -109,10 +110,11 @@ public class DeviceCreator extends AppCompatActivity {
                 case CHOOSE_MEMORY_REQUEST:
                     ram=data.getIntExtra("amountOfRam",0);
                     memory=data.getIntExtra("amountOfMemory",0);
-                    cost+=data.getIntExtra("costs",99);
-                    currentCostField.setText(String.format(Locale.getDefault(),"The current cost is %d$",cost));
-                    Toast.makeText(this,Integer.toString(cost),Toast.LENGTH_LONG).show();
-                    isMemorySetted=true;
+                    memoryCost=data.getIntExtra("costs",99);
+                    currentCostField.setText(String.format(Locale.getDefault(),"The current cost is %d$", getOverallCost()));
+                    //Toast.makeText(this,Integer.toString(cost),Toast.LENGTH_LONG).show();
+                    isMemorySet=true;
+                    isSetMemoryImage.setImageDrawable(getDrawable(R.drawable.ic_check_green_24dp));
                     break;
             }
         }
@@ -142,4 +144,6 @@ public class DeviceCreator extends AppCompatActivity {
         public void onNothingSelected(AdapterView<?> arg0) {
         }
     }
+
+    int getOverallCost(){ return memoryCost; }
 }

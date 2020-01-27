@@ -48,6 +48,11 @@ public class ChooseMemoryActivity extends AppCompatActivity {
         TextView ramCounter=findViewById(R.id.ramCounterTextView);
         SeekBar ramSeekbar=findViewById(R.id.ramSeekBar);
         TextView ramCost=findViewById(R.id.ramCost);
+
+
+
+
+        //ramSeekbar
         ramSeekbar.setMax(6);
         //update ui
         ramCounter.setText(String.format(Locale.getDefault(),"%d GB",1) );
@@ -68,7 +73,7 @@ public class ChooseMemoryActivity extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {}
         });
 
-
+        //memorySeekbar
         TextView memoryCounter=findViewById(R.id.memoryCounterTextView);
         TextView memoryCost=findViewById(R.id.memoryCost);
         SeekBar memorySeekbar=findViewById(R.id.memorySeekBar);
@@ -80,7 +85,7 @@ public class ChooseMemoryActivity extends AppCompatActivity {
         memorySeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                mMemory=(int) Math.round(Math.pow(2,progress)) ;
+                mMemory=(int) Math.round(Math.pow(2,progress));
                 memoryCounter.setText(String.format(Locale.getDefault(),"%d GB",mMemory) );
                 memoryCost.setText(String.format(Locale.getDefault(),"%.2f$",(log2(mMemory)+1)*MEMORY_PER_GB));
             }

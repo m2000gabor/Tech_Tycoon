@@ -5,6 +5,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 //TODO new attributes
+//TODO save the name of the owner comapany
 
 @Entity
 public class Device {

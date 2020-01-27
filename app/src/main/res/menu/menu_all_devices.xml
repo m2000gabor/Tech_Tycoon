@@ -5,6 +5,12 @@
     tools:context="com.example.techtycoon.AllDevices">
 
     <item
+        android:id="@+id/action_sortBy"
+        android:icon="@drawable/ic_sort_white_24dp"
+        android:title="Sort By"
+        app:showAsAction="ifRoom"/>
+
+    <item
         android:id="@+id/menuitem_deleteALL"
         android:orderInCategory="100"
         android:title="Delete All"

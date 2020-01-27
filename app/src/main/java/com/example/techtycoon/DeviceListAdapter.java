@@ -1,6 +1,5 @@
 package com.example.techtycoon;
 
-import android.app.Activity;
 import android.content.Context;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,11 +18,17 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
     class DeviceViewHolder extends RecyclerView.ViewHolder {
         private final TextView deviceNameItemView;
         private final TextView deviceLastlySoldTextView;
+        private final TextView deviceRamTextView;
+        private final TextView deviceMemoryTextView;
+        private final TextView priceTextView;
 
         private DeviceViewHolder(View itemView) {
             super(itemView);
             deviceNameItemView = itemView.findViewById(R.id.deviceNameTextView);
             deviceLastlySoldTextView = itemView.findViewById(R.id.deviceLastlySoldTextView);
+            deviceRamTextView = itemView.findViewById(R.id.deviceRamTextView);
+            deviceMemoryTextView = itemView.findViewById(R.id.deviceMemoryTextView);
+            priceTextView = itemView.findViewById(R.id.priceTextView);
         }
     }
 
@@ -36,11 +41,13 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
         mOnClickListener=onClickListener;
     }
 
+    Device getDeviceFromCache(int i){return devices.get(i);}
+
 
 
     @Override
     public DeviceViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = mInflater.inflate(R.layout.recyclerview_item, parent, false);
+        View itemView = mInflater.inflate(R.layout.recyclerview_item_device, parent, false);
         itemView.setOnClickListener(mOnClickListener);
         return new DeviceViewHolder(itemView);
     }
@@ -51,6 +58,9 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
             Device current = devices.get(position);
             holder.deviceNameItemView.setText(current.name);
             holder.deviceLastlySoldTextView.setText(String.format(Locale.getDefault(),"%d",current.soldPieces));
+            holder.deviceRamTextView.setText(String.format(Locale.getDefault(),"RAM: %dGB",current.ram));
+            holder.deviceMemoryTextView.setText(String.format(Locale.getDefault(),"Memory: %dGB",current.memory));
+            holder.priceTextView.setText(String.format(Locale.getDefault(),"Price: %d$",current.getPrice()));
         } else {
             // Covers the case of data not being ready yet.
             holder.deviceNameItemView.setText("No device name");

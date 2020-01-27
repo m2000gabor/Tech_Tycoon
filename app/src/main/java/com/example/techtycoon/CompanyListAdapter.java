@@ -20,8 +20,8 @@ public class CompanyListAdapter extends RecyclerView.Adapter<CompanyListAdapter.
 
         private CompanyViewHolder(View itemView) {
             super(itemView);
-            companyNameItemView = itemView.findViewById(R.id.deviceNameTextView);
-            companylastProfitItemView = itemView.findViewById(R.id.deviceLastlySoldTextView);
+            companyNameItemView = itemView.findViewById(R.id.companyNameTextView);
+            companylastProfitItemView = itemView.findViewById(R.id.companyLastlySoldTextView);
         }
     }
 
@@ -38,7 +38,7 @@ public class CompanyListAdapter extends RecyclerView.Adapter<CompanyListAdapter.
 
     @Override
     public CompanyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = mInflater.inflate(R.layout.recyclerview_item, parent, false);
+        View itemView = mInflater.inflate(R.layout.recyclerview_item_company, parent, false);
         itemView.setOnClickListener(mOnClickListener);
         return new CompanyViewHolder(itemView);
     }

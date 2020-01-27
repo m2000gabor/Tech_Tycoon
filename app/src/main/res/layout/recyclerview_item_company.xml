@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/linearLayout"
+    android:id="@+id/linearLayout2"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/holo_orange_light"
@@ -9,7 +9,7 @@
     >
 
     <TextView
-        android:id="@+id/deviceNameTextView"
+        android:id="@+id/companyNameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
@@ -20,7 +20,7 @@
         />
 
     <TextView
-        android:id="@+id/deviceLastlySoldTextView"
+        android:id="@+id/companyLastlySoldTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="\?"
@@ -28,6 +28,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.953"
-        app:layout_constraintStart_toStartOf="@+id/deviceNameTextView" />
+        app:layout_constraintStart_toStartOf="@+id/companyNameTextView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
