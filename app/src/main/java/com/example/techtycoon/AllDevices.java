@@ -10,6 +10,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -21,6 +23,8 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import static com.example.techtycoon.MainActivity.NEW_DEVICE_ACTIVITY_REQUEST_CODE;
 
 //TODO using livedata and observer appropriately
 
@@ -40,6 +44,13 @@ public class AllDevices extends AppCompatActivity{
 
         RecyclerView recyclerView = findViewById(R.id.devicesRecyclerView);
 
+        FloatingActionButton fab = findViewById(R.id.fab_addNewDevice);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startAddNewDeviceActivity();
+            }
+        });
 
             // Get a new or existing ViewModel from the ViewModelProvider.
             deviceViewModel =new ViewModelProvider(this).get(DeviceViewModel.class);
@@ -135,10 +146,6 @@ public class AllDevices extends AppCompatActivity{
             deviceViewModel.deleteAll();
             return true;
         }else if(id == R.id.action_sortBy){
-            //adapter.setDevices(deviceViewModel.getDeviceList_orderedBy_SoldPieces());
-            //
-            //            showNoticeDialog();
-            //            //sortBy();
             return true;
         }
 
@@ -148,8 +155,7 @@ public class AllDevices extends AppCompatActivity{
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        if (resultCode == RESULT_OK && data.getBooleanExtra("IS_DELETE",false)) {
+        if (requestCode!=NEW_DEVICE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK && data.getBooleanExtra("IS_DELETE",false)) {
             deviceViewModel.delOneDeviceById(data.getIntExtra("ID",-1));
             Toast.makeText(getApplicationContext(), "SIKERULT torolni", Toast.LENGTH_LONG).show();
         }
@@ -234,6 +240,12 @@ public class AllDevices extends AppCompatActivity{
         @Override
         public void onNothingSelected(AdapterView<?> arg0) {
         }
+    }
+
+
+    public void startAddNewDeviceActivity(){
+        Intent addNewDevice = new Intent(getApplicationContext(), DeviceCreator.class);
+        startActivityForResult(addNewDevice,NEW_DEVICE_ACTIVITY_REQUEST_CODE);
     }
 
 }

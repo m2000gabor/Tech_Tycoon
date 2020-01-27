@@ -125,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), "1 month simulated", Toast.LENGTH_SHORT).show();
     }
 
+
     public void startAddNewDeviceActivity(){
         Intent addNewDevice = new Intent(getApplicationContext(), DeviceCreator.class);
         startActivityForResult(addNewDevice,NEW_DEVICE_ACTIVITY_REQUEST_CODE);
@@ -133,6 +134,10 @@ public class MainActivity extends AppCompatActivity {
     public void startAddNewCompanyActivity(){
         Intent addNewCompany = new Intent(getApplicationContext(),AddNewCompany.class);
         startActivityForResult(addNewCompany,NEW_COMPANY_ACTIVITY_REQUEST_CODE);
+    }
+
+    public void startTabbedActivity(View view){
+        startActivity(new Intent().setClass(this,TabbedActivity.class));
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -155,10 +160,7 @@ public class MainActivity extends AppCompatActivity {
                     break;
             }
         }else{
-            Toast.makeText(
-                    getApplicationContext(),
-                    "NEM sikerult hozzaadni",
-                    Toast.LENGTH_LONG).show();
+            //Toast.makeText(getApplicationContext(),"NEM sikerult hozzaadni",Toast.LENGTH_LONG).show();
         }
     }
 }
