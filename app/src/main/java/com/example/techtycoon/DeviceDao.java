@@ -33,9 +33,19 @@ public interface DeviceDao {
     @Query("SELECT * FROM device ORDER BY memory DESC")
     LiveData<List<Device>> orderedDevicesBy_Memory();
 
+    //filtered
     //get all devices of one company
-    @Query("SELECT * FROM device WHERE ownerCompanyId IN (:ownerIds)")
+    @Query("SELECT * FROM device WHERE ownerCompanyId IN (:ownerIds) ")
     LiveData<List<Device>> getAllDevices_byCompanyIDs(int[] ownerIds);
+
+    @Query("SELECT * FROM device WHERE ownerCompanyId IN (:ownerIds) ORDER BY soldPieces DESC")
+    LiveData<List<Device>> orderedDevicesBy_SoldPieces(int[] ownerIds);
+
+    @Query("SELECT * FROM device WHERE ownerCompanyId IN (:ownerIds) ORDER BY ram DESC")
+    LiveData<List<Device>> orderedDevicesBy_Ram(int[] ownerIds);
+
+    @Query("SELECT * FROM device WHERE ownerCompanyId IN (:ownerIds) ORDER BY memory DESC")
+    LiveData<List<Device>> orderedDevicesBy_Memory(int[] ownerIds);
 
     /*
     @Query("SELECT * FROM device WHERE id IN (:deviceIds)")

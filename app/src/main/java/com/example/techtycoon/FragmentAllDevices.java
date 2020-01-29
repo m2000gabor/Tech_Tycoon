@@ -23,7 +23,6 @@ import android.widget.Toast;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
-import static com.example.techtycoon.MainActivity.NEW_DEVICE_ACTIVITY_REQUEST_CODE;
 
 
 public class FragmentAllDevices extends Fragment {
@@ -133,7 +132,7 @@ public class FragmentAllDevices extends Fragment {
             //Getting the instance of Spinner and applying OnItemSelectedListener on it
             this.spin =sp;
             spin.setOnItemSelectedListener(this);
-            String[] sortingOptions = {"ID","Sold pieces", "Ram", "Memory"};
+            String[] sortingOptions = {"SortBy","ID","Sold pieces", "Ram", "Memory"};
 
             //Creating the ArrayAdapter instance having the nameOfCompanies list
             ArrayAdapter aa = new ArrayAdapter(getContext(),android.R.layout.simple_spinner_item,sortingOptions );
@@ -149,7 +148,8 @@ public class FragmentAllDevices extends Fragment {
 
             // Update the cached copy of the words in the adapter.
             //observer= devs -> { adapter.setDevices(devs); };
-            deviceViewModel.orderDevices_ByCode(position);
+            if(position==0){position++;}
+            deviceViewModel.orderDevices_ByCode2(position-1);
             //Toast.makeText(getApplicationContext(),Boolean.toString(deviceList.hasObservers()), Toast.LENGTH_LONG).show();
             //deviceList.observeForever(observer);
         }
@@ -186,19 +186,12 @@ public class FragmentAllDevices extends Fragment {
         //Performing action onItemSelected and onNothing selected
         @Override
         public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id) {
-            observer=new Observer<List<Device>>() {
-                @Override
-                public void onChanged(@Nullable final List<Device> devs) {
-                    // Update the cached copy of the words in the adapter.
-                    adapter.setDevices(devs);
-                }};
-            if(position==0){deviceList=deviceViewModel.getAllDevices();
-            }else{
-                int[] companyIDs={companies[position-1].companyId};
-                deviceList=deviceViewModel.filter_byCompanyIDs(companyIDs);
-            }
-
-            deviceList.observeForever(observer);
+            position--;
+            int companyID;
+            if(position>=0){companyID=companies[position].companyId;
+            }else{companyID=-1;}
+            deviceViewModel.filter_byCompanyID(companyID);
+            //deviceList=deviceViewModel.filter_byCompanyIDs(companyIDs);
         }
         @Override
         public void onNothingSelected(AdapterView<?> arg0) {

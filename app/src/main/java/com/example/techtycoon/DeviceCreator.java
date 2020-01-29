@@ -25,6 +25,7 @@ import java.util.Locale;
 import java.util.Objects;
 
 public class DeviceCreator extends AppCompatActivity {
+    //TODO scrollable
 
     private static final int CHOOSE_MEMORY_REQUEST = 1;
     boolean isMemorySet=false;

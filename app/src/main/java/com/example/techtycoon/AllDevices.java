@@ -27,6 +27,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import static com.example.techtycoon.MainActivity.NEW_DEVICE_ACTIVITY_REQUEST_CODE;
 
 //TODO using livedata and observer appropriately
+//todo delete this activity
 
 public class AllDevices extends AppCompatActivity{
     private DeviceViewModel deviceViewModel;
@@ -173,7 +174,7 @@ public class AllDevices extends AppCompatActivity{
 
             // Update the cached copy of the words in the adapter.
             //observer= devs -> { adapter.setDevices(devs); };
-            deviceViewModel.orderDevices_ByCode(position);
+            deviceViewModel.orderDevices_ByCode2(position);
         }
         @Override
         public void onNothingSelected(AdapterView<?> arg0) {
@@ -216,8 +217,8 @@ public class AllDevices extends AppCompatActivity{
                 }};
             if(position==0){deviceList=deviceViewModel.getAllDevices();
             }else{
-                int[] companyIDs={companies[position-1].companyId};
-                deviceList=deviceViewModel.filter_byCompanyIDs(companyIDs);
+                int companyID=companies[position-1].companyId;
+                deviceViewModel.filter_byCompanyID(companyID);
             }
 
             deviceList.observeForever(observer);
