@@ -119,7 +119,7 @@ public class FragmentDeviceCreator extends Fragment {
         } else {
             String deviceName = deviceNameField.getText().toString();
             int profit = Integer.parseInt(profitField.getText().toString());
-            int maker=companies.get(spin.getSelectedItemPosition()).companyId;
+            int maker=companies.get(spin.getSelectedItemPosition()-1).companyId;
 
             deviceViewModel.insertDevice(new Device(deviceName,profit, getOverallCost(),maker,ram,memory));
             Toast.makeText(getContext(), "Saved", Toast.LENGTH_LONG).show();
@@ -140,7 +140,7 @@ public class FragmentDeviceCreator extends Fragment {
                     isMemorySet = true;
                     isSetMemoryImage.setImageDrawable(getActivity().getDrawable(R.drawable.ic_check_green_24dp));
                     chosenMem.setText(String.format(Locale.getDefault(),"Memory: %dGB", memory));
-                    chosenRam.setText(String.format(Locale.getDefault(),"Memory: %dGB", ram));
+                    chosenRam.setText(String.format(Locale.getDefault(),"Ram: %dGB", ram));
                     chosenMem.setVisibility(View.VISIBLE);
                     chosenRam.setVisibility(View.VISIBLE);
                     break;

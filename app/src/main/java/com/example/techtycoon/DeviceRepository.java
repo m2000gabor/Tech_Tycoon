@@ -6,15 +6,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
-//todo unattached observers might cause memory leak
+//todo remove unattached observers since they cause delays and lag
 
 class DeviceRepository {
-    private static final String[] DEVICE_FIELDS={"name","soldPieces","ram","memory"};
-
     private int orderBy=0;
     private int filter=-1;
 
@@ -23,6 +22,8 @@ class DeviceRepository {
     private LiveData<List<Company>> mAllComps;
 
     private MutableLiveData<List<Device>> mutableAllDevices;
+    private Observer observer;
+    private boolean hasObserver=false;
 
 
     DeviceRepository(Application application) {
@@ -33,31 +34,19 @@ class DeviceRepository {
 
         mutableAllDevices=new MutableLiveData<List<Device>>();
         setSortBy(orderBy);
-
     }
 
     //mutables
     LiveData<List<Device>> mutable_getAllDevices() { return mutableAllDevices; }
+
     void setSortBy(int sortBy){
         orderBy=sortBy;
-        this.getDevices_with_sort_filter();
-        mAllDevs.observeForever(new Observer<List<Device>>() {
-            @Override
-            public void onChanged(List<Device> deviceList) {
-                mutableAllDevices.setValue(deviceList);
-            }
-        });
+        getDevices_with_sort_filter();
     }
 
     void setFilter(int filterBy){
         filter=filterBy;
         getDevices_with_sort_filter();
-        mAllDevs.observeForever(new Observer<List<Device>>() {
-            @Override
-            public void onChanged(List<Device> deviceList) {
-                mutableAllDevices.setValue(deviceList);
-            }
-        });
     }
 
 
@@ -164,12 +153,18 @@ class DeviceRepository {
 
     //depend on the last sort and filter settings
     private void getDevices_with_sort_filter(){
+        if(hasObserver){mAllDevs.removeObserver(observer);};
         if(filter==-1){
             switch (orderBy){
                 default: mAllDevs=mDao.getAllDevices();break;
                 case 1: mAllDevs=mDao.orderedDevicesBy_SoldPieces(); break;
                 case 2: mAllDevs=mDao.orderedDevicesBy_Ram(); break;
                 case 3: mAllDevs=mDao.orderedDevicesBy_Memory(); break;
+                case 4: mAllDevs=mDao.orderedDevicesBy_Profit(); break;
+                case 5:mAllDevs=mDao.orderedDevicesBy_Name(); break;
+                case 6: mAllDevs=mDao.orderedDevicesBy_Price(); break;
+                case 7: mAllDevs=mDao.orderedDevicesBy_OverallIncome(); break;
+
             }
         } else{
             switch (orderBy){
@@ -177,8 +172,22 @@ class DeviceRepository {
                 case 1: mAllDevs=mDao.orderedDevicesBy_SoldPieces(new int[]{filter}); break;
                 case 2: mAllDevs=mDao.orderedDevicesBy_Ram(new int[]{filter}); break;
                 case 3: mAllDevs=mDao.orderedDevicesBy_Memory(new int[]{filter}); break;
+                case 4: mAllDevs=mDao.orderedDevicesBy_Profit(new int[]{filter}); break;
+                case 5: mAllDevs=mDao.orderedDevicesBy_Name(new int[]{filter}); break;
+                case 6: mAllDevs=mDao.orderedDevicesBy_Price(new int[]{filter}); break;
+                case 7: mAllDevs=mDao.orderedDevicesBy_OverallIncome(new int[]{filter}); break;
             }
         }
+
+        observer=new Observer<List<Device>>() {
+            @Override
+            public void onChanged(List<Device> deviceList) {
+                mutableAllDevices.setValue(deviceList);
+            }
+        };
+
+        mAllDevs.observeForever(observer);
+        hasObserver=true;
     }
 
 }

@@ -26,6 +26,7 @@ import static android.app.Activity.RESULT_OK;
 
 
 public class FragmentAllDevices extends Fragment {
+    //todo sort by price
 
     private DeviceViewModel deviceViewModel;
     private DeviceListAdapter adapter;
@@ -132,7 +133,7 @@ public class FragmentAllDevices extends Fragment {
             //Getting the instance of Spinner and applying OnItemSelectedListener on it
             this.spin =sp;
             spin.setOnItemSelectedListener(this);
-            String[] sortingOptions = {"SortBy","ID","Sold pieces", "Ram", "Memory"};
+            String[] sortingOptions = {"SortBy","ID","Sold pieces", "Ram", "Memory","Profit per item","Name","Price","Overall income"};
 
             //Creating the ArrayAdapter instance having the nameOfCompanies list
             ArrayAdapter aa = new ArrayAdapter(getContext(),android.R.layout.simple_spinner_item,sortingOptions );
