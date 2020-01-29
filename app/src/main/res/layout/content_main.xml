@@ -13,8 +13,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:onClick="listDevices"
-        android:text="List Devices"
+        android:onClick="deleteAll"
+        android:text="Delete All"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -24,20 +24,19 @@
         android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="listCompanies"
-        android:text="list companies"
+        android:onClick="addCompany"
+        android:text="Add new company"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button"
-        app:layout_constraintVertical_bias="0.055" />
+        app:layout_constraintVertical_bias="0.023" />
 
     <Button
         android:id="@+id/button3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@android:color/holo_red_light"
         android:onClick="start_simulation"
         android:text="Simulate 1 month"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -45,13 +44,14 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button"
-        app:layout_constraintVertical_bias="0.238" />
+        app:layout_constraintVertical_bias="0.159" />
 
     <Button
         android:id="@+id/startTabbedActivity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="60dp"
+        android:background="@android:color/holo_red_light"
         android:onClick="startTabbedActivity"
         android:text="Start Tabbed Activity"
         app:layout_constraintEnd_toEndOf="parent"

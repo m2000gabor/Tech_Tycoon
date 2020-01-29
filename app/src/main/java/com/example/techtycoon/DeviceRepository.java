@@ -10,7 +10,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
-//TODO make the reposotory to the only source of data
 //todo unattached observers might cause memory leak
 
 class DeviceRepository {

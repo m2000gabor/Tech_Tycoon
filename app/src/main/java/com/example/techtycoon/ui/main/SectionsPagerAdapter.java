@@ -3,7 +3,6 @@ package com.example.techtycoon.ui.main;
 import android.content.Context;
 
 import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -11,7 +10,6 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import com.example.techtycoon.FragmentAllCompanies;
 import com.example.techtycoon.FragmentAllDevices;
 import com.example.techtycoon.FragmentDeviceCreator;
-import com.example.techtycoon.R;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -31,7 +29,6 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         // getItem is called to instantiate the fragment for the given page.
-        // Return a PlaceholderFragment (defined as a static inner class below).
         Fragment fr;
         switch (position){
             default:fr=PlaceholderFragment.newInstance(position + 1);break;

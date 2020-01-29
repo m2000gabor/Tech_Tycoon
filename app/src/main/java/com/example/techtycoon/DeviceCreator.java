@@ -26,6 +26,7 @@ import java.util.Objects;
 
 public class DeviceCreator extends AppCompatActivity {
     //TODO scrollable
+    //todo display chosen params (from chooser activities)
 
     private static final int CHOOSE_MEMORY_REQUEST = 1;
     boolean isMemorySet=false;

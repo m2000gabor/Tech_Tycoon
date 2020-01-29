@@ -96,17 +96,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /** Called when the user touches the List Devices button */
-    public void listDevices(View view) {
-        Intent intent = new Intent();
-        intent.setClass(getApplicationContext(),AllDevices.class);
-        startActivity(intent);
+    public void deleteAll(View view) {
+        deviceViewModel.deleteAll();
     }
 
-    public void listCompanies(View view){
-        Intent intent = new Intent();
-        intent.setClass(getApplicationContext(),allCompanies.class);
-        startActivity(intent);
-    }
+    public void addCompany(View view){startAddNewCompanyActivity();}
 
     public void start_again(View view){
         deviceViewModel.deleteAll();

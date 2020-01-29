@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,28 +25,30 @@ import java.util.Locale;
 
 import static android.app.Activity.RESULT_OK;
 
-//TODO add reset button
 //TODO monetary
 
 public class FragmentDeviceCreator extends Fragment {
     private static final int CHOOSE_MEMORY_REQUEST = 1;
     int ram;
-    int ramLevel;
+    private int ramLevel;
     int memory;
-    int memoryLevel;
+    private int memoryLevel;
     private int memoryCost=0;
 
-    //from newdeviceBasics
+    //layout res
     private EditText deviceNameField;
     private EditText profitField;
     private TextView currentCostField;
+    private TextView chosenMem;
+    private TextView chosenRam;
     private ImageView isSetMemoryImage;
-    private String[] nameOfCompanies;
+
     private List<Company> companies;
     private DeviceViewModel deviceViewModel;
     private Spinner spin;
 
     private boolean isMemorySet;
+    private boolean isCompanySet=false;
 
     public static FragmentDeviceCreator newInstance() {
         FragmentDeviceCreator fragment = new FragmentDeviceCreator();
@@ -72,6 +75,8 @@ public class FragmentDeviceCreator extends Fragment {
         deviceNameField = root.findViewById(R.id.deviceNameInputField);
         profitField = root.findViewById(R.id.profitInputField);
         currentCostField = root.findViewById(R.id.currentCostTextView);
+        chosenMem = root.findViewById(R.id.chosenMemory);
+        chosenRam = root.findViewById(R.id.chosenRam);
         isSetMemoryImage = root.findViewById(R.id.isSetMemory);
         spin = root.findViewById(R.id.spinner);
 
@@ -84,23 +89,23 @@ public class FragmentDeviceCreator extends Fragment {
         });
 
         //set up reset button
-        root.findViewById(R.id.resetDeviceCreator).setOnClickListener(v -> reset());
+        root.findViewById(R.id.resetDeviceCreator).setOnClickListener(v -> reset(true));
 
         //start memorychooser
-        root.findViewById(R.id.startMemoryChooserRelativelayout).setOnClickListener(new View.OnClickListener() {
+        RelativeLayout startMemoryChooserRelativelayout = root.findViewById(R.id.startMemoryChooserRelativeLayout);
+        startMemoryChooserRelativelayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent chooseMemory = new Intent(getContext(),ChooseMemoryActivity.class);
-                chooseMemory.putExtra(MainActivity.RAM_LVL,ramLevel);
-                chooseMemory.putExtra(MainActivity.MEMORY_LVL,memoryLevel);
-                startActivityForResult(chooseMemory,CHOOSE_MEMORY_REQUEST);
+                if(isCompanySet){
+                    Intent chooseMemory = new Intent(getContext(),ChooseMemoryActivity.class);
+                    chooseMemory.putExtra(MainActivity.RAM_LVL,ramLevel);
+                    chooseMemory.putExtra(MainActivity.MEMORY_LVL,memoryLevel);
+                    startActivityForResult(chooseMemory,CHOOSE_MEMORY_REQUEST);
+                }else {
+                    Toast.makeText(getContext(),"Choose a manufacturer",Toast.LENGTH_SHORT).show();
+                }
             }
         });
-
-
-        String[] tmp=new String[companies.size()];
-        for(int i=0;i<companies.size();i++){tmp[i]=companies.get(i).name;}
-        nameOfCompanies =tmp;
         new MySpinnerAdapter(spin);
 
         // Inflate the layout for this fragment
@@ -109,8 +114,8 @@ public class FragmentDeviceCreator extends Fragment {
 
 
     private void addDevice() {
-        if (!isMemorySet || TextUtils.isEmpty(profitField.getText())) {
-            Toast.makeText(getContext(), "profit is required", Toast.LENGTH_LONG).show();
+        if (!isMemorySet || !isCompanySet|| TextUtils.isEmpty(profitField.getText())) {
+            Toast.makeText(getContext(), "All params are required", Toast.LENGTH_LONG).show();
         } else {
             String deviceName = deviceNameField.getText().toString();
             int profit = Integer.parseInt(profitField.getText().toString());
@@ -118,7 +123,7 @@ public class FragmentDeviceCreator extends Fragment {
 
             deviceViewModel.insertDevice(new Device(deviceName,profit, getOverallCost(),maker,ram,memory));
             Toast.makeText(getContext(), "Saved", Toast.LENGTH_LONG).show();
-            reset();
+            reset(true);
         }
     }
 
@@ -134,6 +139,10 @@ public class FragmentDeviceCreator extends Fragment {
                     currentCostField.setText(String.format(Locale.getDefault(),"The current cost is %d$", getOverallCost()));
                     isMemorySet = true;
                     isSetMemoryImage.setImageDrawable(getActivity().getDrawable(R.drawable.ic_check_green_24dp));
+                    chosenMem.setText(String.format(Locale.getDefault(),"Memory: %dGB", memory));
+                    chosenRam.setText(String.format(Locale.getDefault(),"Memory: %dGB", ram));
+                    chosenMem.setVisibility(View.VISIBLE);
+                    chosenRam.setVisibility(View.VISIBLE);
                     break;
             }
         }
@@ -143,12 +152,16 @@ public class FragmentDeviceCreator extends Fragment {
             AdapterView.OnItemSelectedListener {
 
         MySpinnerAdapter(Spinner spin) {
-            //Getting the instance of Spinner and applying OnItemSelectedListener on it
+            String[] tmp=new String[companies.size()+1];
+            tmp[0]="Choose a manufacturer";
+            for(int i=1;i<=companies.size();i++){tmp[i]=companies.get(i-1).name;}
 
+
+            //Getting the instance of Spinner and applying OnItemSelectedListener on it
             spin.setOnItemSelectedListener(this);
 
             //Creating the ArrayAdapter instance having the nameOfCompanies list
-            ArrayAdapter aa = new ArrayAdapter(getContext(),android.R.layout.simple_spinner_item, nameOfCompanies);
+            ArrayAdapter aa = new ArrayAdapter(getContext(),android.R.layout.simple_spinner_item, tmp);
             aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             //Setting the ArrayAdapter data on the Spinner
             spin.setAdapter(aa);
@@ -157,8 +170,16 @@ public class FragmentDeviceCreator extends Fragment {
         //Performing action onItemSelected and onNothing selected
         @Override
         public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id) {
-            ramLevel=companies.get(position).getLevels_USE_THIS()[0];
-            memoryLevel=companies.get(position).getLevels_USE_THIS()[1];
+            if(position==0){
+                isCompanySet=false;
+                reset(false);
+                //Toast.makeText(getContext(),"Choose a manufacturer",Toast.LENGTH_SHORT).show();
+            }else{
+                isCompanySet=true;
+                reset(false);
+                ramLevel=companies.get(position-1).getLevels_USE_THIS()[0];
+                memoryLevel=companies.get(position-1).getLevels_USE_THIS()[1];
+            }
         }
         @Override
         public void onNothingSelected(AdapterView<?> arg0) {
@@ -167,15 +188,18 @@ public class FragmentDeviceCreator extends Fragment {
 
     private int getOverallCost(){ return memoryCost; }
 
-    private void reset(){
-        spin.setSelection(0);
+    private void reset(boolean isFullReset){
+        if(isFullReset){spin.setSelection(0);}
         companies=deviceViewModel.getAllCompaniesList();
         deviceNameField.setText("");
         profitField.setText("");
         currentCostField.setText("The current cost is 0$");
+        chosenMem.setVisibility(View.INVISIBLE);
+        chosenRam.setVisibility(View.INVISIBLE);
         isMemorySet=false;
         isSetMemoryImage.setImageDrawable(getActivity().getDrawable(R.drawable.ic_cancel_red_24dp));
     }
+
 }
 
 
