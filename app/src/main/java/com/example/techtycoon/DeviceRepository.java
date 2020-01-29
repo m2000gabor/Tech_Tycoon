@@ -31,10 +31,6 @@ class DeviceRepository {
     LiveData<List<Device>> getAllDevices() { return mAllDevs; }
     LiveData<List<Company>> getAllCompanies() { return mAllComps;}
 
-    LiveData<List<Device>> orderedDevicesBy_SoldPieces(){ return mDao.orderedDevicesBy_SoldPieces(); }
-    LiveData<List<Device>> orderedDevicesBy_Ram(){ return mDao.orderedDevicesBy_Ram(); }
-    LiveData<List<Device>> orderedDevicesBy_Memory(){ return mDao.orderedDevicesBy_Memory(); }
-
     LiveData<List<Device>> getAllDevices_byCompanyIDs(int[] ownerIds){ return mDao.getAllDevices_byCompanyIDs(ownerIds); }
 
     List<Company> getAllCompaniesList() {
@@ -82,6 +78,10 @@ class DeviceRepository {
             mDao.updateDevices(devices);
         });
     }
+
+    void updateLevel(int id,int[] lvls,int money){AppDatabase.databaseWriteExecutor.execute(() -> {
+        mDao.updateLevel(id,Converter.intArrayToString(lvls),money);
+    });};
 
 
     void deleteOneDeviceById(int id){

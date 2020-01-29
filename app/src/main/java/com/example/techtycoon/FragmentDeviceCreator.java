@@ -24,11 +24,15 @@ import java.util.Locale;
 
 import static android.app.Activity.RESULT_OK;
 
+//TODO add reset button
+//TODO monetary
 
 public class FragmentDeviceCreator extends Fragment {
     private static final int CHOOSE_MEMORY_REQUEST = 1;
     int ram;
+    int ramLevel;
     int memory;
+    int memoryLevel;
     private int memoryCost=0;
 
     //from newdeviceBasics
@@ -79,11 +83,16 @@ public class FragmentDeviceCreator extends Fragment {
             }
         });
 
+        //set up reset button
+        root.findViewById(R.id.resetDeviceCreator).setOnClickListener(v -> reset());
+
         //start memorychooser
         root.findViewById(R.id.startMemoryChooserRelativelayout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent chooseMemory = new Intent(getContext(),ChooseMemoryActivity.class);
+                chooseMemory.putExtra(MainActivity.RAM_LVL,ramLevel);
+                chooseMemory.putExtra(MainActivity.MEMORY_LVL,memoryLevel);
                 startActivityForResult(chooseMemory,CHOOSE_MEMORY_REQUEST);
             }
         });
@@ -148,7 +157,8 @@ public class FragmentDeviceCreator extends Fragment {
         //Performing action onItemSelected and onNothing selected
         @Override
         public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id) {
-            //Toast.makeText(getApplicationContext(), nameOfCompanies[position] , Toast.LENGTH_LONG).show();
+            ramLevel=companies.get(position).getLevels_USE_THIS()[0];
+            memoryLevel=companies.get(position).getLevels_USE_THIS()[1];
         }
         @Override
         public void onNothingSelected(AdapterView<?> arg0) {
@@ -158,6 +168,8 @@ public class FragmentDeviceCreator extends Fragment {
     private int getOverallCost(){ return memoryCost; }
 
     private void reset(){
+        spin.setSelection(0);
+        companies=deviceViewModel.getAllCompaniesList();
         deviceNameField.setText("");
         profitField.setText("");
         currentCostField.setText("The current cost is 0$");

@@ -18,13 +18,13 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import java.util.List;
-import java.util.Objects;
 
 import static android.app.Activity.RESULT_OK;
 
 
 public class FragmentAllCompanies extends Fragment {
     private DeviceViewModel deviceViewModel;
+    private CompanyListAdapter adapter;
 
     public static FragmentAllCompanies newInstance() {
         FragmentAllCompanies fragment = new FragmentAllCompanies();
@@ -54,24 +54,28 @@ public class FragmentAllCompanies extends Fragment {
             public void onClick(View v) {
                 //number of clicked item
                 int itemPosition = recyclerView.getChildLayoutPosition(v);
+                Company current=adapter.getCompanyFromCache(itemPosition);
 
                 //get device fields
-                String nev = Objects.requireNonNull(companies.getValue()).get(itemPosition).name;
-                int id = companies.getValue().get(itemPosition).companyId;
-                int money = companies.getValue().get(itemPosition).money;
+                String nev = current.name;
+                int id = current.companyId;
+                int money = current.money;
+                int[] levels=current.getLevels_USE_THIS();
 
                 //make intent
                 Intent intent = new Intent();
                 intent.putExtra(MainActivity.NAME_FIELD, nev);
                 intent.putExtra(MainActivity.MAIN_MONETARIAL_INFO, money);
                 intent.putExtra("ID", id);
+                intent.putExtra(MainActivity.RAM_LVL,levels[0]);
+                intent.putExtra(MainActivity.MEMORY_LVL,levels[1]);
                 intent.setClass(getContext(), DetailsOfOneCompany.class);
 
                 //start new activity
                 startActivityForResult(intent, MainActivity.DISPLAY_COMPANIES_REQUEST_CODE);
             }
         };
-        final CompanyListAdapter adapter = new CompanyListAdapter(getContext(), mOnClickListener);
+        adapter = new CompanyListAdapter(getContext(), mOnClickListener);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -96,6 +100,16 @@ public class FragmentAllCompanies extends Fragment {
 
             if (resultCode == RESULT_OK && data.getBooleanExtra("IS_DELETE",false)) {
                 deviceViewModel.delOneCompanyById(data.getIntExtra("ID",-1));
-                Toast.makeText(getContext(), "SIKERULT torolni", Toast.LENGTH_LONG).show();}
+                Toast.makeText(getContext(), "SIKERULT torolni", Toast.LENGTH_LONG).show();
+            }else if(resultCode==RESULT_OK && data.getBooleanExtra("IS_UPDATE",false)){
+                int id =data.getIntExtra("ID",-1);
+                int ramlvl= data.getIntExtra(MainActivity.RAM_LVL,-1);
+                int memlvl = data.getIntExtra(MainActivity.MEMORY_LVL,-1);
+                int money =data.getIntExtra(MainActivity.MAIN_MONETARIAL_INFO,-1);
+                if(ramlvl != -1 && memlvl != -1 && money !=-1){
+
+                    deviceViewModel.updateLevel(id, new int[]{ramlvl,memlvl},money);
+                }
+            }
         }
 }

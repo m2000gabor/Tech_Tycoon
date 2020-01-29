@@ -3,7 +3,6 @@ package com.example.techtycoon;
 import java.util.List;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
@@ -70,6 +69,9 @@ public interface DeviceDao {
 
     @Update
     void updateCompanies(Company... companies);
+
+    @Query("UPDATE company SET  money = :money , levels = :lvlString  WHERE companyId LIKE :id ")
+    void updateLevel(int id,String lvlString,int money);
 
     @Update
     void updateDevices(Device... devices);

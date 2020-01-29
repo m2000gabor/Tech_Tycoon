@@ -12,22 +12,34 @@
         android:id="@+id/companyNameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:textSize="22sp"
+        android:layout_marginStart="4dp"
+        android:text="name"
+        android:textSize="28sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:text="name"
-        />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.285" />
 
     <TextView
         android:id="@+id/companyLastlySoldTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="\?"
-        android:textSize="22sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_margin="@dimen/text_margin"
+        android:text="Last profit: 0$"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/companyNameTextView"
+        app:layout_constraintTop_toBottomOf="@+id/companyNameTextView"
+        />
+
+    <TextView
+        android:id="@+id/companysMoneyTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0$"
+        android:textSize="26sp"
+        app:layout_constraintBottom_toBottomOf="@+id/companyNameTextView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.953"
+        app:layout_constraintHorizontal_bias="0.885"
         app:layout_constraintStart_toStartOf="@+id/companyNameTextView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

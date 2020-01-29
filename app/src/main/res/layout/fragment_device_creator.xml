@@ -129,6 +129,14 @@
             android:text="Save"
             android:layout_margin="@dimen/text_margin"/>
 
+        <Button
+            android:id="@+id/resetDeviceCreator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Reset"
+            android:layout_margin="@dimen/text_margin"/>
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

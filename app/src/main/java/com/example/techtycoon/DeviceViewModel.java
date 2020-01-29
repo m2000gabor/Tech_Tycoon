@@ -39,7 +39,7 @@ public class DeviceViewModel extends AndroidViewModel {
     List<Company> getAllCompaniesList(){return mRepository.getAllCompaniesList();}
     List<Device> getAllDevicesList(){return mRepository.getAllDevicesList();}
 
-    LiveData<List<Device>> orderDevices_ByCode(int code){
+    void orderDevices_ByCode(int code){
         mAllDevices = mRepository.orderDevices_ByCode(code);
         mAllDevices.observeForever(new Observer<List<Device>>() {
             @Override
@@ -47,7 +47,7 @@ public class DeviceViewModel extends AndroidViewModel {
                 mutableAllDevices.setValue(deviceList);
             }
         });
-        return mAllDevices; }
+    }
 
     LiveData<List<Device>> filter_byCompanyIDs(int[] ownerIds){return mRepository.getAllDevices_byCompanyIDs(ownerIds);}
 
@@ -57,6 +57,8 @@ public class DeviceViewModel extends AndroidViewModel {
 
     void updateCompanies(Company... companies) { mRepository.updateCompanies(companies); }
     void updateDevices(Device... devices) { mRepository.updateDevices(devices); }
+
+    void updateLevel(int id, int[] levels,int money){mRepository.updateLevel(id,levels,money);}
 
     void delOneDeviceById(int id) { mRepository.deleteOneDeviceById(id); }
     void delOneCompanyById(int id) { mRepository.delOneCompanyById(id); }

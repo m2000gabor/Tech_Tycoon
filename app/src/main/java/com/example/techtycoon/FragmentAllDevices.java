@@ -118,7 +118,7 @@ public class FragmentAllDevices extends Fragment {
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode!=NEW_DEVICE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK && data.getBooleanExtra("IS_DELETE",false)) {
+        if (resultCode == RESULT_OK && data.getBooleanExtra("IS_DELETE",false)) {
             deviceViewModel.delOneDeviceById(data.getIntExtra("ID",-1));
             Toast.makeText(getContext(), "SIKERULT torolni", Toast.LENGTH_LONG).show();
         }

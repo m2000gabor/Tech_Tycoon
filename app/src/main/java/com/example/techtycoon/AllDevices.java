@@ -76,19 +76,6 @@ public class AllDevices extends AppCompatActivity{
                     int cost = currentDev.cost;
 
 
-                    /*
-                    //get device fields
-                    String nev = Objects.requireNonNull(deviceList.getValue()).get(itemPosition).name;
-                    int id = deviceList.getValue().get(itemPosition).id;
-                    int price = deviceList.getValue().get(itemPosition).getPrice();
-                    int profit = deviceList.getValue().get(itemPosition).profit;
-                    int companyId = deviceList.getValue().get(itemPosition).ownerCompanyId;
-                    int ram = deviceList.getValue().get(itemPosition).ram;
-                    int memory = deviceList.getValue().get(itemPosition).memory;
-                    int cost = deviceList.getValue().get(itemPosition).cost;*/
-
-
-
                     //make intent
                     Intent intent = new Intent();
                     intent.putExtra(MainActivity.NAME_FIELD, nev);
@@ -187,8 +174,6 @@ public class AllDevices extends AppCompatActivity{
             // Update the cached copy of the words in the adapter.
             //observer= devs -> { adapter.setDevices(devs); };
             deviceViewModel.orderDevices_ByCode(position);
-            //Toast.makeText(getApplicationContext(),Boolean.toString(deviceList.hasObservers()), Toast.LENGTH_LONG).show();
-            //deviceList.observeForever(observer);
         }
         @Override
         public void onNothingSelected(AdapterView<?> arg0) {

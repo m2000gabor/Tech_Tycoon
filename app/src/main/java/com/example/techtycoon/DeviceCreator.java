@@ -85,7 +85,6 @@ public class DeviceCreator extends AppCompatActivity {
     }
 
     protected void addDevice() {
-
         Intent replyIntent = new Intent();
         if (TextUtils.isEmpty(deviceNameField.getText()) || TextUtils.isEmpty(profitField.getText())) {
             setResult(RESULT_CANCELED, replyIntent);

@@ -49,11 +49,12 @@ public class ChooseMemoryActivity extends AppCompatActivity {
         SeekBar ramSeekbar=findViewById(R.id.ramSeekBar);
         TextView ramCost=findViewById(R.id.ramCost);
 
-
-
+        //get intent
+        int ramLvl=getIntent().getIntExtra(MainActivity.RAM_LVL,1);
+        int memoryLvl=getIntent().getIntExtra(MainActivity.MEMORY_LVL,1);
 
         //ramSeekbar
-        ramSeekbar.setMax(6);
+        ramSeekbar.setMax(ramLvl-1);
         //update ui
         ramCounter.setText(String.format(Locale.getDefault(),"%d GB",1) );
         ramCost.setText(String.format(Locale.getDefault(),"%.2f$",1*RAM_PER_GB));
@@ -77,7 +78,7 @@ public class ChooseMemoryActivity extends AppCompatActivity {
         TextView memoryCounter=findViewById(R.id.memoryCounterTextView);
         TextView memoryCost=findViewById(R.id.memoryCost);
         SeekBar memorySeekbar=findViewById(R.id.memorySeekBar);
-        memorySeekbar.setMax(10);
+        memorySeekbar.setMax(memoryLvl-1);
         //update ui
         memoryCounter.setText(String.format(Locale.getDefault(),"%d GB",1) );
         memoryCost.setText(String.format(Locale.getDefault(),"%.2f$",1*MEMORY_PER_GB));

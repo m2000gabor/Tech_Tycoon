@@ -29,12 +29,16 @@ public class MainActivity extends AppCompatActivity {
     public static final String DEVICE_RAM ="ram" ;
     public static final String DEVICE_MEMORY ="memory" ;
     public static final String DEVICE_COST ="cost" ;
+    public static final String RAM_LVL ="RAMLVL" ;
+    public static final String MEMORY_LVL ="MEMLVL" ;
 
 
     public static final int DISPLAY_DEVICES_REQUEST_CODE =1;
     public static final int DISPLAY_COMPANIES_REQUEST_CODE =2;
     public static final int NEW_DEVICE_ACTIVITY_REQUEST_CODE = 1;
     public static final int NEW_COMPANY_ACTIVITY_REQUEST_CODE = 2;
+
+    private static final int[] STARTING_LEVELS={1,1};
 
     DeviceViewModel deviceViewModel;
     Simulator simulator;
@@ -106,11 +110,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void start_again(View view){
         deviceViewModel.deleteAll();
-        deviceViewModel.insertCompanies(new Company("Apple",10),
-                new Company("Samsung",10),
-                new Company("Xiaomi",10),
-                new Company("Sony",10),
-                new Company("MyPhone",10) );
+        deviceViewModel.insertCompanies(new Company("Apple",10,STARTING_LEVELS),
+                new Company("Samsung",10,STARTING_LEVELS),
+                new Company("Xiaomi",10,STARTING_LEVELS),
+                new Company("Sony",10,STARTING_LEVELS),
+                new Company("MyPhone",10,STARTING_LEVELS) );
     }
 
     public void start_simulation(View view){
@@ -151,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
                 case NEW_COMPANY_ACTIVITY_REQUEST_CODE:
                     String name=data.getStringExtra(NAME_FIELD);
                     int monetary=data.getIntExtra(MAIN_MONETARIAL_INFO,0);
-                    Company c = new Company(name,monetary);
+                    Company c = new Company(name,monetary,STARTING_LEVELS);
                     deviceViewModel.insertCompanies(c);
                     Toast.makeText(
                             getApplicationContext(),
