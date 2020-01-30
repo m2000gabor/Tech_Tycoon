@@ -17,6 +17,9 @@ public interface DeviceDao {
     @Query("SELECT * FROM company")
     List<Company> getAllCompaniesList();
 
+    @Query("SELECT * FROM company WHERE companyId = :id")
+    List<Company> getCompany_byID(int id);
+
     @Query("SELECT * FROM device")
     LiveData<List<Device>> getAllDevices();
 

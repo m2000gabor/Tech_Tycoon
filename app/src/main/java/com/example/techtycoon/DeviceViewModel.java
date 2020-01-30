@@ -8,6 +8,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 public class DeviceViewModel extends AndroidViewModel {
+    //todo companyViewModel
 
     private DeviceRepository mRepository;
     private LiveData<List<Device>> mAllDevices;
@@ -21,38 +22,19 @@ public class DeviceViewModel extends AndroidViewModel {
         //mAllDevices = mRepository.getAllDevices();
         mAllDevices = mRepository.mutable_getAllDevices();
         mAllCompanies=mRepository.getAllCompanies();
-
-        /*
-        mutableAllDevices=new MutableLiveData<>();
-        mAllDevices.observeForever(new Observer<List<Device>>() {
-            @Override
-            public void onChanged(List<Device> deviceList) {
-                mutableAllDevices.setValue(deviceList);
-            }
-        });*/
     }
     //return mutableAlldevice
     LiveData<List<Device>> mutable_getAllDevices() { return mAllDevices; }
 
 
-    LiveData<List<Device>> getAllDevices() { return mAllDevices; }
+    //LiveData<List<Device>> getAllDevices() { return mAllDevices; }
     LiveData<List<Company>> getAllCompanies() { return mAllCompanies; }
     List<Company> getAllCompaniesList(){return mRepository.getAllCompaniesList();}
+    Company getCompany_byID(int ID){return mRepository.getCompany_byID(ID);}
     List<Device> getAllDevicesList(){return mRepository.getAllDevicesList();}
 
-    /*
-    void getDevices_ByCode(int code){
-        mAllDevices = mRepository.getDevices_ByCode(code);
-        mAllDevices.observeForever(new Observer<List<Device>>() {
-            @Override
-            public void onChanged(List<Device> deviceList) {
-                mutableAllDevices.setValue(deviceList);
-            }
-        });
-    }*/
     void orderDevices_ByCode2 (int code) { mRepository.setSortBy(code);}
 
-    //LiveData<List<Device>> filter_byCompanyIDs(int[] ownerIds){return mRepository.getAllDevices_byCompanyIDs(ownerIds);}
     void filter_byCompanyID(int ownerId){mRepository.setFilter(ownerId);}
 
 

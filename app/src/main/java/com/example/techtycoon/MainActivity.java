@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String DEVICE_COST ="cost" ;
     public static final String RAM_LVL ="RAMLVL" ;
     public static final String MEMORY_LVL ="MEMLVL" ;
+    public static final String LEVELS ="LEVELS" ;
 
 
     public static final int DISPLAY_DEVICES_REQUEST_CODE =1;
@@ -49,14 +50,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startAddNewDeviceActivity();
-            }
-        });
 
         //create db
         AppDatabase db = AppDatabase.getDatabase(getApplicationContext());
@@ -123,11 +116,6 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), "1 month simulated", Toast.LENGTH_SHORT).show();
     }
 
-
-    public void startAddNewDeviceActivity(){
-        Intent addNewDevice = new Intent(getApplicationContext(), DeviceCreator.class);
-        startActivityForResult(addNewDevice,NEW_DEVICE_ACTIVITY_REQUEST_CODE);
-    }
 
     public void startAddNewCompanyActivity(){
         Intent addNewCompany = new Intent(getApplicationContext(),AddNewCompany.class);

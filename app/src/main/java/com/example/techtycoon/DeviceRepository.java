@@ -68,6 +68,14 @@ class DeviceRepository {
         }
         return def;
     }
+    Company getCompany_byID(int id){
+        try {
+            return new getCompByIdAsyncTask(mDao,id).execute().get().get(0);
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return new Company();
+    }
     List<Device> getAllDevicesList() {
         List<Device> def=new LinkedList<Device>();
         try {
@@ -138,6 +146,15 @@ class DeviceRepository {
         @Override
         protected List<Company>  doInBackground(Void... params) {
             return mAsyncTaskDao.getAllCompaniesList();
+        }
+    }
+    private static class getCompByIdAsyncTask extends android.os.AsyncTask<Void, Void, List<Company> >{
+        private DeviceDao mAsyncTaskDao;
+        private int id;
+        getCompByIdAsyncTask(DeviceDao dao,int ID) { mAsyncTaskDao = dao; this.id=ID;}
+        @Override
+        protected List<Company>  doInBackground(Void... params) {
+            return mAsyncTaskDao.getCompany_byID(id);
         }
     }
 

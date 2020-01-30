@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".DevelopmentActivity"
+    tools:showIn="@layout/activity_development">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/money_Development"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size"
+            android:layout_margin="@dimen/text_margin"
+            android:text="money"
+            />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraint_ramMem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/labelHeaderRamMemory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/text_margin"
+                android:text="Ram and Memory"
+                android:textSize="22sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <RelativeLayout
+                android:id="@+id/relativeLayout_Ram"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@+id/labelHeaderRamMemory"
+                app:layout_constraintTop_toBottomOf="@+id/labelHeaderRamMemory"
+                android:layout_marginStart="@dimen/text_margin">
+
+            <TextView
+                android:id="@+id/labelRam"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/text_margin_small"
+                android:textSize="@dimen/text_size_small"
+                android:text="Ram:"
+                />
+
+            <TextView
+                android:id="@+id/ramLevel2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/text_margin_small"
+                android:layout_centerInParent="true"
+                android:textSize="@dimen/text_size_small"
+                android:layout_toEndOf="@id/labelRam"
+                android:text="lvl 1"/>
+
+            <TextView
+                android:id="@+id/ramUpgradeCost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/text_margin_small"
+                android:textSize="@dimen/text_size_small"
+                android:layout_toEndOf="@id/ramLevel2"
+                android:layout_centerInParent="true"
+                android:text="0$" />
+
+
+                <ImageButton
+                    android:id="@+id/ImageButton_RamUpgrade"
+                    android:layout_width="30dp"
+                    android:layout_height="26dp"
+                    android:layout_toEndOf="@id/ramUpgradeCost"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/ic_upgrade_green_24dp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/relativeLayout_Memory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@+id/labelHeaderRamMemory"
+                app:layout_constraintTop_toBottomOf="@+id/relativeLayout_Ram"
+                android:layout_marginStart="@dimen/text_margin">
+
+            <TextView
+                android:id="@+id/labelMemory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/text_margin_small"
+                android:textSize="@dimen/text_size_small"
+                android:text="Memory:"
+                android:layout_alignParentStart="true"
+                android:layout_centerInParent="true"/>
+
+            <TextView
+                android:id="@+id/memoryLevel2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/text_margin_small"
+                android:layout_centerInParent="true"
+                android:textSize="@dimen/text_size_small"
+                android:text="lvl 1"
+                android:layout_toEndOf="@id/labelMemory"  />
+
+            <TextView
+                android:id="@+id/memoryUpgradeCost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/text_margin_small"
+                android:textSize="@dimen/text_size_small"
+                android:layout_centerInParent="true"
+                android:text="0$"
+                android:layout_toEndOf="@id/memoryLevel2"/>
+
+            <ImageButton
+                android:id="@+id/ImageButton_MemoryUpgrade"
+                android:layout_width="30dp"
+                android:layout_height="26dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_upgrade_green_24dp"
+                android:layout_toEndOf="@id/memoryUpgradeCost"/>
+
+            </RelativeLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </LinearLayout>
+
+</ScrollView>

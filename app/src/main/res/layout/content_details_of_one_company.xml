@@ -38,100 +38,6 @@
             android:layout_margin="10sp"
             android:text="companyID" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Levels:"
-            android:textSize="22dp"
-            android:layout_margin="@dimen/text_margin"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:id="@+id/ramLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Ram:"
-                    android:textSize="16sp"
-                    android:layout_margin="@dimen/text_margin"
-                    android:layout_alignParentStart="true"
-                    android:layout_centerInParent="true"
-                    />
-
-                <TextView
-                    android:id="@+id/ramLevel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="lvl 0"
-                    android:textSize="16sp"
-                    android:layout_margin="@dimen/text_margin"
-                    android:layout_toEndOf="@id/ramLabel"
-                    android:layout_centerInParent="true"
-                    />
-
-                <Button
-                    android:id="@+id/ramUpgrade"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Upgrade for 0$"
-                    android:textSize="16sp"
-                    android:layout_margin="@dimen/text_margin"
-                    android:layout_alignParentEnd="true"
-                    />
-
-            </RelativeLayout>
-
-
-
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:id="@+id/memoryLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Memory:"
-                    android:textSize="16sp"
-                    android:layout_margin="@dimen/text_margin"
-                    android:layout_alignParentStart="true"
-                    android:layout_centerInParent="true"
-                    />
-
-                <TextView
-                    android:id="@+id/memoryLevel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="lvl 0"
-                    android:textSize="16sp"
-                    android:layout_margin="@dimen/text_margin"
-                    android:layout_toEndOf="@id/memoryLabel"
-                    android:layout_centerInParent="true"
-                    />
-
-                <Button
-                    android:id="@+id/memoryUpgrade"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Upgrade for 0$"
-                    android:textSize="16sp"
-                    android:layout_margin="@dimen/text_margin"
-                    android:layout_alignParentEnd="true"
-                    />
-
-            </RelativeLayout>
-
-
-
-        </LinearLayout>
-
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -143,8 +49,8 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/saveCompany"
-            android:text="Save"
+            android:id="@+id/startDevelopmentActivity"
+            android:text="start Development Activity"
             />
 
 

@@ -32,5 +32,7 @@ public class Company {
 
     public String getCompanyName(){return this.name;}
     public int  getCompanyId(){return this.companyId;}
+
+    public void setLevels_USE_THIS(int[] arr){this.levels=Converter.intArrayToString(arr);}
     public int[] getLevels_USE_THIS(){return Converter.stringToIntArray(this.levels);}
 }

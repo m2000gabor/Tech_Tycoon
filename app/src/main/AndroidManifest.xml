@@ -11,26 +11,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".DevelopmentActivity"
+            android:label="Development Center"
+            android:parentActivityName=".DetailsOfOneCompany"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.techtycoon.DetailsOfOneCompany" />
+        </activity>
+        <activity
             android:name=".TabbedActivity"
             android:label="@string/title_activity_tabbed"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.techtycoon.MainActivity" />
-        </activity>
-        <activity
-            android:name=".ChooseMemoryActivity"
-            android:label="@string/title_activity_choose_memory"
-            android:parentActivityName=".DeviceCreator"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.techtycoon.DeviceCreator" />
-        </activity>
-        <activity
-            android:name=".DeviceCreator"
-            android:label="@string/title_activity_device_creator"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data

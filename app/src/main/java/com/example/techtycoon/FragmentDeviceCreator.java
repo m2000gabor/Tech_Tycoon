@@ -189,9 +189,8 @@ public class FragmentDeviceCreator extends Fragment {
     private int getOverallCost(){ return memoryCost; }
 
     private void reset(boolean isFullReset){
-        if(isFullReset){spin.setSelection(0);}
+        if(isFullReset){spin.setSelection(0);deviceNameField.setText("");}
         companies=deviceViewModel.getAllCompaniesList();
-        deviceNameField.setText("");
         profitField.setText("");
         currentCostField.setText("The current cost is 0$");
         chosenMem.setVisibility(View.INVISIBLE);

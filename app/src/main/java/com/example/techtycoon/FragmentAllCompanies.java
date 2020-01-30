@@ -67,8 +67,7 @@ public class FragmentAllCompanies extends Fragment {
                 intent.putExtra(MainActivity.NAME_FIELD, nev);
                 intent.putExtra(MainActivity.MAIN_MONETARIAL_INFO, money);
                 intent.putExtra("ID", id);
-                intent.putExtra(MainActivity.RAM_LVL,levels[0]);
-                intent.putExtra(MainActivity.MEMORY_LVL,levels[1]);
+                intent.putExtra(MainActivity.LEVELS,levels);
                 intent.setClass(getContext(), DetailsOfOneCompany.class);
 
                 //start new activity
@@ -97,19 +96,17 @@ public class FragmentAllCompanies extends Fragment {
 
         public void onActivityResult(int requestCode, int resultCode, Intent data) {
             super.onActivityResult(requestCode, resultCode, data);
-
+            /*
             if (resultCode == RESULT_OK && data.getBooleanExtra("IS_DELETE",false)) {
                 deviceViewModel.delOneCompanyById(data.getIntExtra("ID",-1));
                 Toast.makeText(getContext(), "SIKERULT torolni", Toast.LENGTH_LONG).show();
             }else if(resultCode==RESULT_OK && data.getBooleanExtra("IS_UPDATE",false)){
                 int id =data.getIntExtra("ID",-1);
-                int ramlvl= data.getIntExtra(MainActivity.RAM_LVL,-1);
-                int memlvl = data.getIntExtra(MainActivity.MEMORY_LVL,-1);
+                int[] levels= data.getIntArrayExtra(MainActivity.LEVELS);
                 int money =data.getIntExtra(MainActivity.MAIN_MONETARIAL_INFO,-1);
-                if(ramlvl != -1 && memlvl != -1 && money !=-1){
-
-                    deviceViewModel.updateLevel(id, new int[]{ramlvl,memlvl},money);
+                if(levels.length >0 && money !=-1){
+                    deviceViewModel.updateLevel(id, levels,money);
                 }
-            }
+            }*/
         }
 }
