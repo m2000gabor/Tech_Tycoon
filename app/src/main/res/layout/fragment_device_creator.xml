@@ -82,6 +82,7 @@
                 android:layout_margin="@dimen/text_margin"
                 android:layout_alignTop="@id/startMemoryChooserTextView"
                 android:text="Memory: "
+                android:visibility="invisible"
                 android:textSize="12sp" />
 
             <TextView
@@ -92,6 +93,92 @@
                 android:layout_toEndOf="@id/chosenMemory"
                 android:layout_alignParentBottom="true"
                 android:text="Ram: "
+                android:visibility="invisible"
+                android:textSize="12sp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10sp"
+            android:id="@+id/startBodyChooserRelativeLayout"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Body"
+                android:id="@+id/startBodyChooserTextView"
+                android:textSize="22sp"
+                android:layout_marginStart="@dimen/text_margin_small"
+                android:gravity="start"
+                />
+
+            <ImageView
+                android:id="@+id/isSetBody"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@id/startBodyChooserTextView"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="10sp"
+                android:src="@drawable/ic_cancel_red_24dp" />
+
+            <TextView
+                android:id="@+id/chosenDesign"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/startBodyChooserTextView"
+                android:layout_marginStart="@dimen/text_margin"
+                android:layout_marginEnd="@dimen/text_margin"
+                android:text="Design: "
+                android:visibility="invisible"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/chosenMaterial"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/text_margin"
+                android:layout_toEndOf="@id/chosenDesign"
+                android:layout_alignBaseline="@id/chosenDesign"
+                android:text="Material: "
+                android:visibility="invisible"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/chosenColors"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/text_margin"
+                android:layout_toEndOf="@id/chosenMaterial"
+                android:layout_alignBaseline="@id/chosenMaterial"
+                android:text="Colors: "
+                android:visibility="invisible"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/chosenIp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/chosenDesign"
+                android:layout_alignStart="@id/chosenDesign"
+                android:layout_marginTop="@dimen/text_margin_small"
+                android:layout_marginEnd="@dimen/text_margin"
+                android:text="Ip: "
+                android:visibility="invisible"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/chosenBezel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/text_margin"
+                android:layout_below="@id/chosenDesign"
+                android:layout_toEndOf="@id/chosenIp"
+                android:layout_alignBaseline="@id/chosenIp"
+                android:text="Bezel: "
+                android:visibility="invisible"
                 android:textSize="12sp" />
 
         </RelativeLayout>

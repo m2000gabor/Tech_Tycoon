@@ -136,6 +136,261 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraint_body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/labelHeaderBody"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/text_margin"
+                android:text="Body"
+                android:textSize="22sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <RelativeLayout
+                android:id="@+id/relativeLayout_Design"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@+id/labelHeaderBody"
+                app:layout_constraintTop_toBottomOf="@+id/labelHeaderBody"
+                android:layout_marginStart="@dimen/text_margin">
+
+                <TextView
+                    android:id="@+id/labelDesign"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/text_margin_small"
+                    android:textSize="@dimen/text_size_small"
+                    android:text="Design:"
+                    />
+
+                <TextView
+                    android:id="@+id/DesignLevel2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/text_margin_small"
+                    android:layout_centerInParent="true"
+                    android:textSize="@dimen/text_size_small"
+                    android:layout_toEndOf="@id/labelDesign"
+                    android:text="lvl 1"/>
+
+                <TextView
+                    android:id="@+id/DesignUpgradeCost"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/text_margin_small"
+                    android:textSize="@dimen/text_size_small"
+                    android:layout_toEndOf="@id/DesignLevel2"
+                    android:layout_centerInParent="true"
+                    android:text="0$" />
+
+
+                <ImageButton
+                    android:id="@+id/ImageButton_DesignUpgrade"
+                    android:layout_width="30dp"
+                    android:layout_height="26dp"
+                    android:layout_toEndOf="@id/DesignUpgradeCost"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/ic_upgrade_green_24dp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/relativeLayout_Material"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@+id/labelHeaderBody"
+                app:layout_constraintTop_toBottomOf="@+id/relativeLayout_Design"
+                android:layout_marginStart="@dimen/text_margin">
+
+                <TextView
+                    android:id="@+id/labelMaterial"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/text_margin_small"
+                    android:textSize="@dimen/text_size_small"
+                    android:text="Material:"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerInParent="true"/>
+
+                <TextView
+                    android:id="@+id/MaterialLevel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/text_margin_small"
+                    android:layout_centerInParent="true"
+                    android:textSize="@dimen/text_size_small"
+                    android:text="lvl 1"
+                    android:layout_toEndOf="@id/labelMaterial"  />
+
+                <TextView
+                    android:id="@+id/MaterialUpgradeCost"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/text_margin_small"
+                    android:textSize="@dimen/text_size_small"
+                    android:layout_centerInParent="true"
+                    android:text="0$"
+                    android:layout_toEndOf="@id/MaterialLevel"/>
+
+                <ImageButton
+                    android:id="@+id/ImageButton_MaterialUpgrade"
+                    android:layout_width="30dp"
+                    android:layout_height="26dp"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/ic_upgrade_green_24dp"
+                    android:layout_toEndOf="@id/MaterialUpgradeCost"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/relativeLayout_Colors"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@+id/labelHeaderBody"
+                app:layout_constraintTop_toBottomOf="@+id/relativeLayout_Material"
+                android:layout_marginStart="@dimen/text_margin">
+
+                <TextView
+                    android:id="@+id/labelColors"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/text_margin_small"
+                    android:textSize="@dimen/text_size_small"
+                    android:text="Colors:"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerInParent="true"/>
+
+                <TextView
+                    android:id="@+id/ColorsLevel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/text_margin_small"
+                    android:layout_centerInParent="true"
+                    android:textSize="@dimen/text_size_small"
+                    android:text="lvl 1"
+                    android:layout_toEndOf="@id/labelColors"  />
+
+                <TextView
+                    android:id="@+id/ColorsUpgradeCost"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/text_margin_small"
+                    android:textSize="@dimen/text_size_small"
+                    android:layout_centerInParent="true"
+                    android:text="0$"
+                    android:layout_toEndOf="@id/ColorsLevel"/>
+
+                <ImageButton
+                    android:id="@+id/ImageButton_ColorsUpgrade"
+                    android:layout_width="30dp"
+                    android:layout_height="26dp"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/ic_upgrade_green_24dp"
+                    android:layout_toEndOf="@id/ColorsUpgradeCost"/>
+
+            </RelativeLayout><RelativeLayout
+            app:layout_constraintTop_toBottomOf="@+id/relativeLayout_Colors"
+            android:id="@+id/relativeLayout_Ip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@+id/labelHeaderBody"
+            android:layout_marginStart="@dimen/text_margin">
+
+            <TextView
+                android:id="@+id/labelIp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/text_margin_small"
+                android:textSize="@dimen/text_size_small"
+                android:text="Ip:"
+                android:layout_alignParentStart="true"
+                android:layout_centerInParent="true"/>
+
+            <TextView
+                android:id="@+id/IpLevel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/text_margin_small"
+                android:layout_centerInParent="true"
+                android:textSize="@dimen/text_size_small"
+                android:text="lvl 1"
+                android:layout_toEndOf="@id/labelIp"  />
+
+            <TextView
+                android:id="@+id/IpUpgradeCost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/text_margin_small"
+                android:textSize="@dimen/text_size_small"
+                android:layout_centerInParent="true"
+                android:text="0$"
+                android:layout_toEndOf="@id/IpLevel"/>
+
+            <ImageButton
+                android:id="@+id/ImageButton_IpUpgrade"
+                android:layout_width="30dp"
+                android:layout_height="26dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_upgrade_green_24dp"
+                android:layout_toEndOf="@id/IpUpgradeCost"/>
+
+        </RelativeLayout>
+
+            <RelativeLayout
+            android:id="@+id/relativeLayout_Bezels"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@+id/labelHeaderBody"
+            app:layout_constraintTop_toBottomOf="@+id/relativeLayout_Ip"
+            android:layout_marginStart="@dimen/text_margin">
+
+            <TextView
+                android:id="@+id/labelBezels"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/text_margin_small"
+                android:textSize="@dimen/text_size_small"
+                android:text="Bezels:"
+                android:layout_alignParentStart="true"
+                android:layout_centerInParent="true"/>
+
+            <TextView
+                android:id="@+id/BezelsLevel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/text_margin_small"
+                android:layout_centerInParent="true"
+                android:textSize="@dimen/text_size_small"
+                android:text="lvl 1"
+                android:layout_toEndOf="@id/labelBezels"  />
+
+            <TextView
+                android:id="@+id/BezelsUpgradeCost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/text_margin_small"
+                android:textSize="@dimen/text_size_small"
+                android:layout_centerInParent="true"
+                android:text="0$"
+                android:layout_toEndOf="@id/BezelsLevel"/>
+
+            <ImageButton
+                android:id="@+id/ImageButton_BezelsUpgrade"
+                android:layout_width="30dp"
+                android:layout_height="26dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_upgrade_green_24dp"
+                android:layout_toEndOf="@id/BezelsUpgradeCost"/>
+
+        </RelativeLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     </LinearLayout>
 

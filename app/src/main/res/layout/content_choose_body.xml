@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".ChooseBodyActivity"
+    tools:showIn="@layout/activity_choose_body">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/designLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="40dp"
+        android:text="Design:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <SeekBar
+        android:id="@+id/designSeekBar"
+        android:layout_width="324dp"
+        android:layout_height="28dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintStart_toStartOf="@+id/designLabel"
+        app:layout_constraintTop_toBottomOf="@+id/designLabel" />
+
+
+    <TextView
+        android:id="@+id/designCounterTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:text="0 GB"
+        app:layout_constraintStart_toEndOf="@+id/designLabel"
+        app:layout_constraintTop_toTopOf="@+id/designLabel" />
+
+    <TextView
+        android:id="@+id/designCost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="92dp"
+        android:text="0$"
+        app:layout_constraintStart_toEndOf="@+id/designCounterTextView"
+        app:layout_constraintTop_toTopOf="@+id/designCounterTextView" />
+
+
+    <View
+        android:id="@+id/divider1"
+        android:layout_width="409dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="29dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/designSeekBar"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/materialLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="52dp"
+        android:text="Material:"
+        app:layout_constraintStart_toStartOf="@+id/designSeekBar"
+        app:layout_constraintTop_toBottomOf="@+id/designSeekBar" />
+
+    <SeekBar
+        android:id="@+id/materialSeekBar"
+        android:layout_width="324dp"
+        android:layout_height="28dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintStart_toStartOf="@+id/materialLabel"
+        app:layout_constraintTop_toBottomOf="@+id/materialLabel" />
+
+    <TextView
+        android:id="@+id/materialCounterTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:text="0 GB"
+        app:layout_constraintStart_toEndOf="@+id/materialLabel"
+        app:layout_constraintTop_toTopOf="@+id/materialLabel" />
+
+    <TextView
+        android:id="@+id/materialCost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0$"
+        app:layout_constraintStart_toStartOf="@+id/designCost"
+        app:layout_constraintTop_toTopOf="@+id/materialCounterTextView" />
+
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="409dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="29dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/materialSeekBar"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/colorsLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="52dp"
+        android:text="Colors:"
+        app:layout_constraintStart_toStartOf="@+id/materialSeekBar"
+        app:layout_constraintTop_toBottomOf="@+id/materialSeekBar" />
+
+    <SeekBar
+        android:id="@+id/colorsSeekBar"
+        android:layout_width="324dp"
+        android:layout_height="28dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintStart_toStartOf="@+id/colorsLabel"
+        app:layout_constraintTop_toBottomOf="@+id/colorsLabel" />
+
+    <TextView
+        android:id="@+id/colorsCounterTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:text="0 GB"
+        app:layout_constraintStart_toEndOf="@+id/colorsLabel"
+        app:layout_constraintTop_toTopOf="@+id/colorsLabel" />
+
+    <TextView
+        android:id="@+id/colorsCost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0$"
+        app:layout_constraintStart_toStartOf="@+id/materialCost"
+        app:layout_constraintTop_toTopOf="@+id/colorsCounterTextView" />
+
+    <View
+        android:id="@+id/divider3"
+        android:layout_width="409dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="29dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/colorsSeekBar"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/ipLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="52dp"
+        android:text="IP:"
+        app:layout_constraintStart_toStartOf="@+id/colorsSeekBar"
+        app:layout_constraintTop_toBottomOf="@+id/colorsSeekBar" />
+
+    <SeekBar
+        android:id="@+id/ipSeekBar"
+        android:layout_width="324dp"
+        android:layout_height="28dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintStart_toStartOf="@+id/ipLabel"
+        app:layout_constraintTop_toBottomOf="@+id/ipLabel" />
+
+    <TextView
+        android:id="@+id/ipCounterTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:text="0 GB"
+        app:layout_constraintStart_toEndOf="@+id/ipLabel"
+        app:layout_constraintTop_toTopOf="@+id/ipLabel" />
+
+    <TextView
+        android:id="@+id/ipCost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0$"
+        app:layout_constraintStart_toStartOf="@+id/colorsCost"
+        app:layout_constraintTop_toTopOf="@+id/ipCounterTextView" />
+
+    <View
+        android:id="@+id/divider4"
+        android:layout_width="409dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="29dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ipSeekBar"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/bezelsLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="52dp"
+        android:text="Bezels:"
+        app:layout_constraintStart_toStartOf="@+id/ipSeekBar"
+        app:layout_constraintTop_toBottomOf="@+id/ipSeekBar" />
+
+    <SeekBar
+        android:id="@+id/bezelsSeekBar"
+        android:layout_width="324dp"
+        android:layout_height="28dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintStart_toStartOf="@+id/bezelsLabel"
+        app:layout_constraintTop_toBottomOf="@+id/bezelsLabel" />
+
+    <TextView
+        android:id="@+id/bezelsCounterTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:text="0 GB"
+        app:layout_constraintStart_toEndOf="@+id/bezelsLabel"
+        app:layout_constraintTop_toTopOf="@+id/bezelsLabel" />
+
+    <TextView
+        android:id="@+id/bezelsCost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0$"
+        app:layout_constraintStart_toStartOf="@+id/ipCost"
+        app:layout_constraintTop_toTopOf="@+id/bezelsCounterTextView" />
+
+    <View
+        android:id="@+id/divider5"
+        android:layout_width="409dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="29dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bezelsSeekBar"
+        app:layout_constraintVertical_bias="0.0" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</ScrollView>

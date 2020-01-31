@@ -33,6 +33,21 @@ public class Device {
     @ColumnInfo(name="soldPieces")
     public int soldPieces;
 
+    @ColumnInfo
+    public int design;
+
+    @ColumnInfo
+    public int material;
+
+    @ColumnInfo
+    public int color;
+
+    @ColumnInfo
+    public int ip;
+
+    @ColumnInfo
+    public int bezel;
+
     public Device(String name,int profit,int cost,int ownerCompanyId,int ram, int memory) {
         this.name = name;
         this.profit = profit;
@@ -41,6 +56,22 @@ public class Device {
         this.ram=ram;
         this.memory=memory;
         this.soldPieces=0;
+    }
+
+    public void setBodyParams(int design,int materials,int colors,int ip,int bezels){
+        this.design=design;
+        this.material=materials;
+        this.color=colors;
+        this.ip=ip;
+        this.bezel=bezels;
+    }
+    public int[] getBodyParams(){
+        return new int[]{
+        this.design,
+        this.material,
+        this.color,
+        this.ip,
+        this.bezel};
     }
 
     String getDeviceName(){return this.name;}

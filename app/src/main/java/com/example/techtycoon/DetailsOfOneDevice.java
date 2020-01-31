@@ -31,6 +31,7 @@ public class DetailsOfOneDevice extends AppCompatActivity {
         TextView ramTextV =findViewById(R.id.ram);
         TextView memoryTextV =findViewById(R.id.memory);
         TextView costTextV =findViewById(R.id.cost);
+        TextView bodyTextV =findViewById(R.id.bodyInfos);
 
 
         //get data from previous activity
@@ -42,6 +43,7 @@ public class DetailsOfOneDevice extends AppCompatActivity {
         int ram=intent.getIntExtra(MainActivity.DEVICE_RAM,0);
         int mem=intent.getIntExtra(MainActivity.DEVICE_MEMORY,0);
         int cost=intent.getIntExtra(MainActivity.DEVICE_COST,0);
+        int[] body=intent.getIntArrayExtra(MainActivity.DEVICE_BODY);
 
         id=intent.getIntExtra("ID",-1);
 
@@ -54,6 +56,7 @@ public class DetailsOfOneDevice extends AppCompatActivity {
         ramTextV.setText(String.format(Locale.getDefault(),"RAM: %d GB",ram));
         memoryTextV.setText(String.format(Locale.getDefault(),"Memory: %d GB",mem));
         costTextV.setText(String.format(Locale.getDefault(),"Cost: %d$",cost));
+        bodyTextV.setText(Converter.intArrayToString(body));
 
         setResult(RESULT_OK,new Intent().putExtra(MainActivity.TASK_OF_RECYCLER_VIEW,MainActivity.DISPLAY_DEVICES_REQUEST_CODE));
 

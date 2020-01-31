@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String DEVICE_RAM ="ram" ;
     public static final String DEVICE_MEMORY ="memory" ;
     public static final String DEVICE_COST ="cost" ;
+    public static final String DEVICE_BODY ="body" ;
     public static final String RAM_LVL ="RAMLVL" ;
     public static final String MEMORY_LVL ="MEMLVL" ;
     public static final String LEVELS ="LEVELS" ;
@@ -39,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     public static final int NEW_DEVICE_ACTIVITY_REQUEST_CODE = 1;
     public static final int NEW_COMPANY_ACTIVITY_REQUEST_CODE = 2;
 
-    private static final int[] STARTING_LEVELS={1,1};
+    private static final int[] STARTING_LEVELS={1,1,1,1,1,1,1};
 
     DeviceViewModel deviceViewModel;
     Simulator simulator;
@@ -57,12 +58,17 @@ public class MainActivity extends AppCompatActivity {
         // Get a new or existing ViewModel from the ViewModelProvider.
         deviceViewModel = new ViewModelProvider(this).get(DeviceViewModel.class);
 
-        //get sharedPrefs
         SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
         float lastAvgPrice = sharedPref.getFloat(getString(R.string.simulator_lastAvgPrice), 5);
         float lastAvgRam = sharedPref.getFloat(getString(R.string.simulator_lastAvgRam), 1);
         float lastAvgMemory = sharedPref.getFloat(getString(R.string.simulator_lastAvgMemory), 1);
-        simulator=new Simulator(deviceViewModel,lastAvgPrice,lastAvgRam,lastAvgMemory);
+        float lastAvgDesign = sharedPref.getFloat(getString(R.string.simulator_lastAvgDesign), 1);
+        float lastAvgMaterial = sharedPref.getFloat(getString(R.string.simulator_lastAvgMaterial), 1);
+        float lastAvgColors = sharedPref.getFloat(getString(R.string.simulator_lastAvgColors), 1);
+        float lastAvgIp = sharedPref.getFloat(getString(R.string.simulator_lastAvgIp), 1);
+        float lastAvgBezels = sharedPref.getFloat(getString(R.string.simulator_lastAvgBezels), 1);
+        double[] arr={lastAvgDesign,lastAvgMaterial,lastAvgColors,lastAvgIp,lastAvgBezels};
+        simulator=new Simulator(deviceViewModel,lastAvgPrice,lastAvgRam,lastAvgMemory,arr);
     }
 
     @Override
@@ -106,12 +112,16 @@ public class MainActivity extends AppCompatActivity {
 
     public void start_simulation(View view){
         simulator.simulate();
-        float lastAvgPrice=(float) simulator.lastAvgPrice;
-        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putFloat(getString(R.string.simulator_lastAvgPrice), lastAvgPrice);
+        editor.putFloat(getString(R.string.simulator_lastAvgPrice), (float) simulator.lastAvgPrice);
         editor.putFloat(getString(R.string.simulator_lastAvgMemory),(float) simulator.lastAvgMemory);
         editor.putFloat(getString(R.string.simulator_lastAvgRam),(float) simulator.lastAvgRam);
+        editor.putFloat(getString(R.string.simulator_lastAvgDesign),(float) simulator.averages[0]);
+        editor.putFloat(getString(R.string.simulator_lastAvgMaterial),(float) simulator.averages[1]);
+        editor.putFloat(getString(R.string.simulator_lastAvgColors),(float) simulator.averages[2]);
+        editor.putFloat(getString(R.string.simulator_lastAvgIp),(float) simulator.averages[3]);
+        editor.putFloat(getString(R.string.simulator_lastAvgBezels),(float) simulator.averages[4]);
         editor.apply();
         Toast.makeText(getApplicationContext(), "1 month simulated", Toast.LENGTH_SHORT).show();
     }

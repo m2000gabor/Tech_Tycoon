@@ -18,11 +18,16 @@ import java.util.List;
 import java.util.Locale;
 
 public class DevelopmentActivity extends AppCompatActivity {
-    final int NUMBER_OF_ATTRIBUTES =2;
+    public final static int NUMBER_OF_ATTRIBUTES =7;
     //costs
-    public final int[][] DEVELOPMENT_COSTS = {
+    public final static int[][] DEVELOPMENT_COSTS = {
             /*ram*/{100000, 200000, 300000, 500000, 750000, 1000000, 3000000},
-            /*memory*/{100000, 200000, 250000, 400000, 600000, 800000, 1000000, 1300000, 1500000, 2500000}
+            /*memory*/{100000, 200000, 250000, 400000, 600000, 800000, 1000000, 1300000, 1500000, 2500000},
+            /*design*/{100000, 150000, 200000, 250000, 500000, 750000, 100000, 150000, 2000000, 3000000},
+            /*material*/{20000, 50000, 100000, 150000, 200000, 300000, 500000, 1000000, 1500000, 2500000},
+            /*colors*/{50000, 75000, 100000, 150000, 200000, 250000, 300000},
+            /*ip*/{250000, 500000, 1000000, 4000000},
+            /*bezels*/{100000, 200000, 250000, 300000, 400000, 600000, 800000, 1000000, 1200000, 1500000}
     };
 
     boolean isUpgrade=false;
@@ -50,10 +55,25 @@ public class DevelopmentActivity extends AppCompatActivity {
         //find views
         actualLevelsTextViews[0]= findViewById(R.id.ramLevel2);
         actualLevelsTextViews[1]= findViewById(R.id.memoryLevel2);
+        actualLevelsTextViews[2]= findViewById(R.id.DesignLevel2);
+        actualLevelsTextViews[3]= findViewById(R.id.MaterialLevel);
+        actualLevelsTextViews[4]= findViewById(R.id.ColorsLevel);
+        actualLevelsTextViews[5]= findViewById(R.id.IpLevel);
+        actualLevelsTextViews[6]= findViewById(R.id.BezelsLevel);
         costsTextViews[0]= findViewById(R.id.ramUpgradeCost);
         costsTextViews[1]= findViewById(R.id.memoryUpgradeCost);
+        costsTextViews[2]= findViewById(R.id.DesignUpgradeCost);
+        costsTextViews[3]= findViewById(R.id.MaterialUpgradeCost);
+        costsTextViews[4]= findViewById(R.id.ColorsUpgradeCost);
+        costsTextViews[5]= findViewById(R.id.IpUpgradeCost);
+        costsTextViews[6]= findViewById(R.id.BezelsUpgradeCost);
         imageButtons.add(findViewById(R.id.ImageButton_RamUpgrade));
         imageButtons.add(findViewById(R.id.ImageButton_MemoryUpgrade));
+        imageButtons.add(findViewById(R.id.ImageButton_DesignUpgrade));
+        imageButtons.add(findViewById(R.id.ImageButton_MaterialUpgrade));
+        imageButtons.add(findViewById(R.id.ImageButton_ColorsUpgrade));
+        imageButtons.add(findViewById(R.id.ImageButton_IpUpgrade));
+        imageButtons.add(findViewById(R.id.ImageButton_BezelsUpgrade));
 
         //get intent
         Intent data=getIntent();

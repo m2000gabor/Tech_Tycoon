@@ -1,10 +1,8 @@
 package com.example.techtycoon;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.Locale;
@@ -39,6 +37,7 @@ public class DetailsOfOneCompany extends AppCompatActivity {
         TextView nevTextV =findViewById(R.id.name);
         moneyTextV =findViewById(R.id.money);
         TextView companyIDTextV =findViewById(R.id.companyId);
+        TextView levelsTextV=findViewById(R.id.levels);
 
 
         //get data from previous activity
@@ -51,6 +50,7 @@ public class DetailsOfOneCompany extends AppCompatActivity {
         nevTextV.setText(company.name);
         moneyTextV.setText(String.format(Locale.getDefault(),"Money: %d",company.money));
         companyIDTextV.setText(String.format(Locale.getDefault(),"ID: %d",id));
+        levelsTextV.setText(Converter.intArrayToString(company.getLevels_USE_THIS()));
 
         findViewById(R.id.startDevelopmentActivity).setOnClickListener(new View.OnClickListener() {
             @Override

@@ -19,7 +19,7 @@ public class Company {
     public int lastProfit;
 
     @ColumnInfo(name = "levels")
-    public String levels;
+    private String levels;
 
     public Company(){};
 
@@ -33,6 +33,8 @@ public class Company {
     public String getCompanyName(){return this.name;}
     public int  getCompanyId(){return this.companyId;}
 
+    public String getLevels() {return levels;}
+    public void setLevels(String levels) {this.levels = levels;}
     public void setLevels_USE_THIS(int[] arr){this.levels=Converter.intArrayToString(arr);}
     public int[] getLevels_USE_THIS(){return Converter.stringToIntArray(this.levels);}
 }

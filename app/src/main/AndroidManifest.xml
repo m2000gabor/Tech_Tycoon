@@ -11,6 +11,24 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".ChooseBodyActivity"
+            android:label="@string/title_activity_choose_body"
+            android:parentActivityName=".TabbedActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.techtycoon.TabbedActivity" />
+        </activity>
+        <activity
+            android:name=".ChooseMemoryActivity"
+            android:label="@string/title_activity_choose_memory"
+            android:parentActivityName=".TabbedActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.techtycoon.TabbedActivity" />
+        </activity>
+        <activity
             android:name=".DevelopmentActivity"
             android:label="Development Center"
             android:parentActivityName=".DetailsOfOneCompany"

@@ -112,4 +112,5 @@ public interface DeviceDao {
 
     @Update
     void updateDevices(Device... devices);
+
 }

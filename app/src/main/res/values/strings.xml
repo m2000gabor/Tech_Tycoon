@@ -9,15 +9,22 @@
     <string name="title_devicecomponent_detail">DeviceComponent Detail</string>
     <string name="title_activity_device_creator">DeviceCreator</string>
     <string name="title_activity_choose_memory">ChooseMemoryActivity</string>
+
     <string name="simulator_lastAvgPrice">LastAvgPrice</string>
     <string name="simulator_lastAvgMemory">LastAvgMemory</string>
     <string name="simulator_lastAvgRam">LastAvgRam</string>
+    <string name="simulator_lastAvgDesign">simulator_lastAvgDesign</string>
+    <string name="simulator_lastAvgMaterial">simulator_lastAvgMaterial</string>
+    <string name="simulator_lastAvgColors">simulator_lastAvgColors</string>
+    <string name="simulator_lastAvgIp">simulator_lastAvgIp</string>
+    <string name="simulator_lastAvgBezels">simulator_lastAvgBezels</string>
+
     <string name="title_activity_all_companies">allCompanies</string>
     <string name="title_activity_tabbed">TabbedActivity</string>
     <string name="tab_text_1">Tab 1</string>
     <string name="tab_text_2">Tab 2</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_development">DevelopmentActivity</string>
+    <string name="title_activity_choose_body">ChooseBodyActivity</string>
 </resources>

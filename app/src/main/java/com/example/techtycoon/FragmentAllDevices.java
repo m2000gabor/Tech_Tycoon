@@ -74,6 +74,7 @@ public class FragmentAllDevices extends Fragment {
                 int ram = currentDev.ram;
                 int memory = currentDev.memory;
                 int cost = currentDev.cost;
+                int[] body = currentDev.getBodyParams();
 
 
                 //make intent
@@ -85,6 +86,7 @@ public class FragmentAllDevices extends Fragment {
                 intent.putExtra(MainActivity.DEVICE_RAM, ram);
                 intent.putExtra(MainActivity.DEVICE_MEMORY, memory);
                 intent.putExtra(MainActivity.DEVICE_COST, cost);
+                intent.putExtra(MainActivity.DEVICE_BODY, body);
                 intent.putExtra("ID", id);
                 intent.setClass(getContext(), DetailsOfOneDevice.class);
 
