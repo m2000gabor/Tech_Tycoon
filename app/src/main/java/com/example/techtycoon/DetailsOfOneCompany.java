@@ -3,7 +3,9 @@ package com.example.techtycoon;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Locale;
 import java.util.Objects;
@@ -21,7 +23,9 @@ public class DetailsOfOneCompany extends AppCompatActivity {
 
     //views
     TextView moneyTextV;
-
+    TextView levelsTextV;
+    TextView marketingTextV;
+    Button oneRoundMarketingButton;
 
 
     @Override
@@ -37,8 +41,9 @@ public class DetailsOfOneCompany extends AppCompatActivity {
         TextView nevTextV =findViewById(R.id.name);
         moneyTextV =findViewById(R.id.money);
         TextView companyIDTextV =findViewById(R.id.companyId);
-        TextView levelsTextV=findViewById(R.id.levels);
-
+        levelsTextV=findViewById(R.id.levels);
+        marketingTextV=findViewById(R.id.marketingTextV);
+        oneRoundMarketingButton=findViewById(R.id.oneRoundMarketing);
 
         //get data from previous activity
         Intent intent = getIntent();
@@ -51,6 +56,7 @@ public class DetailsOfOneCompany extends AppCompatActivity {
         moneyTextV.setText(String.format(Locale.getDefault(),"Money: %d",company.money));
         companyIDTextV.setText(String.format(Locale.getDefault(),"ID: %d",id));
         levelsTextV.setText(Converter.intArrayToString(company.getLevels_USE_THIS()));
+        marketingTextV.setText(String.format(Locale.getDefault(),"Marketing: %d",company.marketing));
 
         findViewById(R.id.startDevelopmentActivity).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,6 +69,8 @@ public class DetailsOfOneCompany extends AppCompatActivity {
                 startActivityForResult(intent1,1);
             }
         });
+
+       updateCompany(false);
     }
 
 
@@ -79,10 +87,32 @@ public class DetailsOfOneCompany extends AppCompatActivity {
             if (isUpgrade) {
                 company.setLevels_USE_THIS(data.getIntArrayExtra(MainActivity.LEVELS));
                 company.money=data.getIntExtra(MainActivity.MAIN_MONETARIAL_INFO,0);
-                deviceViewModel.updateCompanies(company);
-                moneyTextV.setText(String.format(Locale.getDefault(),"Money: %d",company.money));
+                updateCompany(true);
             }
         }else {id=data.getIntExtra("ID",-1);}
+    }
+
+    void updateCompany(boolean updateTheDatabase){
+        if(updateTheDatabase){deviceViewModel.updateCompanies(company);};
+        moneyTextV.setText(String.format(Locale.getDefault(),"Money: %d",company.money));
+        marketingTextV.setText(String.format(Locale.getDefault(),"Marketing: %d",company.marketing));
+        levelsTextV.setText(Converter.intArrayToString(company.getLevels_USE_THIS()));
+
+        if(company.money>=10000){oneRoundMarketingButton.setClickable(true);}
+
+
+        oneRoundMarketingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(company.money>=10000){
+                company.money-=10000;
+                company.marketing+=10;
+                updateCompany(true);
+                }else{
+                    Toast.makeText(v.getContext(),"Not enough money",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
 }

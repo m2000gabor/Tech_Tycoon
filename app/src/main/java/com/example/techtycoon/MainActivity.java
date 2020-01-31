@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String DEVICE_MEMORY ="memory" ;
     public static final String DEVICE_COST ="cost" ;
     public static final String DEVICE_BODY ="body" ;
+    public static final String DEVICE_PARAMS ="devParams" ;
     public static final String RAM_LVL ="RAMLVL" ;
     public static final String MEMORY_LVL ="MEMLVL" ;
     public static final String LEVELS ="LEVELS" ;

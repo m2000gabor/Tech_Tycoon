@@ -46,6 +46,14 @@
             android:layout_margin="10sp"
             android:text="levels" />
 
+        <TextView
+            android:id="@+id/marketingTextV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="22sp"
+            android:layout_margin="10sp"
+            android:text="marketing" />
+
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -59,6 +67,13 @@
             android:layout_height="wrap_content"
             android:id="@+id/startDevelopmentActivity"
             android:text="start Development Activity"
+            />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/oneRoundMarketing"
+            android:text="Do marketing (costs: 10000$)"
             />
 
 

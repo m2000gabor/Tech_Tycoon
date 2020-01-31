@@ -2,9 +2,9 @@ package com.example.techtycoon;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.LinkedList;
 import java.util.List;
 
-import static java.lang.Math.max;
 
 class Simulator {
     ///Simulator 2.6. - generified
@@ -19,6 +19,7 @@ class Simulator {
     double lastAvgPrice;
     double lastAvgRam;
     double lastAvgMemory;
+    private double customerNum;
 
     Simulator(DeviceViewModel model,double lastAvgPr,double lastAvgR,double lastAvgMem,double[] bodyAvgs){
         this.deviceViewModel=model;
@@ -37,19 +38,22 @@ class Simulator {
         if(lastAvgMemory<=0){lastAvgMemory=deviceList.get(0).memory;}
         for(int i = 0; i< ATTRIBUTES_IN_ARRAY; i++) {
             if (averages[i] <= 0) {
-                averages[i] = deviceList.get(0).getBodyParams()[i];
+                averages[i] = deviceList.get(0).getParams()[1][i];
             }
         }
 
         int[] sold=new int[deviceList.size()];
         for(int i=0;i<deviceList.size();i++){sold[i]=0; deviceList.get(i).soldPieces=0;}
 
-        selling(sold,deviceList);
+        selling(sold,deviceList,companyList);
 
         //save the number of sold items
         for(int i=0;i<deviceList.size();i++){deviceList.get(i).soldPieces=sold[i];}
         //null companies last profit
-        for(int i=0;i<companyList.size();i++){companyList.get(i).lastProfit=0; }
+        for(int i=0;i<companyList.size();i++){
+            companyList.get(i).lastProfit=0;
+            companyList.get(i).marketing-=2;
+        }
 
         earning(sold,deviceList,companyList);
 
@@ -64,7 +68,6 @@ class Simulator {
         double sumPrice=0;
         double sumRam=0;
         double sumMem=0;
-        double customerNum=1200;
         double[] sumBody=new double[ATTRIBUTES_IN_ARRAY];
         for (int i=0;i<ATTRIBUTES_IN_ARRAY;i++){sumBody[i]=0;}
         for (int i=0;i<deviceList.size();i++){
@@ -72,18 +75,9 @@ class Simulator {
             sumRam+=sold[i]*(log2(deviceList.get(i).ram)+1);
             sumMem+=sold[i]*(log2(deviceList.get(i).memory)+1);
             for (int j = 0; j< ATTRIBUTES_IN_ARRAY; j++){
-                sumBody[j]+=sold[i]*deviceList.get(i).getBodyParams()[j];
+                sumBody[j]+=sold[i]*deviceList.get(i).getParams()[1][j];
             }
         }
-        /*
-        lastAvgPrice=max(5,(sumPrice/customerNum));
-        lastAvgRam=sumRam/customerNum;
-        lastAvgMemory=(sumMem/customerNum);
-        for (int j = 0; j< ATTRIBUTES_IN_ARRAY; j++){
-            averages[j]=(sumBody[j]/customerNum);
-        }*/
-
-
 
         lastAvgPrice+=MARKET_SPEED*((sumPrice/customerNum)-lastAvgPrice);
         lastAvgRam+=MARKET_SPEED*((sumRam/customerNum)-lastAvgRam);
@@ -94,16 +88,24 @@ class Simulator {
 
     }
 
-    private void selling(int[] sold, @NotNull List<Device> deviceList){
+    private void selling(int[] sold, @NotNull List<Device> deviceList,List<Company> companyList){
+        List<Company> compsToDevList=new LinkedList<>();
+        for (int i=0;i<deviceList.size();i++){
+            int j=0;
+            while (companyList.get(j).companyId != deviceList.get(i).ownerCompanyId){j++;}
+            compsToDevList.add(companyList.get(j));
+        }
         ///int[0] is the number of customers per month!
         ///custmNum,price,ram,mem
 
         //Profiles:
         int[] midRange={1000,5,5,5,4,2,2,2,2};
-        sellingToOneProfile2(sold,deviceList,midRange);
+        sellingToOneProfile2(sold,deviceList,compsToDevList,midRange);
 
         int[] top={200,5,10,10,3,5,3,3,3};
-        sellingToOneProfile2(sold,deviceList,top);
+        sellingToOneProfile2(sold,deviceList,compsToDevList,top);
+
+        customerNum=1200;
 
         /*
         int[] cheep={200,10,2,2};
@@ -116,7 +118,7 @@ class Simulator {
         sellingToOneProfile2(sold,deviceList,photo);*/
     }
 
-    private void sellingToOneProfile2(int[] sold, @NotNull List<Device> deviceList,int[] weights){
+    private void sellingToOneProfile2(int[] sold,List<Device> deviceList,List<Company> companiesToDevList,int[] weights){
         int customerNum=weights[0];
         int length=deviceList.size();
         double[] point=new double[length];
@@ -132,10 +134,10 @@ class Simulator {
             value+= (double) Math.pow(fx(log2(deviceList.get(i).memory)+1, lastAvgMemory),weights[3]*0.2);
 
             for(int j = 0; j< ATTRIBUTES_IN_ARRAY; j++){
-                value+= (double) Math.pow(fx(deviceList.get(i).getBodyParams()[j], averages[j]),weights[j+1]*0.2);
+                value+= (double) Math.pow(fx(deviceList.get(i).getParams()[1][j], averages[j]),weights[j+3]*0.2);
             }
 
-            point[i]=value/price;
+            point[i]=(value/price)*(1+(companiesToDevList.get(i).marketing*0.001) );
             sumPoints+=point[i];
         }
         double avgPoints=sumPoints/length;
@@ -169,11 +171,9 @@ class Simulator {
     private static double log2 (double x) { return (Math.log(x) / Math.log(2) + 1e-10); }
 
     private static double fx(double value,double average) {
-        //ez nem megoldas if(average==0){return 0;}
         double norm=value/average;
         if(norm<=1.0) {
             return Math.pow(norm,2);
-        //}else if(norm > 2.0){return fx(2*average,average);
         }else{return Math.pow(norm-1,0.5)+fx(average,average);}
     }
 

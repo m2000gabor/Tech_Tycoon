@@ -71,10 +71,8 @@ public class FragmentAllDevices extends Fragment {
                 int price =currentDev.getPrice();
                 int profit = currentDev.profit;
                 int companyId = currentDev.ownerCompanyId;
-                int ram = currentDev.ram;
-                int memory = currentDev.memory;
                 int cost = currentDev.cost;
-                int[] body = currentDev.getBodyParams();
+                int[][] devParams = currentDev.getParams();
 
 
                 //make intent
@@ -83,10 +81,8 @@ public class FragmentAllDevices extends Fragment {
                 intent.putExtra(MainActivity.DEVICE_PRICE, price);
                 intent.putExtra(MainActivity.MAIN_MONETARIAL_INFO, profit);
                 intent.putExtra(MainActivity.DEVICE_COMPANY_ID, companyId);
-                intent.putExtra(MainActivity.DEVICE_RAM, ram);
-                intent.putExtra(MainActivity.DEVICE_MEMORY, memory);
                 intent.putExtra(MainActivity.DEVICE_COST, cost);
-                intent.putExtra(MainActivity.DEVICE_BODY, body);
+                intent.putExtra(MainActivity.DEVICE_PARAMS, Device.mtxToArray(devParams));
                 intent.putExtra("ID", id);
                 intent.setClass(getContext(), DetailsOfOneDevice.class);
 

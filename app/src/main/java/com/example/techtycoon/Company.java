@@ -21,12 +21,23 @@ public class Company {
     @ColumnInfo(name = "levels")
     private String levels;
 
+    @ColumnInfo
+    public int marketing;
+
+    /*
+    @ColumnInfo
+    public int reputation;
+
+    @ColumnInfo
+    public int popularity;*/
+
     public Company(){};
 
     public Company(String name,int money,int[] levels) {
         this.name = name;
         this.money = money;
         this.lastProfit=0;
+        marketing=0;
         this.levels=Converter.intArrayToString(levels);
     }
 

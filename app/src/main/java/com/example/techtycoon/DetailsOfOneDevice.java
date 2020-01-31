@@ -40,10 +40,8 @@ public class DetailsOfOneDevice extends AppCompatActivity {
         int profit=intent.getIntExtra(MainActivity.MAIN_MONETARIAL_INFO,0);
         int companyId=intent.getIntExtra(MainActivity.DEVICE_COMPANY_ID,0);
         int price=intent.getIntExtra(MainActivity.DEVICE_PRICE,0);
-        int ram=intent.getIntExtra(MainActivity.DEVICE_RAM,0);
-        int mem=intent.getIntExtra(MainActivity.DEVICE_MEMORY,0);
         int cost=intent.getIntExtra(MainActivity.DEVICE_COST,0);
-        int[] body=intent.getIntArrayExtra(MainActivity.DEVICE_BODY);
+        int[][] devParams=Device.intArrayToMtx(intent.getIntArrayExtra(MainActivity.DEVICE_PARAMS));
 
         id=intent.getIntExtra("ID",-1);
 
@@ -53,10 +51,10 @@ public class DetailsOfOneDevice extends AppCompatActivity {
         profitTextV.setText(String.format(Locale.getDefault(),"Profit: %d$",profit));
         deviceIDTextV.setText(String.format(Locale.getDefault(),"Device ID: %d",id));
         ownerIDTextV.setText(String.format(Locale.getDefault(),"Owner id: %d",companyId));
-        ramTextV.setText(String.format(Locale.getDefault(),"RAM: %d GB",ram));
-        memoryTextV.setText(String.format(Locale.getDefault(),"Memory: %d GB",mem));
+        ramTextV.setText(String.format(Locale.getDefault(),"RAM: %d GB",devParams[0][0]));
+        memoryTextV.setText(String.format(Locale.getDefault(),"Memory: %d GB",devParams[0][1]));
         costTextV.setText(String.format(Locale.getDefault(),"Cost: %d$",cost));
-        bodyTextV.setText(Converter.intArrayToString(body));
+        bodyTextV.setText(Converter.intArrayToString(devParams[1]));
 
         setResult(RESULT_OK,new Intent().putExtra(MainActivity.TASK_OF_RECYCLER_VIEW,MainActivity.DISPLAY_DEVICES_REQUEST_CODE));
 
