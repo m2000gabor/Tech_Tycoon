@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -23,6 +22,8 @@ import static android.app.Activity.RESULT_OK;
 
 
 public class FragmentAllCompanies extends Fragment {
+    public static final String ASSISTANT_GOAL="assistantGoal";
+    public static final String HAS_ASSISTANT="hasAssistant";
     private DeviceViewModel deviceViewModel;
     private CompanyListAdapter adapter;
 
@@ -64,10 +65,7 @@ public class FragmentAllCompanies extends Fragment {
 
                 //make intent
                 Intent intent = new Intent();
-                intent.putExtra(MainActivity.NAME_FIELD, nev);
-                intent.putExtra(MainActivity.MAIN_MONETARIAL_INFO, money);
                 intent.putExtra("ID", id);
-                intent.putExtra(MainActivity.LEVELS,levels);
                 intent.setClass(getContext(), DetailsOfOneCompany.class);
 
                 //start new activity
@@ -96,12 +94,13 @@ public class FragmentAllCompanies extends Fragment {
 
         public void onActivityResult(int requestCode, int resultCode, Intent data) {
             super.onActivityResult(requestCode, resultCode, data);
+
             /*
             if (resultCode == RESULT_OK && data.getBooleanExtra("IS_DELETE",false)) {
                 deviceViewModel.delOneCompanyById(data.getIntExtra("ID",-1));
                 Toast.makeText(getContext(), "SIKERULT torolni", Toast.LENGTH_LONG).show();
             }else if(resultCode==RESULT_OK && data.getBooleanExtra("IS_UPDATE",false)){
-                int id =data.getIntExtra("ID",-1);
+
                 int[] levels= data.getIntArrayExtra(MainActivity.LEVELS);
                 int money =data.getIntExtra(MainActivity.MAIN_MONETARIAL_INFO,-1);
                 if(levels.length >0 && money !=-1){

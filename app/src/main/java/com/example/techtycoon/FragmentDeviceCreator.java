@@ -1,9 +1,15 @@
 package com.example.techtycoon;
 
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -20,6 +26,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
@@ -79,6 +87,7 @@ public class FragmentDeviceCreator extends Fragment {
         deviceViewModel = new ViewModelProvider(this).get(DeviceViewModel.class);
         companies=deviceViewModel.getAllCompaniesList();
         isMemorySet=false;
+        isBodySet=false;
         costs=new int[NUMBER_OF_CHOOSER_ACTIVITIES];
     }
 
@@ -147,8 +156,6 @@ public class FragmentDeviceCreator extends Fragment {
             }
         });
 
-
-
         new MySpinnerAdapter(spin);
 
         // Inflate the layout for this fragment
@@ -157,15 +164,17 @@ public class FragmentDeviceCreator extends Fragment {
 
 
     private void addDevice() {
-        if (!isMemorySet || !isCompanySet || TextUtils.isEmpty(profitField.getText())) {
+        if (!isMemorySet || !isBodySet || !isCompanySet || TextUtils.isEmpty(profitField.getText())) {
             Toast.makeText(getContext(), "All params are required", Toast.LENGTH_LONG).show();
         } else {
             String deviceName = deviceNameField.getText().toString();
             int profit = Integer.parseInt(profitField.getText().toString());
-            int maker=companies.get(spin.getSelectedItemPosition()-1).companyId;
-            Device device=new Device(deviceName,profit, getOverallCost(),maker,ram,memory);
+            Company maker=companies.get(spin.getSelectedItemPosition()-1);
+            maker.usedSlots++;
+            Device device=new Device(deviceName,profit, getOverallCost(),maker.companyId,ram,memory);
             device.setBodyParams(bodyResults[1],bodyResults[2],bodyResults[3],bodyResults[4],bodyResults[5]);
             deviceViewModel.insertDevice(device);
+            deviceViewModel.updateCompanies(maker);
             Toast.makeText(getContext(), "Saved", Toast.LENGTH_LONG).show();
             reset(true);
         }
@@ -236,11 +245,15 @@ public class FragmentDeviceCreator extends Fragment {
                 reset(false);
                 //Toast.makeText(getContext(),"Choose a manufacturer",Toast.LENGTH_SHORT).show();
             }else{
+                Company selectedCompany=companies.get(position-1);
                 isCompanySet=true;
                 reset(false);
-                levels=companies.get(position-1).getLevels_USE_THIS();
+                levels=selectedCompany.getLevels_USE_THIS();
                 ramLevel=levels[0];
                 memoryLevel=levels[1];
+                if(selectedCompany.maxSlots==companies.get(position-1).usedSlots){
+                    noFreeSlotAlert(selectedCompany);
+                }
             }
         }
         @Override
@@ -270,6 +283,22 @@ public class FragmentDeviceCreator extends Fragment {
         isSetMemoryImage.setImageDrawable(getActivity().getDrawable(R.drawable.ic_cancel_red_24dp));
         isSetBodyImage.setImageDrawable(getActivity().getDrawable(R.drawable.ic_cancel_red_24dp));
     }
+
+    private void noFreeSlotAlert(Company company){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage("No free slot is available at "+company.name)
+                .setTitle("Error");
+        builder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked OK button
+                dialog.cancel();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+        spin.setSelection(0);
+    }
+
 
 }
 

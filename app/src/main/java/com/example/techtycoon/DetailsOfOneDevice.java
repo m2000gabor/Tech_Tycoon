@@ -68,4 +68,5 @@ public class DetailsOfOneDevice extends AppCompatActivity {
         setResult(RESULT_OK, replyIntent);
         finish();
     }
+
 }

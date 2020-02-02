@@ -11,6 +11,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".AssistantActivity"
+            android:label="@string/title_activity_assistant"
+            android:parentActivityName=".DetailsOfOneCompany"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.techtycoon.DetailsOfOneCompany" />
+        </activity>
+        <activity
             android:name=".ChooseBodyActivity"
             android:label="@string/title_activity_choose_body"
             android:parentActivityName=".TabbedActivity"

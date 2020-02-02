@@ -14,8 +14,6 @@ public class DeviceViewModel extends AndroidViewModel {
     private LiveData<List<Device>> mAllDevices;
     private LiveData<List<Company>> mAllCompanies;
 
-    //private MutableLiveData<List<Device>> mutableAllDevices;
-
     public DeviceViewModel (Application application) {
         super(application);
         mRepository = new DeviceRepository(application);

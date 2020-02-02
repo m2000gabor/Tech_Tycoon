@@ -19,5 +19,4 @@ public class Converter {
         return ints;
     }
 
-
 }

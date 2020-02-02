@@ -7,10 +7,7 @@ import java.util.List;
 
 
 class Simulator {
-    ///Simulator 2.6. - generified
-    //TODO implement other profiles
-    //todo find out why crashes
-    //maybe there should be zones defined by some percentage, or above a min value/price ratio
+    ///Simulator 2.6.2 - new profiles
 
     private DeviceViewModel deviceViewModel;
     private static final int ATTRIBUTES_IN_ARRAY =5;
@@ -29,7 +26,7 @@ class Simulator {
         this.averages=bodyAvgs;
     }
 
-    void simulate(){
+    Wrapped_DeviceAndCompanyList simulate(){
         List<Company> companyList =deviceViewModel.getAllCompaniesList();
         List<Device> deviceList=deviceViewModel.getAllDevicesList();
 
@@ -57,12 +54,12 @@ class Simulator {
 
         earning(sold,deviceList,companyList);
 
-        Company[] varargsComp =companyList.toArray(new Company[0]);
-        Device[] varargsDev=deviceList.toArray(new Device[0]);
+        //Company[] varargsComp =companyList.toArray(new Company[0]);
+        //Device[] varargsDev=deviceList.toArray(new Device[0]);
 
         //apply changes
-        deviceViewModel.updateCompanies(varargsComp);
-        deviceViewModel.updateDevices(varargsDev);
+        //deviceViewModel.updateCompanies(varargsComp);
+        //deviceViewModel.updateDevices(varargsDev);
 
         //set averages
         double sumPrice=0;
@@ -85,7 +82,7 @@ class Simulator {
         for (int j = 0; j< ATTRIBUTES_IN_ARRAY; j++){
             averages[j]+=MARKET_SPEED*((sumBody[j]/customerNum)-averages[j]);
         }
-
+        return new Wrapped_DeviceAndCompanyList(deviceList,companyList);
     }
 
     private void selling(int[] sold, @NotNull List<Device> deviceList,List<Company> companyList){
@@ -96,26 +93,24 @@ class Simulator {
             compsToDevList.add(companyList.get(j));
         }
         ///int[0] is the number of customers per month!
-        ///custmNum,price,ram,mem
+        ///custmNum,price,ram,mem,design,material,color,ip,bezel
+
 
         //Profiles:
-        int[] midRange={1000,5,5,5,4,2,2,2,2};
+        int[] midRange={1000,7,5,5,4,2,2,2,2};
         sellingToOneProfile2(sold,deviceList,compsToDevList,midRange);
 
-        int[] top={200,5,10,10,3,5,3,3,3};
+        int[] top={200,5,10,10,3,5,2,3,3};
         sellingToOneProfile2(sold,deviceList,compsToDevList,top);
 
-        customerNum=1200;
+        int[] cheep={300,10,4,4,1,1,1,2,1};
+        sellingToOneProfile2(sold,deviceList,compsToDevList,cheep);
 
-        /*
-        int[] cheep={200,10,2,2};
-        sellingToOneProfile2(sold,deviceList,cheep);
+        int[] beauty={50,7,2,2,10,7,8,2,5};
+        sellingToOneProfile2(sold,deviceList,compsToDevList,beauty);
 
-        int[] status_symbol={25,3,6,5};
-        sellingToOneProfile2(sold,deviceList,status_symbol);
+        customerNum=1550;
 
-        int[] photo={1,4,2,10};
-        sellingToOneProfile2(sold,deviceList,photo);*/
     }
 
     private void sellingToOneProfile2(int[] sold,List<Device> deviceList,List<Company> companiesToDevList,int[] weights){

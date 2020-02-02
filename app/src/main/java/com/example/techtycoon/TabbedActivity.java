@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import com.example.techtycoon.Assistant.AssistantManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
@@ -19,6 +20,7 @@ import com.example.techtycoon.ui.main.SectionsPagerAdapter;
 public class TabbedActivity extends AppCompatActivity {
     DeviceViewModel deviceViewModel;
     Simulator simulator;
+    AssistantManager assistantManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +35,7 @@ public class TabbedActivity extends AppCompatActivity {
         // Get a new or existing ViewModel from the ViewModelProvider.
         deviceViewModel = new ViewModelProvider(this).get(DeviceViewModel.class);
 
+        assistantManager=new AssistantManager();
 
 
         FloatingActionButton fab = findViewById(R.id.fabSimulate);
@@ -53,7 +56,8 @@ public class TabbedActivity extends AppCompatActivity {
                 double[] arr={(double) lastAvgDesign,(double)lastAvgMaterial,(double)lastAvgColors,(double) lastAvgIp,(double)lastAvgBezels};
 
                 simulator=new Simulator(deviceViewModel,lastAvgPrice,lastAvgRam,lastAvgMemory,arr);
-                simulator.simulate();
+                Wrapped_DeviceAndCompanyList simulatorResults=simulator.simulate();
+                oneMonthSimulated(simulatorResults);
 
                 SharedPreferences.Editor editor = sharedPref.edit();
                 editor.putFloat(getString(R.string.simulator_lastAvgPrice), (float) simulator.lastAvgPrice);
@@ -66,7 +70,14 @@ public class TabbedActivity extends AppCompatActivity {
                 editor.putFloat(getString(R.string.simulator_lastAvgBezels),(float) simulator.averages[4]);
                 editor.apply();
                 Toast.makeText(getApplicationContext(), "1 month simulated", Toast.LENGTH_SHORT).show();
+
             }
         });
+    }
+
+    void oneMonthSimulated(Wrapped_DeviceAndCompanyList simulatorResults){
+        Wrapped_DeviceAndCompanyList afterAssistants=assistantManager.trigger(simulatorResults.companies,simulatorResults.devices);
+        deviceViewModel.updateCompanies(afterAssistants.companies.toArray(new Company[0]));
+        deviceViewModel.updateDevices(afterAssistants.devices.toArray(new Device[0]));
     }
 }

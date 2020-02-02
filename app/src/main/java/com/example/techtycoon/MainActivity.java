@@ -112,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void start_simulation(View view){
+        /*
         simulator.simulate();
         SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
@@ -125,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
         editor.putFloat(getString(R.string.simulator_lastAvgBezels),(float) simulator.averages[4]);
         editor.apply();
         Toast.makeText(getApplicationContext(), "1 month simulated", Toast.LENGTH_SHORT).show();
+        */
     }
 
 

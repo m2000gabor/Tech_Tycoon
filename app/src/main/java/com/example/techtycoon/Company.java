@@ -1,6 +1,9 @@
 package com.example.techtycoon;
 
+import com.example.techtycoon.Assistant.Assistant;
+
 import androidx.room.ColumnInfo;
+import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -24,6 +27,18 @@ public class Company {
     @ColumnInfo
     public int marketing;
 
+    @ColumnInfo
+    public int maxSlots;
+
+    @ColumnInfo
+    public int usedSlots;
+
+    @ColumnInfo
+    public boolean hasAssistant;
+
+    @Embedded
+    public Assistant assistant;
+
     /*
     @ColumnInfo
     public int reputation;
@@ -37,8 +52,11 @@ public class Company {
         this.name = name;
         this.money = money;
         this.lastProfit=0;
-        marketing=0;
+        this.marketing=0;
+        this.maxSlots=1;
+        this.usedSlots=0;
         this.levels=Converter.intArrayToString(levels);
+        hasAssistant=false;
     }
 
     public String getCompanyName(){return this.name;}
