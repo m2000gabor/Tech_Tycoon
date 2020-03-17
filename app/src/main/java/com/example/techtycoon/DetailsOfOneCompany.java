@@ -19,6 +19,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 
+import static java.lang.Integer.max;
+
 public class DetailsOfOneCompany extends AppCompatActivity {
     private final static int[] SLOT_COSTS={0,100000,200000,300000,400000,500000,750000,1000000,1500000};
 
@@ -69,8 +71,8 @@ public class DetailsOfOneCompany extends AppCompatActivity {
         oneRoundMarketingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(company.money>=10000){
-                    company.money-=10000;
+                if(company.money>=calculateMarketingCost(company.marketing)){
+                    company.money-=calculateMarketingCost(company.marketing);
                     company.marketing+=10;
                     updateCompany(true);
                 }else{
@@ -146,7 +148,7 @@ public class DetailsOfOneCompany extends AppCompatActivity {
     }
 
     public static int calculateMarketingCost(int actualMarketingLevel){
-        return 10000+(actualMarketingLevel*100);
+        return max(10000+(actualMarketingLevel*100),0);
     }
 
 }

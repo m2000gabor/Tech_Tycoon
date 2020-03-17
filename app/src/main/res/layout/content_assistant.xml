@@ -28,7 +28,7 @@
             android:textSize="@dimen/text_size"/>
 
         <Switch
-            android:id="@+id/generalAssistantSwitch"
+            android:id="@+id/headerAssistantSwitch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Activity"
@@ -44,15 +44,15 @@
             android:orientation="horizontal">
 
             <Switch
-                android:id="@+id/marketingAssistantSwitch"
+                android:id="@+id/marketingGoalAssistantSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Marketing assistant"
+                android:text="Marketing Goal assistant"
                 android:textSize="@dimen/text_size_small"
                 android:layout_margin="@dimen/text_margin_small"/>
 
             <EditText
-                android:id="@+id/marketingInputField"
+                android:id="@+id/marketingGoalInputField"
                 android:layout_width="80sp"
                 android:layout_height="wrap_content"
                 android:inputType="numberDecimal"
@@ -62,7 +62,37 @@
 
         </LinearLayout>
 
+        <Switch
+            android:id="@+id/marketingAvgAssistantSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Marketing Average assistant"
+            android:textSize="@dimen/text_size_small"
+            android:layout_margin="@dimen/text_margin_small"/>
 
+        <Switch
+            android:id="@+id/general1AssistantSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Avg profit holder"
+            android:textSize="@dimen/text_size_small"
+            android:layout_margin="@dimen/text_margin_small"/>
+
+        <Switch
+        android:id="@+id/general2AssistantSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Random"
+        android:textSize="@dimen/text_size_small"
+        android:layout_margin="@dimen/text_margin_small"/>
+
+        <Switch
+            android:id="@+id/general3AssistantSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Inventor"
+            android:textSize="@dimen/text_size_small"
+            android:layout_margin="@dimen/text_margin_small"/>
 
     </LinearLayout>
 

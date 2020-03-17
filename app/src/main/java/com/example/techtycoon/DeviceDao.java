@@ -4,8 +4,10 @@ import java.util.List;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Transaction;
 import androidx.room.Update;
 
 @Dao
@@ -92,11 +94,10 @@ public interface DeviceDao {
     void insertOneDevice(Device device);
 
     @Insert
-    void insertCompanies(Company... companies);
+    void insertDevices(Device... devices);
 
-    /*
-    @Delete
-    void delete(Device device);*/
+    @Insert
+    void insertCompanies(Company... companies);
 
     @Query("DELETE FROM device")
     void deleteAllDevice();
@@ -112,5 +113,8 @@ public interface DeviceDao {
 
     @Update
     void updateDevices(Device... devices);
+
+    @Delete
+    void deleteDevices(Device... devices);
 
 }

@@ -19,8 +19,6 @@ import static com.example.techtycoon.Simulator.log2;
 //TODO dynamic costs
 
 public class ChooseMemoryActivity extends AppCompatActivity {
-    public final static double MEMORY_PER_GB = 2; //0.17
-    public static final double RAM_PER_GB = 4; //6.5
     int mRam=1;
     int mMemory=1;
 
@@ -38,7 +36,9 @@ public class ChooseMemoryActivity extends AppCompatActivity {
                 Intent replyIntent=new Intent();
                 replyIntent.putExtra("amountOfRam",mRam);
                 replyIntent.putExtra("amountOfMemory",mMemory);
-                replyIntent.putExtra("costs",(int) Math.round((log2(mMemory)+1)*MEMORY_PER_GB+(log2(mRam)+1)*RAM_PER_GB));
+                replyIntent.putExtra("costs",
+                        (int) Math.round(DeviceValidator.getCostOfMemory(0,mMemory)+
+                        DeviceValidator.getCostOfMemory(1,mRam)));
                 setResult(RESULT_OK,replyIntent);
                 finish();
             }
@@ -57,14 +57,14 @@ public class ChooseMemoryActivity extends AppCompatActivity {
         ramSeekbar.setMax(ramLvl-1);
         //update ui
         ramCounter.setText(String.format(Locale.getDefault(),"%d GB",1) );
-        ramCost.setText(String.format(Locale.getDefault(),"%.2f$",1*RAM_PER_GB));
+        ramCost.setText(String.format(Locale.getDefault(),"%.2f$",DeviceValidator.getCostOfMemory(1,1)));
 
         ramSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 mRam=(int) Math.round(Math.pow(2,progress));
                 ramCounter.setText(String.format(Locale.getDefault(),"%d GB",mRam ));
-                ramCost.setText(String.format(Locale.getDefault(),"%.2f$",(log2(mRam)+1)*RAM_PER_GB));
+                ramCost.setText(String.format(Locale.getDefault(),"%.2f$",DeviceValidator.getCostOfMemory(1,mRam)));
             }
 
             @Override
@@ -81,14 +81,14 @@ public class ChooseMemoryActivity extends AppCompatActivity {
         memorySeekbar.setMax(memoryLvl-1);
         //update ui
         memoryCounter.setText(String.format(Locale.getDefault(),"%d GB",1) );
-        memoryCost.setText(String.format(Locale.getDefault(),"%.2f$",1*MEMORY_PER_GB));
+        memoryCost.setText(String.format(Locale.getDefault(),"%.2f$",DeviceValidator.getCostOfMemory(0,1)));
 
         memorySeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 mMemory=(int) Math.round(Math.pow(2,progress));
                 memoryCounter.setText(String.format(Locale.getDefault(),"%d GB",mMemory) );
-                memoryCost.setText(String.format(Locale.getDefault(),"%.2f$",(log2(mMemory)+1)*MEMORY_PER_GB));
+                memoryCost.setText(String.format(Locale.getDefault(),"%.2f$",DeviceValidator.getCostOfMemory(0,mMemory)));
             }
 
             @Override

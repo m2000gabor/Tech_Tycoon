@@ -21,6 +21,7 @@ public class Company {
     @ColumnInfo(name = "lastProfit")
     public int lastProfit;
 
+    //todo use levels as a matrix
     @ColumnInfo(name = "levels")
     private String levels;
 
@@ -66,4 +67,5 @@ public class Company {
     public void setLevels(String levels) {this.levels = levels;}
     public void setLevels_USE_THIS(int[] arr){this.levels=Converter.intArrayToString(arr);}
     public int[] getLevels_USE_THIS(){return Converter.stringToIntArray(this.levels);}
+    public boolean hasFreeSlot(){ return maxSlots<usedSlots; }
 }

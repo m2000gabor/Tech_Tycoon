@@ -1,5 +1,7 @@
 package com.example.techtycoon;
 
+import android.telecom.Call;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
@@ -82,6 +84,10 @@ class Simulator {
         for (int j = 0; j< ATTRIBUTES_IN_ARRAY; j++){
             averages[j]+=MARKET_SPEED*((sumBody[j]/customerNum)-averages[j]);
         }
+
+        deviceViewModel.updateCompanies(companyList.toArray(new Company[0]));
+        deviceViewModel.updateDevices(deviceList.toArray(new Device[0]));
+
         return new Wrapped_DeviceAndCompanyList(deviceList,companyList);
     }
 

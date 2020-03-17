@@ -18,6 +18,7 @@ class DeviceRepository {
     private int filter=-1;
 
     private DeviceDao mDao;
+    private TransactionDao mTransactionDao;
     private LiveData<List<Device>> mAllDevs;
     private LiveData<List<Company>> mAllComps;
 
@@ -29,6 +30,7 @@ class DeviceRepository {
     DeviceRepository(Application application) {
         AppDatabase db = AppDatabase.getDatabase(application);
         mDao = db.deviceDao();
+        mTransactionDao = db.transactionDao();
 
         mAllComps=mDao.getAllCompany();
 
@@ -119,6 +121,18 @@ class DeviceRepository {
 
 
     void deleteOneDeviceById(int id){
+        List<Device> deviceList=mutableAllDevices.getValue();
+        List<Company> companyList=getAllCompaniesList();
+
+        int i=0;
+        while (deviceList.get(i).id != id){i++;}
+
+        int j=0;
+        while(deviceList.get(i).ownerCompanyId != companyList.get(j).companyId){j++;}
+        Company newComp=companyList.get(j);
+        newComp.usedSlots--;
+        updateCompanies(newComp);
+
         AppDatabase.databaseWriteExecutor.execute(() -> {
             mDao.deleteOneDeviceById(id);
         });
@@ -130,6 +144,7 @@ class DeviceRepository {
     }
 
     void deleteAll(){
+
         AppDatabase.databaseWriteExecutor.execute(() -> {
             mDao.deleteAllDevice();
         });
@@ -138,6 +153,18 @@ class DeviceRepository {
         });
     }
 
+    void startAgain(Company... companies){
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            mTransactionDao.insertAndDeleteInTransaction(companies);
+        });
+    }
+
+    void assistantToDatabase(Company[] companies,Device[] insert,Device[] update,Device[] delete){
+        for (Device d : insert) { d.id = 0; d.soldPieces=0; }
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            mTransactionDao.assistantTransaction(companies,insert,update,delete);
+        });
+    }
 
     //asynctask classes
     private static class getAllCompsAsyncTask extends android.os.AsyncTask<Void, Void, List<Company> > {

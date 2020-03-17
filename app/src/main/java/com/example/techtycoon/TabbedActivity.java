@@ -21,6 +21,7 @@ public class TabbedActivity extends AppCompatActivity {
     DeviceViewModel deviceViewModel;
     Simulator simulator;
     AssistantManager assistantManager;
+    boolean assistantTurn=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,7 @@ public class TabbedActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(!assistantTurn){
                 //get sharedPrefs
                 SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
                 float lastAvgPrice = sharedPref.getFloat(getString(R.string.simulator_lastAvgPrice), 5);
@@ -57,7 +59,7 @@ public class TabbedActivity extends AppCompatActivity {
 
                 simulator=new Simulator(deviceViewModel,lastAvgPrice,lastAvgRam,lastAvgMemory,arr);
                 Wrapped_DeviceAndCompanyList simulatorResults=simulator.simulate();
-                oneMonthSimulated(simulatorResults);
+                //oneMonthSimulated(simulatorResults);
 
                 SharedPreferences.Editor editor = sharedPref.edit();
                 editor.putFloat(getString(R.string.simulator_lastAvgPrice), (float) simulator.lastAvgPrice);
@@ -69,15 +71,22 @@ public class TabbedActivity extends AppCompatActivity {
                 editor.putFloat(getString(R.string.simulator_lastAvgIp),(float) simulator.averages[3]);
                 editor.putFloat(getString(R.string.simulator_lastAvgBezels),(float) simulator.averages[4]);
                 editor.apply();
+                fab.setImageResource(R.drawable.ic_account_circle_white_24dp);
                 Toast.makeText(getApplicationContext(), "1 month simulated", Toast.LENGTH_SHORT).show();
 
-            }
+            }else{
+                    Wrapped_DeviceAndCompanyList afterAssistants=assistantManager.trigger(deviceViewModel.getAllCompaniesList(),deviceViewModel.getAllDevicesList());
+                    deviceViewModel.assistantToDatabase(afterAssistants);
+                    Toast.makeText(getApplicationContext(), "Assistants finished the work", Toast.LENGTH_SHORT).show();
+                    fab.setImageResource(R.drawable.ic_play_arrow_white_24dp);
+                }
+            assistantTurn=!assistantTurn;
+        }
         });
     }
-
+    /*
     void oneMonthSimulated(Wrapped_DeviceAndCompanyList simulatorResults){
         Wrapped_DeviceAndCompanyList afterAssistants=assistantManager.trigger(simulatorResults.companies,simulatorResults.devices);
-        deviceViewModel.updateCompanies(afterAssistants.companies.toArray(new Company[0]));
-        deviceViewModel.updateDevices(afterAssistants.devices.toArray(new Device[0]));
-    }
+        deviceViewModel.assistantToDatabase(afterAssistants);
+    }*/
 }

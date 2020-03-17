@@ -12,7 +12,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 public class DetailsOfOneDevice extends AppCompatActivity {
+    //todo edit
     int id;
+    int companyId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +40,7 @@ public class DetailsOfOneDevice extends AppCompatActivity {
         Intent intent = getIntent();
         String nev = intent.getStringExtra(MainActivity.NAME_FIELD);
         int profit=intent.getIntExtra(MainActivity.MAIN_MONETARIAL_INFO,0);
-        int companyId=intent.getIntExtra(MainActivity.DEVICE_COMPANY_ID,0);
+        companyId=intent.getIntExtra(MainActivity.DEVICE_COMPANY_ID,0);
         int price=intent.getIntExtra(MainActivity.DEVICE_PRICE,0);
         int cost=intent.getIntExtra(MainActivity.DEVICE_COST,0);
         int[][] devParams=Device.intArrayToMtx(intent.getIntArrayExtra(MainActivity.DEVICE_PARAMS));

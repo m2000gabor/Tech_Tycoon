@@ -7,12 +7,11 @@ import androidx.room.PrimaryKey;
 //TODO new attributes
 //TODO save the name of the owner company
 
-
-
 @Entity
 public class Device {
     public static final int NUMBER_OF_BUDGETS=2; //rammemory,body
     public static final int[] CHILDREN_OF_BUDGETS={2,5}; //rammemory,body
+    public final static int NUMBER_OF_ATTRIBUTES =7;
 
     @PrimaryKey(autoGenerate = true)
     public int id;
@@ -38,6 +37,7 @@ public class Device {
     @ColumnInfo(name="soldPieces")
     public int soldPieces;
 
+    //Body
     @ColumnInfo
     public int design;
 
@@ -53,6 +53,27 @@ public class Device {
     @ColumnInfo
     public int bezel;
 
+    /*
+
+    //Display
+    @ColumnInfo
+    public int displaySize;
+
+    @ColumnInfo
+    public int resolution;
+
+    //todo get density
+
+    @ColumnInfo
+    public int displayTechnology;
+
+    @ColumnInfo
+    public int brightness;
+
+    @ColumnInfo
+    public boolean refreshRate;*/
+
+
     public Device(String name,int profit,int cost,int ownerCompanyId,int ram, int memory) {
         this.name = name;
         this.profit = profit;
@@ -63,6 +84,17 @@ public class Device {
         this.soldPieces=0;
     }
 
+    public Device(Device d) {
+        this.name = d.name;
+        this.profit = d.profit;
+        this.cost=d.cost;
+        this.ownerCompanyId=d.ownerCompanyId;
+        this.ram=d.ram;
+        this.memory=d.memory;
+        this.setBodyParams(d.getParams()[1]);
+        this.soldPieces=0;
+    }
+
     public void setBodyParams(int design,int materials,int colors,int ip,int bezels){
         this.design=design;
         this.material=materials;
@@ -70,6 +102,10 @@ public class Device {
         this.ip=ip;
         this.bezel=bezels;
     }
+    public void setBodyParams(int[] bodyParams){
+        this.setBodyParams(bodyParams[0],bodyParams[1],bodyParams[2],bodyParams[3],bodyParams[4]);
+    }
+
     int[][] getParams(){
         return new int[][]{
                 {this.ram,
@@ -86,8 +122,9 @@ public class Device {
     String getDeviceName(){return this.name;}
     //public int  getDeviceId(){return this.id;}
     int getPrice(){return cost+profit;}
+    public int getOverallIncome(){ return soldPieces*profit; }
 
-    static int[] mtxToArray(int[][] mtx){
+    public static int[] mtxToArray(int[][] mtx){
         int length=0;
         for (int i=0;i<NUMBER_OF_BUDGETS;i++){
             length+=CHILDREN_OF_BUDGETS[i];

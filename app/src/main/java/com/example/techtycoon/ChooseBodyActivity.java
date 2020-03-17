@@ -16,9 +16,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
+import static com.example.techtycoon.DeviceValidator.BODY_COSTS;
+
 public class ChooseBodyActivity extends AppCompatActivity {
     private static final int NUM_OF_ATTR=5;
-    private static final int[] BODY_COSTS={5,3,1,2,3};
+    //private static final int[] BODY_COSTS={5,3,1,2,3};
     private int[] BODY_MAX_POINTS;
     TextView[] valueTextViews;
     TextView[] costTextViews;
@@ -35,9 +37,9 @@ public class ChooseBodyActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        BODY_MAX_POINTS=new int[DevelopmentActivity.NUMBER_OF_ATTRIBUTES];
-        for(int i=0;i<DevelopmentActivity.NUMBER_OF_ATTRIBUTES-2;i++){
-            BODY_MAX_POINTS[i]=DevelopmentActivity.DEVELOPMENT_COSTS[i+2].length;};
+        BODY_MAX_POINTS=new int[Device.NUMBER_OF_ATTRIBUTES];
+        for(int i=0;i<Device.NUMBER_OF_ATTRIBUTES-2;i++){
+            BODY_MAX_POINTS[i]=DevelopmentValidator.getMaxLevel(i+2);};
 
         //get int
         levels=getIntent().getIntArrayExtra(MainActivity.LEVELS);

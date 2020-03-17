@@ -13,6 +13,7 @@ import androidx.room.RoomDatabase;
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract DeviceDao deviceDao();
+    public abstract TransactionDao transactionDao();
 
     private static volatile AppDatabase INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;

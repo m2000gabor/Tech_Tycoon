@@ -47,5 +47,19 @@ public class DeviceViewModel extends AndroidViewModel {
     void delOneDeviceById(int id) { mRepository.deleteOneDeviceById(id); }
     void delOneCompanyById(int id) { mRepository.delOneCompanyById(id); }
 
-    void deleteAll(){mRepository.deleteAll();}
+    void deleteAll(){
+        mRepository.deleteAll();
+            }
+
+    void startAgain(Company... companies){
+        mRepository.startAgain(companies);
+    }
+
+    void assistantToDatabase(Wrapped_DeviceAndCompanyList assistantResults){
+
+        mRepository.assistantToDatabase(assistantResults.UpdateCompanies.toArray(new Company[0]),
+                assistantResults.insert.toArray(new Device[0]),
+                assistantResults.update.toArray(new Device[0]),
+                assistantResults.delete.toArray(new Device[0]));
+    }
 }

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -17,18 +16,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
+import static com.example.techtycoon.Device.NUMBER_OF_ATTRIBUTES;
+
+
 public class DevelopmentActivity extends AppCompatActivity {
-    public final static int NUMBER_OF_ATTRIBUTES =7;
-    //costs
-    public final static int[][] DEVELOPMENT_COSTS = {
-            /*ram*/{100000, 200000, 300000, 500000, 750000, 1000000, 3000000},
-            /*memory*/{100000, 200000, 250000, 400000, 600000, 800000, 1000000, 1300000, 1500000, 2500000},
-            /*design*/{100000, 150000, 200000, 250000, 500000, 750000, 100000, 150000, 2000000, 3000000},
-            /*material*/{20000, 50000, 100000, 150000, 200000, 300000, 500000, 1000000, 1500000, 2500000},
-            /*colors*/{50000, 75000, 100000, 150000, 200000, 250000, 300000},
-            /*ip*/{250000, 500000, 1000000, 4000000},
-            /*bezels*/{100000, 200000, 250000, 300000, 400000, 600000, 800000, 1000000, 1200000, 1500000}
-    };
+    //todo make development compatible with assistants
 
     boolean isUpgrade=false;
     int money;
@@ -108,23 +100,23 @@ public class DevelopmentActivity extends AppCompatActivity {
     void refresh(){
         moneyTextView.setText(String.format(Locale.getDefault(),"Money: %d$",money));
         for(int i = 0; i< NUMBER_OF_ATTRIBUTES; i++){
-            costsTextViews[i].setText(String.format(Locale.getDefault(),"%d$", DEVELOPMENT_COSTS[i][levels[i]-1]));
+            costsTextViews[i].setText(String.format(Locale.getDefault(),"%d$", DevelopmentValidator.getOneDevelopmentCost(i,levels[i])));
             actualLevelsTextViews[i].setText(String.format(Locale.getDefault(),"lvl %d", levels[i]));
 
             //if maximum level is reached
-            if (levels[i]==DEVELOPMENT_COSTS[i].length){
+            if (-1== DevelopmentValidator.getOneDevelopmentCost(i,levels[i])){
                 imageButtons.get(i).setVisibility(View.INVISIBLE);
                 costsTextViews[i].setText("Reached max level");
                 continue;
             }
-            if(money>= DEVELOPMENT_COSTS[i][levels[i]-1]){
+            if(money>= DevelopmentValidator.getOneDevelopmentCost(i,levels[i])){
                 imageButtons.get(i).setImageDrawable(getDrawable(R.drawable.ic_upgrade_green_24dp));
                 imageButtons.get(i).setClickable(true);
                 imageButtons.get(i).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         int i=imageButtons.indexOf((ImageButton) v);
-                        money-= DEVELOPMENT_COSTS[i][levels[i]-1];
+                        money-= DevelopmentValidator.getOneDevelopmentCost(i,levels[i]);
                         levels[i]++;
                         isUpgrade=true;
                         refresh();

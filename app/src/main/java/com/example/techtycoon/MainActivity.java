@@ -9,8 +9,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
@@ -18,7 +16,7 @@ import androidx.lifecycle.ViewModelProvider;
 //TODO time
 //TODO companies have a development route and cost limiting the available features
 //TODO detailed stats
-//TODO nem sikerult hozzaadni toast iin mainactivity
+//TODO nem sikerult hozzaadni toast in mainactivity
 
 public class MainActivity extends AppCompatActivity {
     public static final String NAME_FIELD ="name" ;
@@ -103,30 +101,19 @@ public class MainActivity extends AppCompatActivity {
     public void addCompany(View view){startAddNewCompanyActivity();}
 
     public void start_again(View view){
-        deviceViewModel.deleteAll();
-        deviceViewModel.insertCompanies(new Company("Apple",10,STARTING_LEVELS),
+        Company[] companies={
+                new Company("Apple",10,STARTING_LEVELS),
                 new Company("Samsung",10,STARTING_LEVELS),
                 new Company("Xiaomi",10,STARTING_LEVELS),
                 new Company("Sony",10,STARTING_LEVELS),
-                new Company("MyPhone",10,STARTING_LEVELS) );
+                new Company("MyPhone",10,STARTING_LEVELS),
+                new Company("Admin",1000000000,STARTING_LEVELS)};
+
+        deviceViewModel.startAgain(companies);
     }
 
     public void start_simulation(View view){
-        /*
-        simulator.simulate();
-        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putFloat(getString(R.string.simulator_lastAvgPrice), (float) simulator.lastAvgPrice);
-        editor.putFloat(getString(R.string.simulator_lastAvgMemory),(float) simulator.lastAvgMemory);
-        editor.putFloat(getString(R.string.simulator_lastAvgRam),(float) simulator.lastAvgRam);
-        editor.putFloat(getString(R.string.simulator_lastAvgDesign),(float) simulator.averages[0]);
-        editor.putFloat(getString(R.string.simulator_lastAvgMaterial),(float) simulator.averages[1]);
-        editor.putFloat(getString(R.string.simulator_lastAvgColors),(float) simulator.averages[2]);
-        editor.putFloat(getString(R.string.simulator_lastAvgIp),(float) simulator.averages[3]);
-        editor.putFloat(getString(R.string.simulator_lastAvgBezels),(float) simulator.averages[4]);
-        editor.apply();
-        Toast.makeText(getApplicationContext(), "1 month simulated", Toast.LENGTH_SHORT).show();
-        */
+
     }
 
 
