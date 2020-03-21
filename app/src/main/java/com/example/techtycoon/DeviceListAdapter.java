@@ -58,8 +58,8 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
             Device current = devices.get(position);
             holder.deviceNameItemView.setText(current.name);
             holder.deviceLastlySoldTextView.setText(String.format(Locale.getDefault(),"%d",current.soldPieces));
-            holder.deviceRamTextView.setText(String.format(Locale.getDefault(),"RAM: %dGB",current.ram));
-            holder.deviceMemoryTextView.setText(String.format(Locale.getDefault(),"Memory: %dGB",current.memory));
+            holder.deviceRamTextView.setText(String.format(Locale.getDefault(),"RAM: %dGB",(int) Math.pow(2,current.ram)));
+            holder.deviceMemoryTextView.setText(String.format(Locale.getDefault(),"Memory: %dGB",(int) Math.pow(2,current.memory)));
             holder.priceTextView.setText(String.format(Locale.getDefault(),"Price: %d$",current.getPrice()));
         } else {
             // Covers the case of data not being ready yet.

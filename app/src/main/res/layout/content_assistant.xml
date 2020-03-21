@@ -94,6 +94,22 @@
             android:textSize="@dimen/text_size_small"
             android:layout_margin="@dimen/text_margin_small"/>
 
+        <Switch
+            android:id="@+id/fullAssistant1Switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Full1"
+            android:textSize="@dimen/text_size_small"
+            android:layout_margin="@dimen/text_margin_small"/>
+
+        <Switch
+            android:id="@+id/fullAssistant2Switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Full2 - Apple"
+            android:textSize="@dimen/text_size_small"
+            android:layout_margin="@dimen/text_margin_small"/>
+
     </LinearLayout>
 
 </ScrollView>

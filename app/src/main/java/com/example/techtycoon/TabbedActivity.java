@@ -17,7 +17,13 @@ import android.widget.Toast;
 
 import com.example.techtycoon.ui.main.SectionsPagerAdapter;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+
 public class TabbedActivity extends AppCompatActivity {
+    public static HashMap<String,Integer> NAME_newestPartOfTheSeries=new HashMap<>();
+
     DeviceViewModel deviceViewModel;
     Simulator simulator;
     AssistantManager assistantManager;
@@ -75,10 +81,21 @@ public class TabbedActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "1 month simulated", Toast.LENGTH_SHORT).show();
 
             }else{
+                    SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+                    //get nameTable for bots naming convention
+                    Set<String> keys=sharedPref.getStringSet("nameTableKeys",new HashSet<String>());
+                    for (String key : keys) {NAME_newestPartOfTheSeries.put(key,sharedPref.getInt(key, -1));}
+
                     Wrapped_DeviceAndCompanyList afterAssistants=assistantManager.trigger(deviceViewModel.getAllCompaniesList(),deviceViewModel.getAllDevicesList());
                     deviceViewModel.assistantToDatabase(afterAssistants);
                     Toast.makeText(getApplicationContext(), "Assistants finished the work", Toast.LENGTH_SHORT).show();
                     fab.setImageResource(R.drawable.ic_play_arrow_white_24dp);
+
+                    SharedPreferences.Editor editor = getPreferences(MODE_PRIVATE).edit();
+                    Set<String> nameTableKeysSet=NAME_newestPartOfTheSeries.keySet();
+                    editor.putStringSet("nameTableKeys",nameTableKeysSet);
+                    for (String key :nameTableKeysSet) {editor.putInt(key,NAME_newestPartOfTheSeries.get(key));}
+                    editor.apply();
                 }
             assistantTurn=!assistantTurn;
         }

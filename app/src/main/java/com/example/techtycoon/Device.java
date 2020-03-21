@@ -28,6 +28,7 @@ public class Device {
     @ColumnInfo(name="ownerCompanyId")
     public int ownerCompanyId;
 
+    //todo Db should store ram n memory like their level 1,2,3,4,5 and not 32,64
     @ColumnInfo(name="ram")
     public int ram;
 
@@ -89,10 +90,11 @@ public class Device {
         this.profit = d.profit;
         this.cost=d.cost;
         this.ownerCompanyId=d.ownerCompanyId;
-        this.ram=d.ram;
-        this.memory=d.memory;
-        this.setBodyParams(d.getParams()[1]);
         this.soldPieces=0;
+
+        for(int i=0;i<NUMBER_OF_ATTRIBUTES;i++){
+            setFieldByNum(i,d.getFieldByNum(i));
+        }
     }
 
     public void setBodyParams(int design,int materials,int colors,int ip,int bezels){
@@ -119,8 +121,6 @@ public class Device {
         };
     }
 
-    String getDeviceName(){return this.name;}
-    //public int  getDeviceId(){return this.id;}
     int getPrice(){return cost+profit;}
     public int getOverallIncome(){ return soldPieces*profit; }
 
@@ -161,4 +161,45 @@ public class Device {
 
         return mtx;
     }
+
+    //-1 returns the profit
+    public int getFieldByNum(int attrID){
+        int i=-1;
+        switch (attrID){
+            case -1:i=this.profit;break;
+            case 0:i=this.ram; break;
+            case 1:i=this.memory; break;
+            case 2:i=this.design; break;
+            case 3:i=this.material; break;
+            case 4: i=this.color;break;
+            case 5: i=this.ip;break;
+            case 6: i=this.bezel;break;
+        }
+        return i;
+    }
+
+    public void setFieldByNum(int attrID,int value){
+        switch (attrID){
+            case -1:this.profit=value;break;
+            case 0:this.ram=value; break;
+            case 1:this.memory=value; break;
+            case 2:this.design=value; break;
+            case 3:this.material=value; break;
+            case 4:this.color=value;break;
+            case 5:this.ip=value;break;
+            case 6:this.bezel=value;break;
+        }
+    }
+
+    /*
+     * returns the difference between the attributes of 2 device
+     */
+    public int equalAttributes(Device d){
+        int diff=0;
+        for (int i=0;i<NUMBER_OF_ATTRIBUTES;i++){
+            if(this.getFieldByNum(i)!=d.getFieldByNum(i)){diff++;}
+        }
+        return diff;
+    }
+
 }

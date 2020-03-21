@@ -180,14 +180,14 @@ public class FragmentDeviceCreator extends Fragment {
         if (resultCode == RESULT_OK){
             switch (requestCode){
                 case CHOOSE_MEMORY_REQUEST:
-                    ram=data.getIntExtra("amountOfRam",0);
-                    memory=data.getIntExtra("amountOfMemory",0);
+                    ram=data.getIntExtra("amountOfRam",1);
+                    memory=data.getIntExtra("amountOfMemory",1);
                     costs[0]=data.getIntExtra("costs",99);
                     currentCostField.setText(String.format(Locale.getDefault(),"The current cost is %d$", getOverallCost()));
                     isMemorySet = true;
                     isSetMemoryImage.setImageDrawable(getActivity().getDrawable(R.drawable.ic_check_green_24dp));
-                    chosenMem.setText(String.format(Locale.getDefault(),"Memory: %dGB", memory));
-                    chosenRam.setText(String.format(Locale.getDefault(),"Ram: %dGB", ram));
+                    chosenMem.setText(String.format(Locale.getDefault(),"Memory: %dGB", (int) Math.round(Math.pow(2,memory)) ));
+                    chosenRam.setText(String.format(Locale.getDefault(),"Ram: %dGB", (int) Math.round(Math.pow(2,ram))));
                     chosenMem.setVisibility(View.VISIBLE);
                     chosenRam.setVisibility(View.VISIBLE);
                     break;

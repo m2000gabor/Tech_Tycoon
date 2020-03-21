@@ -1,8 +1,6 @@
 package com.example.techtycoon;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -42,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
     private static final int[] STARTING_LEVELS={1,1,1,1,1,1,1};
 
     DeviceViewModel deviceViewModel;
-    Simulator simulator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,18 +53,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Get a new or existing ViewModel from the ViewModelProvider.
         deviceViewModel = new ViewModelProvider(this).get(DeviceViewModel.class);
-
-        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
-        float lastAvgPrice = sharedPref.getFloat(getString(R.string.simulator_lastAvgPrice), 5);
-        float lastAvgRam = sharedPref.getFloat(getString(R.string.simulator_lastAvgRam), 1);
-        float lastAvgMemory = sharedPref.getFloat(getString(R.string.simulator_lastAvgMemory), 1);
-        float lastAvgDesign = sharedPref.getFloat(getString(R.string.simulator_lastAvgDesign), 1);
-        float lastAvgMaterial = sharedPref.getFloat(getString(R.string.simulator_lastAvgMaterial), 1);
-        float lastAvgColors = sharedPref.getFloat(getString(R.string.simulator_lastAvgColors), 1);
-        float lastAvgIp = sharedPref.getFloat(getString(R.string.simulator_lastAvgIp), 1);
-        float lastAvgBezels = sharedPref.getFloat(getString(R.string.simulator_lastAvgBezels), 1);
-        double[] arr={lastAvgDesign,lastAvgMaterial,lastAvgColors,lastAvgIp,lastAvgBezels};
-        simulator=new Simulator(deviceViewModel,lastAvgPrice,lastAvgRam,lastAvgMemory,arr);
     }
 
     @Override
@@ -112,11 +97,7 @@ public class MainActivity extends AppCompatActivity {
         deviceViewModel.startAgain(companies);
     }
 
-    public void start_simulation(View view){
-
-    }
-
-
+    public void start_simulation(View view){}
     public void startAddNewCompanyActivity(){
         Intent addNewCompany = new Intent(getApplicationContext(),AddNewCompany.class);
         startActivityForResult(addNewCompany,NEW_COMPANY_ACTIVITY_REQUEST_CODE);

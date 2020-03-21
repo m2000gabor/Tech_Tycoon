@@ -53,8 +53,8 @@ public class DetailsOfOneDevice extends AppCompatActivity {
         profitTextV.setText(String.format(Locale.getDefault(),"Profit: %d$",profit));
         deviceIDTextV.setText(String.format(Locale.getDefault(),"Device ID: %d",id));
         ownerIDTextV.setText(String.format(Locale.getDefault(),"Owner id: %d",companyId));
-        ramTextV.setText(String.format(Locale.getDefault(),"RAM: %d GB",devParams[0][0]));
-        memoryTextV.setText(String.format(Locale.getDefault(),"Memory: %d GB",devParams[0][1]));
+        ramTextV.setText(String.format(Locale.getDefault(),"RAM: %d GB",(int) Math.pow(2,devParams[0][0])));
+        memoryTextV.setText(String.format(Locale.getDefault(),"Memory: %d GB",(int) Math.pow(2,devParams[0][1])));
         costTextV.setText(String.format(Locale.getDefault(),"Cost: %d$",cost));
         bodyTextV.setText(Converter.intArrayToString(devParams[1]));
 

@@ -1,14 +1,12 @@
 package com.example.techtycoon;
 
-import android.telecom.Call;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
 import java.util.List;
 
 
-class Simulator {
+public class Simulator {
     ///Simulator 2.6.2 - new profiles
 
     private DeviceViewModel deviceViewModel;
@@ -52,6 +50,7 @@ class Simulator {
         for(int i=0;i<companyList.size();i++){
             companyList.get(i).lastProfit=0;
             companyList.get(i).marketing-=2;
+            if(companyList.get(i).marketing<0){companyList.get(i).marketing=0;}
         }
 
         earning(sold,deviceList,companyList);
@@ -71,8 +70,8 @@ class Simulator {
         for (int i=0;i<ATTRIBUTES_IN_ARRAY;i++){sumBody[i]=0;}
         for (int i=0;i<deviceList.size();i++){
             sumPrice+=sold[i]*deviceList.get(i).getPrice();
-            sumRam+=sold[i]*(log2(deviceList.get(i).ram)+1);
-            sumMem+=sold[i]*(log2(deviceList.get(i).memory)+1);
+            sumRam+=sold[i]*(deviceList.get(i).ram+1);
+            sumMem+=sold[i]*(deviceList.get(i).memory+1);
             for (int j = 0; j< ATTRIBUTES_IN_ARRAY; j++){
                 sumBody[j]+=sold[i]*deviceList.get(i).getParams()[1][j];
             }
@@ -131,8 +130,8 @@ class Simulator {
         for (int i=0;i<length;i++){
             price=(double) fx(deviceList.get(i).getPrice(), lastAvgPrice);
             price=Math.pow(price,weights[1]*0.2);
-            value=(double) Math.pow(fx(log2(deviceList.get(i).ram)+1, lastAvgRam),weights[2]*0.2);
-            value+= (double) Math.pow(fx(log2(deviceList.get(i).memory)+1, lastAvgMemory),weights[3]*0.2);
+            value=(double) Math.pow(fx(deviceList.get(i).ram+1, lastAvgRam),weights[2]*0.2);
+            value+= (double) Math.pow(fx(deviceList.get(i).memory+1, lastAvgMemory),weights[3]*0.2);
 
             for(int j = 0; j< ATTRIBUTES_IN_ARRAY; j++){
                 value+= (double) Math.pow(fx(deviceList.get(i).getParams()[1][j], averages[j]),weights[j+3]*0.2);

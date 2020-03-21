@@ -2,27 +2,22 @@ package com.example.techtycoon;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.techtycoon.Assistant.Assistant;
 
 import java.util.Locale;
 import java.util.Objects;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.FragmentManager;
 
 import static java.lang.Integer.max;
 
 public class DetailsOfOneCompany extends AppCompatActivity {
-    private final static int[] SLOT_COSTS={0,100000,200000,300000,400000,500000,750000,1000000,1500000};
+
 
     //random variables
     int id;
@@ -35,6 +30,7 @@ public class DetailsOfOneCompany extends AppCompatActivity {
     TextView levelsTextV;
     TextView marketingTextV;
     TextView slotsTextV;
+    TextView logsTextV;
     Button oneRoundMarketingButton;
     Button buySlotButton;
 
@@ -55,6 +51,7 @@ public class DetailsOfOneCompany extends AppCompatActivity {
         levelsTextV=findViewById(R.id.levels);
         marketingTextV=findViewById(R.id.marketingTextV);
         slotsTextV=findViewById(R.id.slotsTextV);
+        logsTextV=findViewById(R.id.companyLogs);
         oneRoundMarketingButton=findViewById(R.id.oneRoundMarketing);
         buySlotButton=findViewById(R.id.buySlot);
 
@@ -83,8 +80,8 @@ public class DetailsOfOneCompany extends AppCompatActivity {
         buySlotButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(company.money>=SLOT_COSTS[company.maxSlots]){
-                    company.money-=SLOT_COSTS[company.maxSlots];
+                if(company.money>=DevelopmentValidator.nextSlotCost(company.maxSlots)){
+                    company.money-=DevelopmentValidator.nextSlotCost(company.maxSlots);
                     company.maxSlots+=1;
                     updateCompany(true);
                 }else{
@@ -140,9 +137,12 @@ public class DetailsOfOneCompany extends AppCompatActivity {
         moneyTextV.setText(String.format(Locale.getDefault(),"Money: %d",company.money));
         marketingTextV.setText(String.format(Locale.getDefault(),"Marketing: %d",company.marketing));
         slotsTextV.setText(String.format(Locale.getDefault(),"Slots: %d/%d",company.maxSlots,company.usedSlots));
+        logsTextV.setText(company.logs);
         levelsTextV.setText(Converter.intArrayToString(company.getLevels_USE_THIS()));
+        if(DevelopmentValidator.nextSlotCost(company.maxSlots)!=-1){
         buySlotButton.setText(String.format(Locale.getDefault(),
-                "Buy a new slot for: %d$",SLOT_COSTS[company.maxSlots]));
+                "Buy a new slot for: %d$",DevelopmentValidator.nextSlotCost(company.maxSlots)));
+        }else{buySlotButton.setClickable(false);}
         oneRoundMarketingButton.setText(String.format(Locale.getDefault(),
                 "Launch marketing campaign for: %d$",calculateMarketingCost(company.marketing)));
     }

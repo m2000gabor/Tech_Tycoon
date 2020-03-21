@@ -61,7 +61,6 @@ public class DeviceValidator {
         return cost;
     }
 
-
     public int getOverallCost(){
         int overallCost=0;
         for (int i=0;i<Device.NUMBER_OF_BUDGETS;i++){overallCost+=getCostOfBudgets(i,-1,-1);}

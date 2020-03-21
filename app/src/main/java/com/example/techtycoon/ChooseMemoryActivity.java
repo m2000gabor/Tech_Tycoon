@@ -56,14 +56,14 @@ public class ChooseMemoryActivity extends AppCompatActivity {
         //ramSeekbar
         ramSeekbar.setMax(ramLvl-1);
         //update ui
-        ramCounter.setText(String.format(Locale.getDefault(),"%d GB",1) );
+        ramCounter.setText(String.format(Locale.getDefault(),"%d GB",2) );
         ramCost.setText(String.format(Locale.getDefault(),"%.2f$",DeviceValidator.getCostOfMemory(1,1)));
 
         ramSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                mRam=(int) Math.round(Math.pow(2,progress));
-                ramCounter.setText(String.format(Locale.getDefault(),"%d GB",mRam ));
+                mRam=progress+1;
+                ramCounter.setText(String.format(Locale.getDefault(),"%d GB",(int) Math.round(Math.pow(2,mRam)) ));
                 ramCost.setText(String.format(Locale.getDefault(),"%.2f$",DeviceValidator.getCostOfMemory(1,mRam)));
             }
 
@@ -80,14 +80,14 @@ public class ChooseMemoryActivity extends AppCompatActivity {
         SeekBar memorySeekbar=findViewById(R.id.memorySeekBar);
         memorySeekbar.setMax(memoryLvl-1);
         //update ui
-        memoryCounter.setText(String.format(Locale.getDefault(),"%d GB",1) );
+        memoryCounter.setText(String.format(Locale.getDefault(),"%d GB",2) );
         memoryCost.setText(String.format(Locale.getDefault(),"%.2f$",DeviceValidator.getCostOfMemory(0,1)));
 
         memorySeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                mMemory=(int) Math.round(Math.pow(2,progress));
-                memoryCounter.setText(String.format(Locale.getDefault(),"%d GB",mMemory) );
+                mMemory=progress+1;
+                memoryCounter.setText(String.format(Locale.getDefault(),"%d GB",(int) Math.round(Math.pow(2,mMemory))) );
                 memoryCost.setText(String.format(Locale.getDefault(),"%.2f$",DeviceValidator.getCostOfMemory(0,mMemory)));
             }
 

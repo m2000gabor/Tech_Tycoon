@@ -23,12 +23,15 @@ public class AssistantActivity extends AppCompatActivity {
     Company company;
     int id;
 
-    //view element
+    //only add the switch to this array
+    //assistantType will be the switch's position in this array+1
     int[] ResID_switch={R.id.marketingGoalAssistantSwitch,
             R.id.marketingAvgAssistantSwitch,
             R.id.general1AssistantSwitch,
             R.id.general2AssistantSwitch,
-            R.id.general3AssistantSwitch
+            R.id.general3AssistantSwitch,
+            R.id.fullAssistant1Switch,
+            R.id.fullAssistant2Switch
     };
     EditText marketingInputField;
     Switch headerAssistantSwitch;
@@ -65,13 +68,12 @@ public class AssistantActivity extends AppCompatActivity {
             switches[company.assistant.assistantType-1].setChecked(true);
             switch (company.assistant.assistantType){
                 case 1:
-                    marketingInputField.setText(String.format(Locale.getDefault(),"%d",company.assistant.marketingGoal));
+                    marketingInputField.setText(String.format(Locale.getDefault(),"%d",company.assistant.assistantGoal));
                     break;
                 default:break;
             }
-            headerAssistantSwitch.setChecked(true);
         };
-        headerAssistantSwitch.setChecked(company.hasAssistant);
+
         headerAssistantSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,6 +85,7 @@ public class AssistantActivity extends AppCompatActivity {
                 }
             }
         });
+        headerAssistantSwitch.setChecked(company.hasAssistant);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
