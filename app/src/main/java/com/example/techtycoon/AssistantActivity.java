@@ -3,7 +3,10 @@ package com.example.techtycoon;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.example.techtycoon.Assistant.Assistant;
+import com.example.techtycoon.Assistant.AbstractAssistant;
+import com.example.techtycoon.Assistant.AppleBot;
+import com.example.techtycoon.Assistant.AverageBot;
+import com.example.techtycoon.Assistant.Bot1;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +22,7 @@ import android.widget.Toast;
 import java.util.Locale;
 
 public class AssistantActivity extends AppCompatActivity {
+    //todo Choose assistant from a list and customize below
     DeviceViewModel deviceViewModel;
     Company company;
     int id;
@@ -61,14 +65,13 @@ public class AssistantActivity extends AppCompatActivity {
             switches[i]=findViewById(ResID_switch[i]);
         }
 
-
         //setvalues
         headerOfAssistants.setText(String.format(Locale.getDefault(),"%s's assistants",company.name));
-        if(company.hasAssistant){
-            switches[company.assistant.assistantType-1].setChecked(true);
-            switch (company.assistant.assistantType){
+        if(company.assistantType!=-1){
+            switches[company.assistantType-1].setChecked(true);
+            switch (company.assistantType){
                 case 1:
-                    marketingInputField.setText(String.format(Locale.getDefault(),"%d",company.assistant.assistantGoal));
+                    marketingInputField.setText(String.format(Locale.getDefault(),"%s",company.assistantStatus));
                     break;
                 default:break;
             }
@@ -85,14 +88,13 @@ public class AssistantActivity extends AppCompatActivity {
                 }
             }
         });
-        headerAssistantSwitch.setChecked(company.hasAssistant);
+        headerAssistantSwitch.setChecked(company.assistantType!=-1);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 boolean isAssistNeeded= headerAssistantSwitch.isChecked();
-                company.hasAssistant=isAssistNeeded;
                 int goal=0;
                 int type=0;
                 if(isAssistNeeded) {
@@ -110,14 +112,22 @@ public class AssistantActivity extends AppCompatActivity {
 
                     type++;
                 }
-
-                if(isAssistNeeded){ company.assistant=new Assistant(company.companyId,goal,type); }
+                if(isAssistNeeded){
+                    company.assistantType=type;
+                    company.assistantStatus=String.valueOf(goal);
+                }else {company.assistantType=-1;}
                 deviceViewModel.updateCompanies(company);
                 Toast.makeText(view.getContext(),"Saved",Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public boolean navigateUpTo (Intent upIntent){
+        upIntent.putExtra("ID", id);
+        return super.navigateUpTo(upIntent);
     }
 
 }

@@ -4,17 +4,16 @@ import static com.example.techtycoon.Simulator.log2;
 
 //primary source for assistant, should be used in fragments too
 public class DeviceValidator {
-    public static final double[] MEMORY_COSTS={2,4};
-    public static final int[] BODY_COSTS={5,3,1,2,3};
+    private static final double[] MEMORY_COSTS={2,4};
+    static final int[] BODY_COSTS={5,3,1,2,3};
 
-    static Device device;
     //todo implement a validation process
     public static boolean validate(Company myCompany,Device newDev){return true;}
-    public DeviceValidator(Device d){device=d;}
+    public DeviceValidator(){}
 
     //calculate the cost of a param or a whole budget
     //@param budgets
-    static int getCostOfBudgets(int i,int j,int value){
+    private static int getCostOfBudgets(int i,int j,int value,Device device){
         double cost=0;
         switch (i){
             //memory
@@ -61,8 +60,8 @@ public class DeviceValidator {
         return cost;
     }
 
-    public int getOverallCost(){
+    public static int getOverallCost(Device device){
         int overallCost=0;
-        for (int i=0;i<Device.NUMBER_OF_BUDGETS;i++){overallCost+=getCostOfBudgets(i,-1,-1);}
+        for (int i=0;i<Device.NUMBER_OF_BUDGETS;i++){overallCost+=getCostOfBudgets(i,-1,-1,device);}
         return overallCost;}
 }

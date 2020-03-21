@@ -11,7 +11,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
-//todo remove unattached observers since they cause delays and lag
+//todo ?remove unattached observers since they cause delays and lag?
 
 class DeviceRepository {
     private int orderBy=0;
@@ -70,9 +70,17 @@ class DeviceRepository {
         }
         return def;
     }
+    Device getDevice_byID(int id){
+        try {
+            return new getDevByIdAsyncTask(mDao,id).execute().get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
     Company getCompany_byID(int id){
         try {
-            return new getCompByIdAsyncTask(mDao,id).execute().get().get(0);
+            return new getCompByIdAsyncTask(mDao,id).execute().get();
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
@@ -175,12 +183,12 @@ class DeviceRepository {
             return mAsyncTaskDao.getAllCompaniesList();
         }
     }
-    private static class getCompByIdAsyncTask extends android.os.AsyncTask<Void, Void, List<Company> >{
+    private static class getCompByIdAsyncTask extends android.os.AsyncTask<Void, Void, Company >{
         private DeviceDao mAsyncTaskDao;
         private int id;
         getCompByIdAsyncTask(DeviceDao dao,int ID) { mAsyncTaskDao = dao; this.id=ID;}
         @Override
-        protected List<Company>  doInBackground(Void... params) {
+        protected Company  doInBackground(Void... params) {
             return mAsyncTaskDao.getCompany_byID(id);
         }
     }
@@ -193,7 +201,15 @@ class DeviceRepository {
             return mAsyncTaskDao.getAllDevicesList();
         }
     }
-
+    private static class getDevByIdAsyncTask extends android.os.AsyncTask<Void, Void, Device >{
+        private DeviceDao mAsyncTaskDao;
+        private int id;
+        getDevByIdAsyncTask(DeviceDao dao,int ID) { mAsyncTaskDao = dao; this.id=ID;}
+        @Override
+        protected Device  doInBackground(Void... params) {
+            return mAsyncTaskDao.getDevice_byID(id);
+        }
+    }
 
     //depend on the last sort and filter settings
     private void getDevices_with_sort_filter(){

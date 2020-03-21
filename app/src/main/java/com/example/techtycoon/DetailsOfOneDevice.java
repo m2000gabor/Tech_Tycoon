@@ -3,6 +3,8 @@ package com.example.techtycoon;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.Locale;
@@ -12,9 +14,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 public class DetailsOfOneDevice extends AppCompatActivity {
-    //todo edit
     int id;
     int companyId;
+    int profit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +41,7 @@ public class DetailsOfOneDevice extends AppCompatActivity {
         //get data from previous activity
         Intent intent = getIntent();
         String nev = intent.getStringExtra(MainActivity.NAME_FIELD);
-        int profit=intent.getIntExtra(MainActivity.MAIN_MONETARIAL_INFO,0);
+        profit=intent.getIntExtra(MainActivity.MAIN_MONETARIAL_INFO,0);
         companyId=intent.getIntExtra(MainActivity.DEVICE_COMPANY_ID,0);
         int price=intent.getIntExtra(MainActivity.DEVICE_PRICE,0);
         int cost=intent.getIntExtra(MainActivity.DEVICE_COST,0);
@@ -62,13 +64,37 @@ public class DetailsOfOneDevice extends AppCompatActivity {
 
     }
 
-
     public void delThisOne(View view) {
         Intent replyIntent=new Intent();
         replyIntent.putExtra("IS_DELETE", true);
         replyIntent.putExtra("ID", id);
         setResult(RESULT_OK, replyIntent);
         finish();
+    }
+
+    public void editProfit(View v){
+        TextView textView=findViewById(R.id.profit);
+        if(textView.getVisibility()==View.VISIBLE) {
+            EditText editText = findViewById(R.id.profitEditable);
+            textView.setVisibility(View.GONE);
+            editText.setText(String.valueOf(profit));
+            editText.setVisibility(View.VISIBLE);
+            ((Button) v).setText("Save");
+        }else{
+            EditText editText = findViewById(R.id.profitEditable);
+            profit = Integer.parseInt(editText.getText().toString());
+            editText.setVisibility(View.GONE);
+            textView.setText(String.format(Locale.getDefault(),"Profit: %d$",profit));
+            textView.setVisibility(View.VISIBLE);
+            ((Button) v).setText("Edit");
+
+            //make a replyIntent
+            Intent replyIntent=new Intent();
+            replyIntent.putExtra("isProfitChanged", true);
+            replyIntent.putExtra("ID", id);
+            replyIntent.putExtra("profit", profit);
+            setResult(RESULT_OK, replyIntent);
+        }
     }
 
 }

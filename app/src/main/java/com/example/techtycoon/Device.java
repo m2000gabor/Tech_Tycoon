@@ -28,7 +28,7 @@ public class Device {
     @ColumnInfo(name="ownerCompanyId")
     public int ownerCompanyId;
 
-    //todo Db should store ram n memory like their level 1,2,3,4,5 and not 32,64
+    //Db should store ram n memory like their level 1,2,3,4,5 and not 32,64
     @ColumnInfo(name="ram")
     public int ram;
 
@@ -75,17 +75,27 @@ public class Device {
     public boolean refreshRate;*/
 
 
-    public Device(String name,int profit,int cost,int ownerCompanyId,int ram, int memory) {
+    public Device(String name,int profit,int ownerCompanyId,int[] attributes) {
+        if(attributes==null){attributes=new int[Device.NUMBER_OF_ATTRIBUTES];}
         this.name = name;
         this.profit = profit;
-        this.cost=cost;
+
         this.ownerCompanyId=ownerCompanyId;
-        this.ram=ram;
-        this.memory=memory;
+        for(int i=0;i<Device.NUMBER_OF_ATTRIBUTES;i++){
+            setFieldByNum(i,attributes[i]);
+        }
+        this.soldPieces=0;
+        this.cost=DeviceValidator.getOverallCost(this);
+    }
+    public Device(String name,int profit,int ownerCompanyId) {
+        this.name = name;
+        this.profit = profit;
+        this.ownerCompanyId=ownerCompanyId;
         this.soldPieces=0;
     }
 
     public Device(Device d) {
+        this.id=-1;
         this.name = d.name;
         this.profit = d.profit;
         this.cost=d.cost;

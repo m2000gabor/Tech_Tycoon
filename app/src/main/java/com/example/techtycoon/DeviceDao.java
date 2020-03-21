@@ -7,7 +7,6 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
-import androidx.room.Transaction;
 import androidx.room.Update;
 
 @Dao
@@ -20,7 +19,10 @@ public interface DeviceDao {
     List<Company> getAllCompaniesList();
 
     @Query("SELECT * FROM company WHERE companyId = :id")
-    List<Company> getCompany_byID(int id);
+    Company getCompany_byID(int id);
+
+    @Query("SELECT * FROM device WHERE id = :id")
+    Device getDevice_byID(int id);
 
     @Query("SELECT * FROM device")
     LiveData<List<Device>> getAllDevices();

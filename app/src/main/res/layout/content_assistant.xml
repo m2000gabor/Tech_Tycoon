@@ -74,7 +74,7 @@
             android:id="@+id/general1AssistantSwitch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Avg profit holder"
+            android:text="Average bot"
             android:textSize="@dimen/text_size_small"
             android:layout_margin="@dimen/text_margin_small"/>
 
@@ -98,7 +98,7 @@
             android:id="@+id/fullAssistant1Switch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Full1"
+            android:text="Full1 - Bot1"
             android:textSize="@dimen/text_size_small"
             android:layout_margin="@dimen/text_margin_small"/>
 
@@ -106,7 +106,7 @@
             android:id="@+id/fullAssistant2Switch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Full2 - Apple"
+            android:text="Full2 - AppleBot"
             android:textSize="@dimen/text_size_small"
             android:layout_margin="@dimen/text_margin_small"/>
 

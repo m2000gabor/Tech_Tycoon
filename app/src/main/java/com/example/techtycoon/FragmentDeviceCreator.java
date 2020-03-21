@@ -27,17 +27,15 @@ import java.util.Locale;
 
 import static android.app.Activity.RESULT_OK;
 
-//TODO view arrays
+//TODO store views in array
 
 public class FragmentDeviceCreator extends Fragment {
     private static final int NUMBER_OF_CHOOSER_ACTIVITIES=2;
     private static final int CHOOSE_MEMORY_REQUEST = 1;
     private static final int CHOOSE_BODY_REQUEST = 2;
     static final String BODY_RESULTS="bodyRes";
-    int ram;
-    int memory;
-    private int ramLevel;
-    private int memoryLevel;
+    private int ram;
+    private int memory;
     private int[] bodyResults;
     private int[] costs;
 
@@ -119,6 +117,28 @@ public class FragmentDeviceCreator extends Fragment {
         //set up reset button
         root.findViewById(R.id.resetDeviceCreator).setOnClickListener(v -> reset(true));
 
+        //setUp insertButton
+        root.findViewById(R.id.insertBasic).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!isCompanySet && companies.get(spin.getSelectedItemPosition()-1).hasFreeSlot()) {
+                    Toast.makeText(getContext(), "Set the company", Toast.LENGTH_LONG).show();
+                } else {
+                    Company maker=companies.get(spin.getSelectedItemPosition()-1);
+                    String deviceName = "test by "+maker.name;
+                    int profit = 100;
+                    maker.usedSlots++;
+                    int[] params=new int[Device.NUMBER_OF_ATTRIBUTES];
+                    for (int i = 0; i <Device.NUMBER_OF_ATTRIBUTES; i++) {params[i]=1;}
+                    Device device=new Device(deviceName,profit,maker.companyId,params);
+                    deviceViewModel.insertDevice(device);
+                    deviceViewModel.updateCompanies(maker);
+                    Toast.makeText(getContext(), "Saved", Toast.LENGTH_LONG).show();
+                    reset(true);
+                }
+            }
+        });
+
         //start memorychooser
         RelativeLayout startMemoryChooserRelativelayout = root.findViewById(R.id.startMemoryChooserRelativeLayout);
         startMemoryChooserRelativelayout.setOnClickListener(new View.OnClickListener() {
@@ -126,8 +146,8 @@ public class FragmentDeviceCreator extends Fragment {
             public void onClick(View v) {
                 if(isCompanySet){
                     Intent chooseMemory = new Intent(getContext(),ChooseMemoryActivity.class);
-                    chooseMemory.putExtra(MainActivity.RAM_LVL,ramLevel);
-                    chooseMemory.putExtra(MainActivity.MEMORY_LVL,memoryLevel);
+                    chooseMemory.putExtra(MainActivity.RAM_LVL,ram);
+                    chooseMemory.putExtra(MainActivity.MEMORY_LVL,memory);
                     startActivityForResult(chooseMemory,CHOOSE_MEMORY_REQUEST);
                 }else {
                     Toast.makeText(getContext(),"Choose a manufacturer",Toast.LENGTH_SHORT).show();
@@ -165,7 +185,9 @@ public class FragmentDeviceCreator extends Fragment {
             int profit = Integer.parseInt(profitField.getText().toString());
             Company maker=companies.get(spin.getSelectedItemPosition()-1);
             maker.usedSlots++;
-            Device device=new Device(deviceName,profit, getOverallCost(),maker.companyId,ram,memory);
+            Device device=new Device(deviceName,profit,maker.companyId,null);
+            device.setFieldByNum(0,ram);
+            device.setFieldByNum(1,memory);
             device.setBodyParams(bodyResults[1],bodyResults[2],bodyResults[3],bodyResults[4],bodyResults[5]);
             deviceViewModel.insertDevice(device);
             deviceViewModel.updateCompanies(maker);
@@ -243,8 +265,8 @@ public class FragmentDeviceCreator extends Fragment {
                 isCompanySet=true;
                 reset(false);
                 levels=selectedCompany.getLevels_USE_THIS();
-                ramLevel=levels[0];
-                memoryLevel=levels[1];
+                ram=levels[0];
+                memory=levels[1];
                 if(selectedCompany.maxSlots==companies.get(position-1).usedSlots){
                     noFreeSlotAlert(selectedCompany);
                 }

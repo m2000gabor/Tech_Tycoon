@@ -245,6 +245,14 @@
             android:text="Reset"
             android:layout_margin="@dimen/text_margin"/>
 
+        <Button
+            android:id="@+id/insertBasic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Basic"
+            android:layout_margin="@dimen/text_margin"/>
+
     </LinearLayout>
 
 </ScrollView>

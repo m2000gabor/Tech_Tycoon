@@ -26,12 +26,10 @@ import static android.app.Activity.RESULT_OK;
 
 
 public class FragmentAllDevices extends Fragment {
-    //todo sort by price
 
     private DeviceViewModel deviceViewModel;
     private DeviceListAdapter adapter;
     private LiveData<List<Device>> deviceList;
-    private Observer<List<Device>> observer;
     private Spinner companySpinner;
 
     public static FragmentAllDevices newInstance() {
@@ -98,13 +96,15 @@ public class FragmentAllDevices extends Fragment {
         // Add an observer on the LiveData returned by getAlphabetizedWords.
         // The onChanged() method fires when the observed data changes and the activity is
         // in the foreground.
-        observer=new Observer<List<Device>>() {
+        // Update the cached copy of the words in the adapter.
+        Observer<List<Device>> observer = new Observer<List<Device>>() {
             @Override
             public void onChanged(@Nullable final List<Device> devs) {
                 // Update the cached copy of the words in the adapter.
                 adapter.setDevices(devs);
-            }};
-        deviceList.observe(getViewLifecycleOwner(),observer);
+            }
+        };
+        deviceList.observe(getViewLifecycleOwner(), observer);
 
         companySpinner=root.findViewById(R.id.companySpinner);
         new SortBySpinnerAdapter(spin);
@@ -118,7 +118,14 @@ public class FragmentAllDevices extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && data.getBooleanExtra("IS_DELETE",false)) {
             deviceViewModel.delOneDeviceById(data.getIntExtra("ID",-1));
-            Toast.makeText(getContext(), "SIKERULT torolni", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), "Successful deletion", Toast.LENGTH_LONG).show();
+        }else if(resultCode == RESULT_OK && data.getBooleanExtra("isProfitChanged",false)){
+            int id=data.getIntExtra("ID",-1);
+            int profit=data.getIntExtra("profit",-1);
+            Device device=deviceViewModel.getDevice_byID(id);
+            device.profit=profit;
+            deviceViewModel.updateDevices(device);
+            Toast.makeText(getContext(), "Profit is updated", Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -20,7 +20,6 @@ import static com.example.techtycoon.Device.NUMBER_OF_ATTRIBUTES;
 
 
 public class DevelopmentActivity extends AppCompatActivity {
-    //todo make development compatible with assistants
 
     boolean isUpgrade=false;
     int money;

@@ -17,10 +17,8 @@ import androidx.appcompat.widget.Toolbar;
 import static java.lang.Integer.max;
 
 public class DetailsOfOneCompany extends AppCompatActivity {
-
-
     //random variables
-    int id;
+    int id=-1;
     boolean isUpgrade=false;
     DeviceViewModel deviceViewModel;
     Company company;
@@ -33,7 +31,6 @@ public class DetailsOfOneCompany extends AppCompatActivity {
     TextView logsTextV;
     Button oneRoundMarketingButton;
     Button buySlotButton;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +57,6 @@ public class DetailsOfOneCompany extends AppCompatActivity {
         id=intent.getIntExtra("ID",-1);
         deviceViewModel=new DeviceViewModel(getApplication());
         company = deviceViewModel.getCompany_byID(id);
-
 
         //display data
         nevTextV.setText(company.name);

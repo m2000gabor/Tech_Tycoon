@@ -27,7 +27,7 @@ public class TabbedActivity extends AppCompatActivity {
     DeviceViewModel deviceViewModel;
     Simulator simulator;
     AssistantManager assistantManager;
-    boolean assistantTurn=false;
+    boolean assistantTurn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,16 +43,17 @@ public class TabbedActivity extends AppCompatActivity {
         deviceViewModel = new ViewModelProvider(this).get(DeviceViewModel.class);
 
         assistantManager=new AssistantManager();
-
+        //get sharedPref
+        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        assistantTurn=sharedPref.getBoolean("isAssistantTurn",false);
 
         FloatingActionButton fab = findViewById(R.id.fabSimulate);
-
+        if(assistantTurn){fab.setImageResource(R.drawable.ic_account_circle_white_24dp);}
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(!assistantTurn){
                 //get sharedPrefs
-                SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
                 float lastAvgPrice = sharedPref.getFloat(getString(R.string.simulator_lastAvgPrice), 5);
                 float lastAvgRam = sharedPref.getFloat(getString(R.string.simulator_lastAvgRam), 1);
                 float lastAvgMemory = sharedPref.getFloat(getString(R.string.simulator_lastAvgMemory), 1);
@@ -81,7 +82,6 @@ public class TabbedActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "1 month simulated", Toast.LENGTH_SHORT).show();
 
             }else{
-                    SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
                     //get nameTable for bots naming convention
                     Set<String> keys=sharedPref.getStringSet("nameTableKeys",new HashSet<String>());
                     for (String key : keys) {NAME_newestPartOfTheSeries.put(key,sharedPref.getInt(key, -1));}
@@ -101,9 +101,12 @@ public class TabbedActivity extends AppCompatActivity {
         }
         });
     }
-    /*
-    void oneMonthSimulated(Wrapped_DeviceAndCompanyList simulatorResults){
-        Wrapped_DeviceAndCompanyList afterAssistants=assistantManager.trigger(simulatorResults.companies,simulatorResults.devices);
-        deviceViewModel.assistantToDatabase(afterAssistants);
-    }*/
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        SharedPreferences.Editor editor = getPreferences(MODE_PRIVATE).edit();
+        editor.putBoolean("isAssistantTurn",assistantTurn);
+        editor.apply();
+    }
 }

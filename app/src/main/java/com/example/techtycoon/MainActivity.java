@@ -14,7 +14,8 @@ import androidx.lifecycle.ViewModelProvider;
 //TODO time
 //TODO companies have a development route and cost limiting the available features
 //TODO detailed stats
-//TODO nem sikerult hozzaadni toast in mainactivity
+//todo store the discontinued devices
+//todo release time for companies (now the new devices come too frequent)
 
 public class MainActivity extends AppCompatActivity {
     public static final String NAME_FIELD ="name" ;
@@ -96,8 +97,16 @@ public class MainActivity extends AppCompatActivity {
 
         deviceViewModel.startAgain(companies);
     }
+    public void start_again_bots(View view){
+        Company[] companies={
+                new Company("Apple",1,STARTING_LEVELS),
+                new Company("Strawberry",1,STARTING_LEVELS),
+                new Company("Samsung",1,STARTING_LEVELS),
+                new Company("Sony",1,STARTING_LEVELS),
+                new Company("Player",1,STARTING_LEVELS)};
+        deviceViewModel.startAgain(companies);
+    }
 
-    public void start_simulation(View view){}
     public void startAddNewCompanyActivity(){
         Intent addNewCompany = new Intent(getApplicationContext(),AddNewCompany.class);
         startActivityForResult(addNewCompany,NEW_COMPANY_ACTIVITY_REQUEST_CODE);
@@ -127,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
                     break;
             }
         }else{
-            //Toast.makeText(getApplicationContext(),"NEM sikerult hozzaadni",Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),"Result is not OK",Toast.LENGTH_LONG).show();
         }
     }
 }

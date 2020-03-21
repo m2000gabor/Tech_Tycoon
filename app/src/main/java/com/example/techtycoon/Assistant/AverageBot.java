@@ -1,0 +1,134 @@
+package com.example.techtycoon.Assistant;
+
+import android.util.Pair;
+
+import com.example.techtycoon.Company;
+import com.example.techtycoon.DetailsOfOneCompany;
+import com.example.techtycoon.DevelopmentValidator;
+import com.example.techtycoon.Device;
+import com.example.techtycoon.Wrapped_DeviceAndCompanyList;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+
+public class AverageBot extends AbstractAssistant {
+    private final int[] profile = {10, 5, 3, 4, 2, 2, 2, 2, 2};
+
+    AverageBot(){}
+
+    private int getImportance(int attrId){
+        return profile[attrId+2];
+    }
+
+     Wrapped_DeviceAndCompanyList work(List<Company> companyList, List<Device> deviceList, List<Device> myDevices, Company myCompany, Wrapped_DeviceAndCompanyList ret) {
+        /*
+               Name: Avg
+                Description: if something is worse than the avg try to update it
+                Action tree:
+                    -if something is worse than the avg then add to the toDoList
+                    -order the list by the importance (specified in the profile)
+                    -try to the everything from the most important to the least one
+                Details:
+                    -if the profit is low than decrease the profits on the devices
+        */
+        int marketingCost = DetailsOfOneCompany.calculateMarketingCost(myCompany.marketing);
+        //first: attrId; second: importance from the profile
+        LinkedList<Pair<Integer,Integer>> toDoList=new LinkedList<>();
+
+        //marketing
+        if(myCompany.marketing < avg_marketing(companyList)){
+            toDoList.add(new Pair<>(-1,getImportance(-1)));
+        }
+
+        //newSlot
+        double avgSlot=0;
+        for (Company c :companyList) {avgSlot += c.maxSlots; }
+        avgSlot/=companyList.size();
+        if(myCompany.maxSlots<avgSlot){
+            toDoList.add(new Pair<>(-2,getImportance(-2)));
+        }
+
+        //profit
+        if(getRegion(companyList.stream().map(c->c.lastProfit).collect(Collectors.toList()),
+                myCompany.lastProfit)<=2){
+            toDoList.add(new Pair<>(-3,0));
+        }
+
+        //dev attributes
+        for (int i = 0; i < Device.NUMBER_OF_ATTRIBUTES; i++) {
+            if(myCompany.getLevels_USE_THIS()[i]<avg(deviceList,i)){
+                toDoList.add(new Pair<>(i,getImportance(i)));
+            }
+        }
+
+        //sort
+        toDoList.sort( (p1,p2) -> p2.second-p1.second );
+
+        //try to complete the tasks
+        for (Integer i :
+                toDoList.stream().map((p) -> p.first).collect(Collectors.toList())) {
+            if(i==-3){
+                //company's profit is low
+
+                //device manager
+                Device newDev = new Device(
+                        nameBuilder.buildName(myDevices.get(0).name,1),
+                        (int) Math.round(avg(deviceList,-1)),
+                        myCompany.companyId,
+                        myCompany.getLevels_USE_THIS()
+                );
+
+                if (myCompany.hasFreeSlot()) {
+                    ret.insert.add(newDev);
+                    myCompany.usedSlots++;
+                } else {
+                    ret.delete.add(myDevices.get(min_Overall(myDevices)));
+                    ret.insert.add(newDev);
+                }
+            }else if (i == -2) {
+                //try to buy a new slot
+                if(DevelopmentValidator.nextSlotCost(myCompany.maxSlots) <= myCompany.money &&
+                        DevelopmentValidator.nextSlotCost(myCompany.maxSlots) != -1){
+                    myCompany.money -= DevelopmentValidator.nextSlotCost(myCompany.maxSlots);
+                    myCompany.maxSlots++;
+                    myCompany.logs = myCompany.logs + "The assistant bougth a new slot!\n";
+
+                    //device manager
+                    Device newDev = new Device(
+                            nameBuilder.buildName(myDevices.get(0).name,1),
+                            (int) Math.round(avg(deviceList,-1)),
+                            myCompany.companyId,
+                            myCompany.getLevels_USE_THIS()
+                    );
+                    ret.insert.add(newDev);
+                    myCompany.usedSlots++;
+                }
+            }else if(i==-1){
+                //try to buy marketing
+                while (myCompany.money >= marketingCost) {
+                    myCompany.money -= marketingCost;
+                    myCompany.marketing += 10;
+                    myCompany.logs = myCompany.logs + "The assistant bougth " + 10 + " marketing!\n";
+                    marketingCost = DetailsOfOneCompany.calculateMarketingCost(myCompany.marketing);
+                }
+
+            }else{
+                //try to upgrade a device attribute
+                if (myCompany.money >= DevelopmentValidator.getOneDevelopmentCost(i, myCompany.getLevels_USE_THIS()[i]) &&
+                        DevelopmentValidator.getOneDevelopmentCost(i, myCompany.getLevels_USE_THIS()[i]) != -1) {
+                    myCompany.money -= DevelopmentValidator.getOneDevelopmentCost(i, myCompany.getLevels_USE_THIS()[i]);
+                    int[] levels = myCompany.getLevels_USE_THIS();
+                    levels[i]++;
+                    myCompany.setLevels_USE_THIS(levels);
+                    myCompany.logs = myCompany.logs + i + ". attribute is upgraded!\n";
+                }
+            }
+        }
+
+        ret.UpdateCompanies.add(myCompany);
+        return ret;
+    }
+
+}
