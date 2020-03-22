@@ -6,6 +6,7 @@ import com.example.techtycoon.Company;
 import com.example.techtycoon.DetailsOfOneCompany;
 import com.example.techtycoon.DevelopmentValidator;
 import com.example.techtycoon.Device;
+import com.example.techtycoon.DeviceValidator;
 import com.example.techtycoon.Wrapped_DeviceAndCompanyList;
 
 import java.util.Collections;
@@ -15,7 +16,7 @@ import java.util.List;
 
 public class Bot1 extends AbstractAssistant{
 
-    public Bot1() {}
+    Bot1() {}
 
      Wrapped_DeviceAndCompanyList work(List<Company> companyList, List<Device> deviceList, List<Device> myDevices, Company myCompany, Wrapped_DeviceAndCompanyList ret){
         String status;
@@ -109,7 +110,7 @@ public class Bot1 extends AbstractAssistant{
                             myCompany.getLevels_USE_THIS()[key]);
                     lvls[key]++;
                     myCompany.setLevels_USE_THIS(lvls);
-                    myCompany.logs=myCompany.logs+"\n"+key +".attribute is updated by the assistant!\n";
+                    myCompany.logs=myCompany.logs+key +".attribute is updated by the assistant!\n";
                     status=status+";"+key;
                 }
             }
@@ -131,6 +132,7 @@ public class Bot1 extends AbstractAssistant{
             }
 
             newDev.profit=priceMaker(newDev,deviceList,myDevices,newStatusInts[0]);
+            newDev.cost= DeviceValidator.getOverallCost(newDev);
 
             if (myCompany.hasFreeSlot()) {
                 ret.insert.add(newDev);

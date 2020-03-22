@@ -75,21 +75,21 @@ public class Device {
     public boolean refreshRate;*/
 
 
-    public Device(String name,int profit,int ownerCompanyId,int[] attributes) {
+    public Device(String name,int profit,int cost,int ownerCompanyId,int[] attributes) {
         if(attributes==null){attributes=new int[Device.NUMBER_OF_ATTRIBUTES];}
         this.name = name;
         this.profit = profit;
-
+        this.cost=cost;
         this.ownerCompanyId=ownerCompanyId;
         for(int i=0;i<Device.NUMBER_OF_ATTRIBUTES;i++){
             setFieldByNum(i,attributes[i]);
         }
         this.soldPieces=0;
-        this.cost=DeviceValidator.getOverallCost(this);
     }
-    public Device(String name,int profit,int ownerCompanyId) {
+    public Device(String name,int profit,int cost,int ownerCompanyId) {
         this.name = name;
         this.profit = profit;
+        this.cost=cost;
         this.ownerCompanyId=ownerCompanyId;
         this.soldPieces=0;
     }

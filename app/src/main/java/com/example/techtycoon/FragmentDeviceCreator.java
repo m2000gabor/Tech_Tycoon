@@ -130,7 +130,8 @@ public class FragmentDeviceCreator extends Fragment {
                     maker.usedSlots++;
                     int[] params=new int[Device.NUMBER_OF_ATTRIBUTES];
                     for (int i = 0; i <Device.NUMBER_OF_ATTRIBUTES; i++) {params[i]=1;}
-                    Device device=new Device(deviceName,profit,maker.companyId,params);
+                    Device device=new Device(deviceName,profit,0,maker.companyId,params);
+                    device.cost=DeviceValidator.getOverallCost(device);
                     deviceViewModel.insertDevice(device);
                     deviceViewModel.updateCompanies(maker);
                     Toast.makeText(getContext(), "Saved", Toast.LENGTH_LONG).show();
@@ -185,10 +186,11 @@ public class FragmentDeviceCreator extends Fragment {
             int profit = Integer.parseInt(profitField.getText().toString());
             Company maker=companies.get(spin.getSelectedItemPosition()-1);
             maker.usedSlots++;
-            Device device=new Device(deviceName,profit,maker.companyId,null);
+            Device device=new Device(deviceName,profit,0,maker.companyId,null);
             device.setFieldByNum(0,ram);
             device.setFieldByNum(1,memory);
             device.setBodyParams(bodyResults[1],bodyResults[2],bodyResults[3],bodyResults[4],bodyResults[5]);
+            device.cost=DeviceValidator.getOverallCost(device);
             deviceViewModel.insertDevice(device);
             deviceViewModel.updateCompanies(maker);
             Toast.makeText(getContext(), "Saved", Toast.LENGTH_LONG).show();

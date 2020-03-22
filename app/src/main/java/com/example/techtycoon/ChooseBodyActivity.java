@@ -16,11 +16,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
-import static com.example.techtycoon.DeviceValidator.BODY_COSTS;
-
 public class ChooseBodyActivity extends AppCompatActivity {
     private static final int NUM_OF_ATTR=5;
-    //private static final int[] BODY_COSTS={5,3,1,2,3};
     private int[] BODY_MAX_POINTS;
     TextView[] valueTextViews;
     TextView[] costTextViews;
@@ -70,7 +67,7 @@ public class ChooseBodyActivity extends AppCompatActivity {
         result[0]=0; //overall cost of the body
         for (int i=0;i<NUM_OF_ATTR;i++){
             valueTextViews[i].setText(String.format(Locale.getDefault(),"%d/%d points",BODY_MAX_POINTS[i],1) );
-            costTextViews[i].setText(String.format(Locale.getDefault(),"%d$",BODY_COSTS[i]) );
+            costTextViews[i].setText(String.format(Locale.getDefault(),"%d$",DeviceValidator.getCostOfBody(i,1)) );
             result[i+1]=1;
         }
 
@@ -82,7 +79,7 @@ public class ChooseBodyActivity extends AppCompatActivity {
                 int i=seekbars.indexOf(seekBar);
                 result[i+1]=progress;
                 valueTextViews[i].setText(String.format(Locale.getDefault(),"%d/%d points",BODY_MAX_POINTS[i],progress) );
-                costTextViews[i].setText(String.format(Locale.getDefault(),"%d$",BODY_COSTS[i]*progress) );
+                costTextViews[i].setText(String.format(Locale.getDefault(),"%d$",DeviceValidator.getCostOfBody(i,progress)) );
             }
 
             @Override
@@ -102,7 +99,7 @@ public class ChooseBodyActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                for (int i=0;i<NUM_OF_ATTR;i++){result[0]+=BODY_COSTS[i]*result[i+1];}
+                for (int i=0;i<NUM_OF_ATTR;i++){result[0]+=DeviceValidator.getCostOfBody(i,result[i+1]);}
                 Intent intent=new Intent();
                 intent.putExtra(FragmentDeviceCreator.BODY_RESULTS,result);
                 setResult(RESULT_OK,intent);

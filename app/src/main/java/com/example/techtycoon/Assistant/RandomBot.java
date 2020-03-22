@@ -2,6 +2,7 @@ package com.example.techtycoon.Assistant;
 
 import com.example.techtycoon.Company;
 import com.example.techtycoon.Device;
+import com.example.techtycoon.DeviceValidator;
 import com.example.techtycoon.Wrapped_DeviceAndCompanyList;
 
 import java.util.List;
@@ -10,7 +11,8 @@ import java.util.Random;
 class RandomBot extends AbstractAssistant {
     @Override
     Wrapped_DeviceAndCompanyList work(List<Company> companyList, List<Device> deviceList, List<Device> myDevices, Company myCompany, Wrapped_DeviceAndCompanyList ret) {
-
+                //not working
+        //activates only when profit is below the average, no development, no new slot
                 //random
                 if (avg_lastProfit(companyList) > myCompany.lastProfit) {
                     Random randomGenerator = new Random(deviceList.hashCode());
@@ -40,13 +42,14 @@ class RandomBot extends AbstractAssistant {
                             body[i]++;
                         }
                     }
-                    //Device newDev = createValidDevice(name, 0, myCompany, memory, body);
+
                     int[] attributes=new int[Device.NUMBER_OF_ATTRIBUTES];
                     Device newDev = new Device(name,
-                            (int) Math.round(myDevices.get(0).cost * (0.2 * randomGenerator.nextInt(10))),
+                            (int) Math.round(myDevices.get(0).cost * (0.2 * randomGenerator.nextInt(10))),0,
                             myCompany.companyId,
                             attributes
                             );
+                    newDev.cost=DeviceValidator.getOverallCost(newDev);
                     ret.delete.add(myDevices.get(minIndex));
                     ret.insert.add(newDev);
                 }

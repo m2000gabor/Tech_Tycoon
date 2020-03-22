@@ -6,6 +6,7 @@ import com.example.techtycoon.Company;
 import com.example.techtycoon.DetailsOfOneCompany;
 import com.example.techtycoon.DevelopmentValidator;
 import com.example.techtycoon.Device;
+import com.example.techtycoon.DeviceValidator;
 import com.example.techtycoon.Wrapped_DeviceAndCompanyList;
 
 import java.util.LinkedList;
@@ -38,7 +39,7 @@ public class AverageBot extends AbstractAssistant {
         LinkedList<Pair<Integer,Integer>> toDoList=new LinkedList<>();
 
         //marketing
-        if(myCompany.marketing < avg_marketing(companyList)){
+        if(myCompany.marketing+10 < avg_marketing(companyList)){
             toDoList.add(new Pair<>(-1,getImportance(-1)));
         }
 
@@ -70,25 +71,18 @@ public class AverageBot extends AbstractAssistant {
         for (Integer i :
                 toDoList.stream().map((p) -> p.first).collect(Collectors.toList())) {
             if(i==-3){
+                myCompany.logs = myCompany.logs + "Our profit is low. A discount is made on all devices.\n";
                 //company's profit is low
-
-                //device manager
-                Device newDev = new Device(
-                        nameBuilder.buildName(myDevices.get(0).name,1),
-                        (int) Math.round(avg(deviceList,-1)),
-                        myCompany.companyId,
-                        myCompany.getLevels_USE_THIS()
-                );
-
-                if (myCompany.hasFreeSlot()) {
-                    ret.insert.add(newDev);
-                    myCompany.usedSlots++;
-                } else {
-                    ret.delete.add(myDevices.get(min_Overall(myDevices)));
-                    ret.insert.add(newDev);
+                //decrease the profits on all devices
+                for (Device d : myDevices) {
+                    Device newDev = new Device(d);
+                    newDev.profit*=0.9;
+                    ret.update.add(newDev);
                 }
+
             }else if (i == -2) {
                 //try to buy a new slot
+                myCompany.logs = myCompany.logs + "Try to buy a new slot...\n";
                 if(DevelopmentValidator.nextSlotCost(myCompany.maxSlots) <= myCompany.money &&
                         DevelopmentValidator.nextSlotCost(myCompany.maxSlots) != -1){
                     myCompany.money -= DevelopmentValidator.nextSlotCost(myCompany.maxSlots);
@@ -98,16 +92,18 @@ public class AverageBot extends AbstractAssistant {
                     //device manager
                     Device newDev = new Device(
                             nameBuilder.buildName(myDevices.get(0).name,1),
-                            (int) Math.round(avg(deviceList,-1)),
+                            (int) Math.round(avg(deviceList,-1)),0,
                             myCompany.companyId,
                             myCompany.getLevels_USE_THIS()
                     );
+                    newDev.cost=DeviceValidator.getOverallCost(newDev);
                     ret.insert.add(newDev);
                     myCompany.usedSlots++;
                 }
             }else if(i==-1){
                 //try to buy marketing
-                while (myCompany.money >= marketingCost) {
+                myCompany.logs = myCompany.logs + "Try to buy marketing...\n";
+                while (myCompany.money >= marketingCost && myCompany.marketing+10 <= avg_marketing(companyList)) {
                     myCompany.money -= marketingCost;
                     myCompany.marketing += 10;
                     myCompany.logs = myCompany.logs + "The assistant bougth " + 10 + " marketing!\n";
@@ -116,6 +112,7 @@ public class AverageBot extends AbstractAssistant {
 
             }else{
                 //try to upgrade a device attribute
+                myCompany.logs = myCompany.logs + "Try to upgrade the "+i+". attribute...\n";
                 if (myCompany.money >= DevelopmentValidator.getOneDevelopmentCost(i, myCompany.getLevels_USE_THIS()[i]) &&
                         DevelopmentValidator.getOneDevelopmentCost(i, myCompany.getLevels_USE_THIS()[i]) != -1) {
                     myCompany.money -= DevelopmentValidator.getOneDevelopmentCost(i, myCompany.getLevels_USE_THIS()[i]);
@@ -123,6 +120,24 @@ public class AverageBot extends AbstractAssistant {
                     levels[i]++;
                     myCompany.setLevels_USE_THIS(levels);
                     myCompany.logs = myCompany.logs + i + ". attribute is upgraded!\n";
+
+                    //device manager
+                    Device newDev = new Device(
+                            nameBuilder.buildName(myDevices.get(0).name,1),
+                            (int) Math.round(avg(deviceList,-1)),0,
+                            myCompany.companyId,
+                            myCompany.getLevels_USE_THIS()
+                    );
+                    newDev.cost= DeviceValidator.getOverallCost(newDev);
+
+                    if (myCompany.hasFreeSlot()) {
+                        ret.insert.add(newDev);
+                        myCompany.usedSlots++;
+                    } else {
+                        ret.delete.add(myDevices.get(min_Overall(myDevices)));
+                        ret.insert.add(newDev);
+                    }
+
                 }
             }
         }

@@ -6,6 +6,7 @@ import com.example.techtycoon.Company;
 import com.example.techtycoon.DetailsOfOneCompany;
 import com.example.techtycoon.DevelopmentValidator;
 import com.example.techtycoon.Device;
+import com.example.techtycoon.DeviceValidator;
 import com.example.techtycoon.Wrapped_DeviceAndCompanyList;
 
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ public class AppleBot extends AbstractAssistant{
 
      Wrapped_DeviceAndCompanyList work(List<Company> companyList, List<Device> deviceList, List<Device> myDevices, Company myCompany, Wrapped_DeviceAndCompanyList ret){
         /*
-        monopolous company
+        monopol company
           3 key development points: slot, marketing, research
          release points: overpriced, unique(best tech); lower priced high-middle;
          goal: prices should increase in general in the market, higher attributes should be used by more people
@@ -96,9 +97,9 @@ public class AppleBot extends AbstractAssistant{
         if(flag_newAttribute){
             myCompany.logs = myCompany.logs + "An attribute is freshly developed.\nA new device with that attribute is made!\n";
             Device newDev= new Device(nameBuilder.buildName(worstDev.name,1)
-                    ,(int) Math.round(max(myDevices.toArray(new Device[0]),-1)*1.2)
+                    ,(int) Math.round(max(myDevices.toArray(new Device[0]),-1)*1.2),0
                     ,myCompany.companyId,myCompany.getLevels_USE_THIS());
-
+            newDev.cost=DeviceValidator.getOverallCost(newDev);
             if (myCompany.hasFreeSlot()) {
                 ret.insert.add(newDev);
                 myCompany.usedSlots++;
