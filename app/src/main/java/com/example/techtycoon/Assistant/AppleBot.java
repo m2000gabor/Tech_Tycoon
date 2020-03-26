@@ -71,8 +71,8 @@ public class AppleBot extends AbstractAssistant{
                     }
                     int i = 0;
                     while (getRegion(marketings, myCompany.marketing) < 4 && myCompany.money >=
-                            DetailsOfOneCompany.calculateMarketingCost(myCompany.marketing)) {
-                        myCompany.money -= DetailsOfOneCompany.calculateMarketingCost(myCompany.marketing);
+                            DevelopmentValidator.calculateMarketingCost(myCompany.marketing)) {
+                        myCompany.money -= DevelopmentValidator.calculateMarketingCost(myCompany.marketing);
                         myCompany.marketing += 10;
                         i++;
                         accomplished=true;
@@ -327,7 +327,7 @@ public class AppleBot extends AbstractAssistant{
                 costOfTheGoal=0;
                 int wouldBeMarketing=myCompany.marketing;
                 while (getRegion(marketings,wouldBeMarketing)<4){
-                    costOfTheGoal+=DetailsOfOneCompany.calculateMarketingCost(wouldBeMarketing);
+                    costOfTheGoal+=DevelopmentValidator.calculateMarketingCost(wouldBeMarketing);
                     wouldBeMarketing+=10;
                 }
                 importance=2*(5-getRegion(marketings,myCompany.marketing));

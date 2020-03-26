@@ -3,11 +3,8 @@ package com.example.techtycoon;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import android.text.TextUtils;
 import android.view.View;
@@ -42,7 +39,7 @@ public class AddNewCompany extends AppCompatActivity {
             String companyName = companyNameField.getText().toString();
             int money = Integer.parseInt(moneyNameField.getText().toString());
             replyIntent.putExtra(MainActivity.NAME_FIELD, companyName);
-            replyIntent.putExtra(MainActivity.MAIN_MONETARIAL_INFO,money);
+            replyIntent.putExtra(MainActivity.MAIN_MONETARILY_INFO,money);
             setResult(RESULT_OK, replyIntent);
         }
         finish();

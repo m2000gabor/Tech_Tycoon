@@ -77,7 +77,7 @@ public class FragmentAllDevices extends Fragment {
                 Intent intent = new Intent();
                 intent.putExtra(MainActivity.NAME_FIELD, nev);
                 intent.putExtra(MainActivity.DEVICE_PRICE, price);
-                intent.putExtra(MainActivity.MAIN_MONETARIAL_INFO, profit);
+                intent.putExtra(MainActivity.MAIN_MONETARILY_INFO, profit);
                 intent.putExtra(MainActivity.DEVICE_COMPANY_ID, companyId);
                 intent.putExtra(MainActivity.DEVICE_COST, cost);
                 intent.putExtra(MainActivity.DEVICE_PARAMS, Device.mtxToArray(devParams));
@@ -116,17 +116,6 @@ public class FragmentAllDevices extends Fragment {
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && data.getBooleanExtra("IS_DELETE",false)) {
-            deviceViewModel.delOneDeviceById(data.getIntExtra("ID",-1));
-            Toast.makeText(getContext(), "Successful deletion", Toast.LENGTH_LONG).show();
-        }else if(resultCode == RESULT_OK && data.getBooleanExtra("isProfitChanged",false)){
-            int id=data.getIntExtra("ID",-1);
-            int profit=data.getIntExtra("profit",-1);
-            Device device=deviceViewModel.getDevice_byID(id);
-            device.profit=profit;
-            deviceViewModel.updateDevices(device);
-            Toast.makeText(getContext(), "Profit is updated", Toast.LENGTH_SHORT).show();
-        }
     }
 
     //set up the sortby spinner

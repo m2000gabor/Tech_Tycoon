@@ -41,7 +41,7 @@ public class DetailsOfOneDevice extends AppCompatActivity {
         //get data from previous activity
         Intent intent = getIntent();
         String nev = intent.getStringExtra(MainActivity.NAME_FIELD);
-        profit=intent.getIntExtra(MainActivity.MAIN_MONETARIAL_INFO,0);
+        profit=intent.getIntExtra(MainActivity.MAIN_MONETARILY_INFO,0);
         companyId=intent.getIntExtra(MainActivity.DEVICE_COMPANY_ID,0);
         int price=intent.getIntExtra(MainActivity.DEVICE_PRICE,0);
         int cost=intent.getIntExtra(MainActivity.DEVICE_COST,0);

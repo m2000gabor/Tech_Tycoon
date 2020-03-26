@@ -34,7 +34,7 @@ public class AverageBot extends AbstractAssistant {
                 Details:
                     -if the profit is low than decrease the profits on the devices
         */
-        int marketingCost = DetailsOfOneCompany.calculateMarketingCost(myCompany.marketing);
+        int marketingCost = DevelopmentValidator.calculateMarketingCost(myCompany.marketing);
         //first: attrId; second: importance from the profile
         LinkedList<Pair<Integer,Integer>> toDoList=new LinkedList<>();
 
@@ -75,9 +75,8 @@ public class AverageBot extends AbstractAssistant {
                 //company's profit is low
                 //decrease the profits on all devices
                 for (Device d : myDevices) {
-                    Device newDev = new Device(d);
-                    newDev.profit*=0.9;
-                    ret.update.add(newDev);
+                    d.profit=(int) Math.floor(d.profit*0.9);
+                    ret.update.add(d);
                 }
 
             }else if (i == -2) {
@@ -107,7 +106,7 @@ public class AverageBot extends AbstractAssistant {
                     myCompany.money -= marketingCost;
                     myCompany.marketing += 10;
                     myCompany.logs = myCompany.logs + "The assistant bougth " + 10 + " marketing!\n";
-                    marketingCost = DetailsOfOneCompany.calculateMarketingCost(myCompany.marketing);
+                    marketingCost = DevelopmentValidator.calculateMarketingCost(myCompany.marketing);
                 }
 
             }else{

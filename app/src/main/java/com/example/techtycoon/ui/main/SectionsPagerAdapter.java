@@ -1,7 +1,6 @@
 package com.example.techtycoon.ui.main;
 
-import android.content.Context;
-
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -10,6 +9,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import com.example.techtycoon.FragmentAllCompanies;
 import com.example.techtycoon.FragmentAllDevices;
 import com.example.techtycoon.FragmentDeviceCreator;
+import com.example.techtycoon.FragmentMyCompany;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -19,10 +19,10 @@ import org.jetbrains.annotations.NotNull;
  */
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-    private static final String[] TAB_TITLES = new String[]{"Device Creator", "All Device","All Company"};
+    private static final String[] TAB_TITLES = new String[]{"Devices","My Company","Companies"};
 
-    public SectionsPagerAdapter(Context context, FragmentManager fm) {
-        super(fm);
+    public SectionsPagerAdapter(@NonNull FragmentManager fm, int behavior) {
+        super(fm, behavior);
     }
 
     @NotNull
@@ -31,10 +31,13 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         // getItem is called to instantiate the fragment for the given page.
         Fragment fr;
         switch (position){
-            default:fr=PlaceholderFragment.newInstance(position + 1);break;
-            case 0:fr= FragmentDeviceCreator.newInstance();break;
-            case 1:fr= FragmentAllDevices.newInstance();break;
-            case 2:fr= FragmentAllCompanies.newInstance();break;
+            //default:fr=PlaceholderFragment.newInstance(position + 1);break;
+            //case ?:fr= FragmentDeviceCreator.newInstance();break;
+
+            case 0:fr= FragmentAllDevices.newInstance();break;
+            case 1:fr= FragmentMyCompany.newInstance();break;
+            default:fr= FragmentAllCompanies.newInstance();break;
+
         }
         return fr;
     }

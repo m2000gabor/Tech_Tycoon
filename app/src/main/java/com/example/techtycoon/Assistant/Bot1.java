@@ -20,7 +20,7 @@ public class Bot1 extends AbstractAssistant{
 
      Wrapped_DeviceAndCompanyList work(List<Company> companyList, List<Device> deviceList, List<Device> myDevices, Company myCompany, Wrapped_DeviceAndCompanyList ret){
         String status;
-        int marketingCost= DetailsOfOneCompany.calculateMarketingCost(myCompany.marketing);
+        int marketingCost= DevelopmentValidator.calculateMarketingCost(myCompany.marketing);
         //profile of the assistant
         final int[] devImportance={5,5,3,3,3,3,3};
         final double marketingImp=0.2;

@@ -12,13 +12,13 @@ public class Simulator {
     private DeviceViewModel deviceViewModel;
     private static final int ATTRIBUTES_IN_ARRAY =5;
     private static final double MARKET_SPEED=0.1;
-    double[] averages;
-    double lastAvgPrice;
-    double lastAvgRam;
-    double lastAvgMemory;
+    public double[] averages;
+    public double lastAvgPrice;
+    public double lastAvgRam;
+    public double lastAvgMemory;
     private double customerNum;
 
-    Simulator(DeviceViewModel model,double lastAvgPr,double lastAvgR,double lastAvgMem,double[] bodyAvgs){
+    public Simulator(DeviceViewModel model, double lastAvgPr, double lastAvgR, double lastAvgMem, double[] bodyAvgs){
         this.deviceViewModel=model;
         this.lastAvgPrice=lastAvgPr;
         this.lastAvgRam=lastAvgR;
@@ -26,7 +26,7 @@ public class Simulator {
         this.averages=bodyAvgs;
     }
 
-    Wrapped_DeviceAndCompanyList simulate(){
+    public Wrapped_DeviceAndCompanyList simulate(){
         List<Company> companyList =deviceViewModel.getAllCompaniesList();
         List<Device> deviceList=deviceViewModel.getAllDevicesList();
 

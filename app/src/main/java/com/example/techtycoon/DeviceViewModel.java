@@ -4,6 +4,7 @@ import android.app.Application;
 
 import java.util.List;
 
+import androidx.annotation.Nullable;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
@@ -25,13 +26,12 @@ public class DeviceViewModel extends AndroidViewModel {
     //return mutableAlldevice
     LiveData<List<Device>> mutable_getAllDevices() { return mAllDevices; }
 
-
-    //LiveData<List<Device>> getAllDevices() { return mAllDevices; }
     LiveData<List<Company>> getAllCompanies() { return mAllCompanies; }
-    List<Company> getAllCompaniesList(){return mRepository.getAllCompaniesList();}
+    public List<Company> getAllCompaniesList(){return mRepository.getAllCompaniesList();}
     Company getCompany_byID(int ID){return mRepository.getCompany_byID(ID);}
+    LiveData<Company> getLiveCompany_byID(int ID){return mRepository.getLiveCompany_byID(ID);}
     Device getDevice_byID(int ID){return mRepository.getDevice_byID(ID);}
-    List<Device> getAllDevicesList(){return mRepository.getAllDevicesList();}
+    public List<Device> getAllDevicesList(){return mRepository.getAllDevicesList();}
 
     void orderDevices_ByCode2 (int code) { mRepository.setSortBy(code);}
 
@@ -57,7 +57,7 @@ public class DeviceViewModel extends AndroidViewModel {
         mRepository.startAgain(companies);
     }
 
-    void assistantToDatabase(Wrapped_DeviceAndCompanyList assistantResults){
+    public void assistantToDatabase(Wrapped_DeviceAndCompanyList assistantResults){
 
         mRepository.assistantToDatabase(assistantResults.UpdateCompanies.toArray(new Company[0]),
                 assistantResults.insert.toArray(new Device[0]),

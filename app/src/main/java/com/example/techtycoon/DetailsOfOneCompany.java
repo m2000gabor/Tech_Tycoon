@@ -14,7 +14,7 @@ import java.util.Objects;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import static java.lang.Integer.max;
+import static com.example.techtycoon.DevelopmentValidator.calculateMarketingCost;
 
 public class DetailsOfOneCompany extends AppCompatActivity {
     //random variables
@@ -93,7 +93,7 @@ public class DetailsOfOneCompany extends AppCompatActivity {
                 intent1.setClass(getBaseContext(),DevelopmentActivity.class);
                 intent1.putExtra("ID",id);
                 intent1.putExtra(MainActivity.LEVELS,company.getLevels_USE_THIS());
-                intent1.putExtra(MainActivity.MAIN_MONETARIAL_INFO,company.money);
+                intent1.putExtra(MainActivity.MAIN_MONETARILY_INFO,company.money);
                 startActivityForResult(intent1,1);
             }
         });
@@ -122,7 +122,7 @@ public class DetailsOfOneCompany extends AppCompatActivity {
             isUpgrade = data.getBooleanExtra("IS_UPDATE", false);
             if (isUpgrade) {
                 company.setLevels_USE_THIS(data.getIntArrayExtra(MainActivity.LEVELS));
-                company.money=data.getIntExtra(MainActivity.MAIN_MONETARIAL_INFO,0);
+                company.money=data.getIntExtra(MainActivity.MAIN_MONETARILY_INFO,0);
                 updateCompany(true);
             }
         }else {id=data.getIntExtra("ID",-1);}
@@ -143,9 +143,7 @@ public class DetailsOfOneCompany extends AppCompatActivity {
                 "Launch marketing campaign for: %d$",calculateMarketingCost(company.marketing)));
     }
 
-    public static int calculateMarketingCost(int actualMarketingLevel){
-        return max(10000+(actualMarketingLevel*100),0);
-    }
+
 
 }
 

@@ -94,18 +94,5 @@ public class FragmentAllCompanies extends Fragment {
 
         public void onActivityResult(int requestCode, int resultCode, Intent data) {
             super.onActivityResult(requestCode, resultCode, data);
-
-            /*
-            if (resultCode == RESULT_OK && data.getBooleanExtra("IS_DELETE",false)) {
-                deviceViewModel.delOneCompanyById(data.getIntExtra("ID",-1));
-                Toast.makeText(getContext(), "SIKERULT torolni", Toast.LENGTH_LONG).show();
-            }else if(resultCode==RESULT_OK && data.getBooleanExtra("IS_UPDATE",false)){
-
-                int[] levels= data.getIntArrayExtra(MainActivity.LEVELS);
-                int money =data.getIntExtra(MainActivity.MAIN_MONETARIAL_INFO,-1);
-                if(levels.length >0 && money !=-1){
-                    deviceViewModel.updateLevel(id, levels,money);
-                }
-            }*/
         }
 }

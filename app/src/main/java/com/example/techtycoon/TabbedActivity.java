@@ -1,13 +1,16 @@
 package com.example.techtycoon;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.example.techtycoon.Assistant.AssistantManager;
+import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,11 +36,12 @@ public class TabbedActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tabbed);
-        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
+        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         ViewPager viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
+        viewPager.setCurrentItem(1,true);
 
         // Get a new or existing ViewModel from the ViewModelProvider.
         deviceViewModel = new ViewModelProvider(this).get(DeviceViewModel.class);
@@ -79,7 +83,7 @@ public class TabbedActivity extends AppCompatActivity {
                 editor.putFloat(getString(R.string.simulator_lastAvgBezels),(float) simulator.averages[4]);
                 editor.apply();
                 fab.setImageResource(R.drawable.ic_account_circle_white_24dp);
-                Toast.makeText(getApplicationContext(), "1 month simulated", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "1 month simulated", Toast.LENGTH_SHORT).show();
 
             }else{
                     //get nameTable for bots naming convention
@@ -88,7 +92,7 @@ public class TabbedActivity extends AppCompatActivity {
 
                     Wrapped_DeviceAndCompanyList afterAssistants=assistantManager.trigger(deviceViewModel.getAllCompaniesList(),deviceViewModel.getAllDevicesList());
                     deviceViewModel.assistantToDatabase(afterAssistants);
-                    Toast.makeText(getApplicationContext(), "Assistants finished the work", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), "Assistants finished the work", Toast.LENGTH_SHORT).show();
                     fab.setImageResource(R.drawable.ic_play_arrow_white_24dp);
 
                     SharedPreferences.Editor editor = getPreferences(MODE_PRIVATE).edit();
@@ -109,4 +113,20 @@ public class TabbedActivity extends AppCompatActivity {
         editor.putBoolean("isAssistantTurn",assistantTurn);
         editor.apply();
     }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && data.getBooleanExtra("IS_DELETE",false)) {
+            deviceViewModel.delOneDeviceById(data.getIntExtra("ID",-1));
+            Toast.makeText(getBaseContext(), "Successful deletion", Toast.LENGTH_LONG).show();
+        }else if(resultCode == RESULT_OK && data.getBooleanExtra("isProfitChanged",false)){
+            int id=data.getIntExtra("ID",-1);
+            int profit=data.getIntExtra("profit",-1);
+            Device device=deviceViewModel.getDevice_byID(id);
+            device.profit=profit;
+            deviceViewModel.updateDevices(device);
+            Toast.makeText(getBaseContext(), "Profit is updated", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 }

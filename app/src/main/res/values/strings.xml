@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Tech Tycoon</string>
     <string name="menuitem_add_a_company">Add a company</string>
@@ -28,4 +29,6 @@
     <string name="title_activity_development">DevelopmentActivity</string>
     <string name="title_activity_choose_body">ChooseBodyActivity</string>
     <string name="title_activity_assistant">AssistantActivity</string>
+    <string name="title_activity_designed">DesignedActivity</string>
+    <string name="buyMarketingLabel">"Do you want to buy \n 10 marketing for 0$?"</string>
 </resources>

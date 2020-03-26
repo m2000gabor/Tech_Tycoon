@@ -68,7 +68,7 @@ public class DevelopmentActivity extends AppCompatActivity {
 
         //get intent
         Intent data=getIntent();
-        money=data.getIntExtra(MainActivity.MAIN_MONETARIAL_INFO,0);
+        money=data.getIntExtra(MainActivity.MAIN_MONETARILY_INFO,0);
         levels=data.getIntArrayExtra(MainActivity.LEVELS);
 
         //make replyIntent with fab
@@ -80,7 +80,7 @@ public class DevelopmentActivity extends AppCompatActivity {
                 resultIntent.putExtra("IS_UPDATE",isUpgrade);
                 if(isUpgrade){
                     resultIntent.putExtra(MainActivity.LEVELS,levels);
-                    resultIntent.putExtra(MainActivity.MAIN_MONETARIAL_INFO,money);
+                    resultIntent.putExtra(MainActivity.MAIN_MONETARILY_INFO,money);
                 }
                 setResult(RESULT_OK,resultIntent);
                 finish();

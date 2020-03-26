@@ -260,7 +260,7 @@ public abstract class AbstractAssistant {
         }
     }
     static boolean tryToBuy_Marketing(Company myCompany) {
-        int marketingCost = DetailsOfOneCompany.calculateMarketingCost(myCompany.marketing);
+        int marketingCost = DevelopmentValidator.calculateMarketingCost(myCompany.marketing);
         if (myCompany.money >= marketingCost) {
             myCompany.money -= marketingCost;
             myCompany.marketing += 10;

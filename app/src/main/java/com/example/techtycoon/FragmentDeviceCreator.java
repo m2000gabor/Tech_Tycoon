@@ -65,6 +65,7 @@ public class FragmentDeviceCreator extends Fragment {
     private boolean isMemorySet;
     private boolean isBodySet;
     private boolean isCompanySet=false;
+    private int myCompanysIndex=-1;
 
     public static FragmentDeviceCreator newInstance() {
         FragmentDeviceCreator fragment = new FragmentDeviceCreator();
@@ -111,18 +112,24 @@ public class FragmentDeviceCreator extends Fragment {
             @Override
             public void onClick(View v) {
                 addDevice();
+                /*
+                FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_device_creator, new FragmentMyCompany(), "frag1");
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();*/
             }
         });
 
-        //set up reset button
-        root.findViewById(R.id.resetDeviceCreator).setOnClickListener(v -> reset(true));
+        //set up exit button
+        //root.findViewById(R.id.resetDeviceCreator).setOnClickListener(v -> reset(true));
+        root.findViewById(R.id.exitDeviceCreator).setOnClickListener(v -> getActivity().getSupportFragmentManager().popBackStack());
 
         //setUp insertButton
         root.findViewById(R.id.insertBasic).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!isCompanySet && companies.get(spin.getSelectedItemPosition()-1).hasFreeSlot()) {
-                    Toast.makeText(getContext(), "Set the company", Toast.LENGTH_LONG).show();
+                if (!isCompanySet || !companies.get(spin.getSelectedItemPosition()-1).hasFreeSlot()) {
+                    Toast.makeText(getContext(), "Set a company with free slots", Toast.LENGTH_LONG).show();
                 } else {
                     Company maker=companies.get(spin.getSelectedItemPosition()-1);
                     String deviceName = "test by "+maker.name;
@@ -172,6 +179,7 @@ public class FragmentDeviceCreator extends Fragment {
         });
 
         new MySpinnerAdapter(spin);
+        if(myCompanysIndex!=-1){spin.setSelection(myCompanysIndex);}
 
         // Inflate the layout for this fragment
         return root;
@@ -242,8 +250,12 @@ public class FragmentDeviceCreator extends Fragment {
         MySpinnerAdapter(Spinner spin) {
             String[] tmp=new String[companies.size()+1];
             tmp[0]="Choose a manufacturer";
-            for(int i=1;i<=companies.size();i++){tmp[i]=companies.get(i-1).name;}
-
+            for(int i=1;i<=companies.size();i++){
+                tmp[i]=companies.get(i-1).name;
+                if(getArguments()!=null && getArguments().getInt("ID",-1) !=-1 &&  getArguments().getInt("ID",-1)==companies.get(i-1).companyId){
+                    myCompanysIndex=i;
+                }
+            }
 
             //Getting the instance of Spinner and applying OnItemSelectedListener on it
             spin.setOnItemSelectedListener(this);
@@ -260,7 +272,9 @@ public class FragmentDeviceCreator extends Fragment {
         public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id) {
             if(position==0){
                 isCompanySet=false;
-                reset(false);
+                try{
+                    reset(false);
+                }catch (NullPointerException ignored){};
                 //Toast.makeText(getContext(),"Choose a manufacturer",Toast.LENGTH_SHORT).show();
             }else{
                 Company selectedCompany=companies.get(position-1);

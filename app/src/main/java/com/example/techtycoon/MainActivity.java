@@ -7,26 +7,26 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 
 //TODO time
-//TODO companies have a development route and cost limiting the available features
 //TODO detailed stats
 //todo store the discontinued devices
 //todo release time for companies (now the new devices come too frequent)
+//todo stats
+//todo campaign
+//todo cheater bot
 
 public class MainActivity extends AppCompatActivity {
     public static final String NAME_FIELD ="name" ;
-    public static final String MAIN_MONETARIAL_INFO ="profit" ;
+    public static final String MAIN_MONETARILY_INFO ="profit" ;
     public static final String TASK_OF_RECYCLER_VIEW ="dataSource" ;
     public static final String DEVICE_COMPANY_ID ="companyId" ;
     public static final String DEVICE_PRICE ="price" ;
-    public static final String DEVICE_RAM ="ram" ;
-    public static final String DEVICE_MEMORY ="memory" ;
     public static final String DEVICE_COST ="cost" ;
-    public static final String DEVICE_BODY ="body" ;
     public static final String DEVICE_PARAMS ="devParams" ;
     public static final String RAM_LVL ="RAMLVL" ;
     public static final String MEMORY_LVL ="MEMLVL" ;
@@ -74,17 +74,17 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.menuitem_add_a_company) {
             startAddNewCompanyActivity();
             return true;
+        }else if(id== R.id.menuitem_deleteALL){
+            deviceViewModel.deleteAll();
         }
 
         return super.onOptionsItemSelected(item);
     }
 
     /** Called when the user touches the List Devices button */
-    public void deleteAll(View view) {
-        deviceViewModel.deleteAll();
-    }
+    public void nothing(View view) {}
 
-    public void addCompany(View view){startAddNewCompanyActivity();}
+    public void nothing2(View view){}
 
     public void start_again(View view){
         Company[] companies={
@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case NEW_COMPANY_ACTIVITY_REQUEST_CODE:
                     String name=data.getStringExtra(NAME_FIELD);
-                    int monetary=data.getIntExtra(MAIN_MONETARIAL_INFO,0);
+                    int monetary=data.getIntExtra(MAIN_MONETARILY_INFO,0);
                     Company c = new Company(name,monetary,STARTING_LEVELS);
                     deviceViewModel.insertCompanies(c);
                     Toast.makeText(

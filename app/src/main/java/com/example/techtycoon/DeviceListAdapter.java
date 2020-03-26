@@ -17,18 +17,18 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
 
     class DeviceViewHolder extends RecyclerView.ViewHolder {
         private final TextView deviceNameItemView;
-        private final TextView deviceLastlySoldTextView;
-        private final TextView deviceRamTextView;
-        private final TextView deviceMemoryTextView;
-        private final TextView priceTextView;
+        private final TextView deviceIncomeTextView;
+        private final TextView deviceStorageTextView;
+        private final TextView deviceBodyTextView;
+        private final TextView soldPiecesTextView;
 
         private DeviceViewHolder(View itemView) {
             super(itemView);
             deviceNameItemView = itemView.findViewById(R.id.deviceNameTextView);
-            deviceLastlySoldTextView = itemView.findViewById(R.id.deviceLastlySoldTextView);
-            deviceRamTextView = itemView.findViewById(R.id.deviceRamTextView);
-            deviceMemoryTextView = itemView.findViewById(R.id.deviceMemoryTextView);
-            priceTextView = itemView.findViewById(R.id.priceTextView);
+            deviceIncomeTextView = itemView.findViewById(R.id.incomeTextView);
+            deviceStorageTextView = itemView.findViewById(R.id.deviceStorageTextView);
+            deviceBodyTextView = itemView.findViewById(R.id.deviceBodyTextView);
+            soldPiecesTextView = itemView.findViewById(R.id.soldPiecesTextView);
         }
     }
 
@@ -36,12 +36,12 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
     private List<Device> devices; // Cached copy of devices
     private View.OnClickListener mOnClickListener;
 
-    DeviceListAdapter(Context c,View.OnClickListener onClickListener) {
+    public DeviceListAdapter(Context c, View.OnClickListener onClickListener) {
         mInflater = LayoutInflater.from(c);
         mOnClickListener=onClickListener;
     }
 
-    Device getDeviceFromCache(int i){return devices.get(i);}
+    public Device getDeviceFromCache(int i){return devices.get(i);}
 
 
 
@@ -57,14 +57,14 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
         if (devices != null) {
             Device current = devices.get(position);
             holder.deviceNameItemView.setText(current.name);
-            holder.deviceLastlySoldTextView.setText(String.format(Locale.getDefault(),"%d",current.soldPieces));
-            holder.deviceRamTextView.setText(String.format(Locale.getDefault(),"RAM: %dGB",(int) Math.pow(2,current.ram)));
-            holder.deviceMemoryTextView.setText(String.format(Locale.getDefault(),"Memory: %dGB",(int) Math.pow(2,current.memory)));
-            holder.priceTextView.setText(String.format(Locale.getDefault(),"Price: %d$",current.getPrice()));
+            holder.deviceIncomeTextView.setText(String.format(Locale.getDefault(),"%d$",current.soldPieces*current.profit));
+            holder.deviceStorageTextView.setText(String.format(Locale.getDefault(),"Storage: %d",current.getScore_Storage()));
+            holder.deviceBodyTextView.setText(String.format(Locale.getDefault(),"Body: %d",current.getScore_Body()));
+            holder.soldPiecesTextView.setText(String.format(Locale.getDefault(),"Sold: %d",current.soldPieces));
         } else {
             // Covers the case of data not being ready yet.
             holder.deviceNameItemView.setText("No device name");
-            holder.deviceLastlySoldTextView.setText("0");
+            holder.deviceIncomeTextView.setText("0");
         }
     }
 

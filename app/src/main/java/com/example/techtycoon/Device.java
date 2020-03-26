@@ -28,15 +28,19 @@ public class Device {
     @ColumnInfo(name="ownerCompanyId")
     public int ownerCompanyId;
 
-    //Db should store ram n memory like their level 1,2,3,4,5 and not 32,64
+    @ColumnInfo(name="soldPieces")
+    public int soldPieces;
+
+
+    //attributes
+
+    //memory
+    //Db store ram n memory like their level 1,2,3,4,5 and not 32,64
     @ColumnInfo(name="ram")
     public int ram;
 
     @ColumnInfo(name="memory")
     public int memory;
-
-    @ColumnInfo(name="soldPieces")
-    public int soldPieces;
 
     //Body
     @ColumnInfo
@@ -118,7 +122,7 @@ public class Device {
         this.setBodyParams(bodyParams[0],bodyParams[1],bodyParams[2],bodyParams[3],bodyParams[4]);
     }
 
-    int[][] getParams(){
+    public int[][] getParams(){
         return new int[][]{
                 {this.ram,
                     this.memory,},
@@ -131,7 +135,7 @@ public class Device {
         };
     }
 
-    int getPrice(){return cost+profit;}
+    public int getPrice(){return cost+profit;}
     public int getOverallIncome(){ return soldPieces*profit; }
 
     public static int[] mtxToArray(int[][] mtx){
@@ -210,6 +214,13 @@ public class Device {
             if(this.getFieldByNum(i)!=d.getFieldByNum(i)){diff++;}
         }
         return diff;
+    }
+
+    public final int getScore_Storage(){
+        return ram+memory;
+    }
+    public final int getScore_Body(){
+        return design+material+color+ip+bezel;
     }
 
 }
