@@ -17,13 +17,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import java.util.List;
-
-import static android.app.Activity.RESULT_OK;
-
 
 public class FragmentAllDevices extends Fragment {
 
@@ -31,6 +28,7 @@ public class FragmentAllDevices extends Fragment {
     private DeviceListAdapter adapter;
     private LiveData<List<Device>> deviceList;
     private Spinner companySpinner;
+    private boolean isDesc=false;
 
     public static FragmentAllDevices newInstance() {
         FragmentAllDevices fragment = new FragmentAllDevices();
@@ -54,6 +52,11 @@ public class FragmentAllDevices extends Fragment {
         View root = inflater.inflate(R.layout.fragment_all_devices, container, false);
 
         RecyclerView recyclerView = root.findViewById(R.id.devicesRecyclerView);
+
+        //asc or desc button
+        ImageButton imageButton=root.findViewById(R.id.ascOrDescImageView);
+        imageButton.setOnClickListener(v->{deviceViewModel.setOrder(!isDesc); isDesc=!isDesc;});
+
         Spinner spin = root.findViewById(R.id.sortbySpinner);
         //onclick
         View.OnClickListener mOnClickListener = new View.OnClickListener() {
@@ -127,7 +130,7 @@ public class FragmentAllDevices extends Fragment {
             //Getting the instance of Spinner and applying OnItemSelectedListener on it
             this.spin =sp;
             spin.setOnItemSelectedListener(this);
-            String[] sortingOptions = {"SortBy","ID","Sold pieces", "Ram", "Memory","Profit per item","Name","Price","Overall income"};
+            String[] sortingOptions = {"SortBy","Name","ID","Price","Overall income","Sold pieces","Profit per item","Ram", "Memory"};
 
             //Creating the ArrayAdapter instance having the nameOfCompanies list
             ArrayAdapter aa = new ArrayAdapter(getContext(),android.R.layout.simple_spinner_item,sortingOptions );
@@ -139,14 +142,10 @@ public class FragmentAllDevices extends Fragment {
         //Performing action onItemSelected and onNothing selected
         @Override
         public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id) {
-            //Toast.makeText(getApplicationContext(),Boolean.toString(deviceList.hasObservers()), Toast.LENGTH_LONG).show();
-
-            // Update the cached copy of the words in the adapter.
-            //observer= devs -> { adapter.setDevices(devs); };
-            if(position==0){position++;}
-            deviceViewModel.orderDevices_ByCode2(position-1);
-            //Toast.makeText(getApplicationContext(),Boolean.toString(deviceList.hasObservers()), Toast.LENGTH_LONG).show();
-            //deviceList.observeForever(observer);
+            if(position==0 || position==1){
+                deviceViewModel.orderDevices_ByCode2(-100,isDesc);
+            }else{
+                deviceViewModel.orderDevices_ByCode2(position-7,isDesc);}
         }
         @Override
         public void onNothingSelected(AdapterView<?> arg0) {

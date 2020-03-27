@@ -70,7 +70,7 @@ public class TabbedActivity extends AppCompatActivity {
 
                 simulator=new Simulator(deviceViewModel,lastAvgPrice,lastAvgRam,lastAvgMemory,arr);
                 Wrapped_DeviceAndCompanyList simulatorResults=simulator.simulate();
-                //oneMonthSimulated(simulatorResults);
+                oneMonthSimulated(simulatorResults);
 
                 SharedPreferences.Editor editor = sharedPref.edit();
                 editor.putFloat(getString(R.string.simulator_lastAvgPrice), (float) simulator.lastAvgPrice);
@@ -129,4 +129,12 @@ public class TabbedActivity extends AppCompatActivity {
         }
     }
 
+    private void oneMonthSimulated(Wrapped_DeviceAndCompanyList results){
+        results.companies.sort((a,b)->(b.lastProfit-a.lastProfit));
+        for(int i=0;i<results.companies.size();i++){
+            results.companies.get(i).marketPosition=i+1;
+        }
+        deviceViewModel.updateCompanies(results.companies.toArray(new Company[0]));
+        deviceViewModel.updateDevices(results.devices.toArray(new Device[0]));
+    }
 }

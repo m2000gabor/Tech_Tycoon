@@ -46,9 +46,9 @@ public class DevelopmentValidator {
      * returns -1 if no more slots available
     */
     public static int nextSlotCost(int actualNumOfSlots){
-        if( SLOT_COSTS.length <= actualNumOfSlots-1){
+        if( SLOT_COSTS.length-1 <= actualNumOfSlots-1){
             return -1;
-        }else{return SLOT_COSTS[actualNumOfSlots];}
+        }else{return SLOT_COSTS[actualNumOfSlots-1];}
     }
 
     public static int calculateMarketingCost(int actualMarketingLevel){

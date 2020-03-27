@@ -23,7 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:layout_marginLeft="140dp"
+            android:layout_marginStart="140dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -34,9 +34,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="@+id/sortbySpinner"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/ascOrDescImageView"
             app:layout_constraintStart_toEndOf="@+id/sortbySpinner"
             app:layout_constraintTop_toTopOf="@+id/sortbySpinner" />
+
+        <ImageButton
+            android:contentDescription="Reverse order"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/sortbySpinner"
+            app:layout_constraintBottom_toBottomOf="@+id/sortbySpinner"
+            android:id="@+id/ascOrDescImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_sort_black_24dp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

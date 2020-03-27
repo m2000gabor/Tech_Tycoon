@@ -33,54 +33,6 @@ public interface DeviceDao {
     @Query("SELECT * FROM device")
     List<Device> getAllDevicesList();
 
-    //Ordered ones
-    @Query("SELECT * FROM device ORDER BY soldPieces DESC")
-    LiveData<List<Device>> orderedDevicesBy_SoldPieces();
-
-    @Query("SELECT * FROM device ORDER BY ram DESC")
-    LiveData<List<Device>> orderedDevicesBy_Ram();
-
-    @Query("SELECT * FROM device ORDER BY memory DESC")
-    LiveData<List<Device>> orderedDevicesBy_Memory();
-
-    @Query("SELECT * FROM device ORDER BY profit DESC")
-    LiveData<List<Device>> orderedDevicesBy_Profit();
-
-    @Query("SELECT * FROM device ORDER BY name")
-    LiveData<List<Device>> orderedDevicesBy_Name();
-
-    @Query("SELECT * FROM device ORDER BY (profit+cost) DESC")
-    LiveData<List<Device>> orderedDevicesBy_Price();
-
-    @Query("SELECT * FROM device ORDER BY (profit*soldPieces) DESC")
-    LiveData<List<Device>> orderedDevicesBy_OverallIncome();
-
-    //filtered
-    //get all devices of one company
-    @Query("SELECT * FROM device WHERE ownerCompanyId IN (:ownerIds) ")
-    LiveData<List<Device>> getAllDevices_byCompanyIDs(int[] ownerIds);
-
-    @Query("SELECT * FROM device WHERE ownerCompanyId IN (:ownerIds) ORDER BY soldPieces DESC")
-    LiveData<List<Device>> orderedDevicesBy_SoldPieces(int[] ownerIds);
-
-    @Query("SELECT * FROM device WHERE ownerCompanyId IN (:ownerIds) ORDER BY ram DESC")
-    LiveData<List<Device>> orderedDevicesBy_Ram(int[] ownerIds);
-
-    @Query("SELECT * FROM device WHERE ownerCompanyId IN (:ownerIds) ORDER BY memory DESC")
-    LiveData<List<Device>> orderedDevicesBy_Memory(int[] ownerIds);
-
-    @Query("SELECT * FROM device WHERE ownerCompanyId IN (:ownerIds) ORDER BY profit DESC")
-    LiveData<List<Device>> orderedDevicesBy_Profit(int[] ownerIds);
-
-    @Query("SELECT * FROM device WHERE ownerCompanyId IN (:ownerIds) ORDER BY name DESC")
-    LiveData<List<Device>> orderedDevicesBy_Name(int[] ownerIds);
-
-    @Query("SELECT * FROM device WHERE ownerCompanyId IN (:ownerIds) ORDER BY (profit+cost) DESC")
-    LiveData<List<Device>> orderedDevicesBy_Price(int[] ownerIds);
-
-    @Query("SELECT * FROM device WHERE ownerCompanyId IN (:ownerIds) ORDER BY (profit*soldPieces) DESC")
-    LiveData<List<Device>> orderedDevicesBy_OverallIncome(int[] ownerIds);
-
     /*
     @Query("SELECT * FROM device WHERE id IN (:deviceIds)")
     LiveData<List<Device>> loadAllByIds(int[] deviceIds);
@@ -104,12 +56,6 @@ public interface DeviceDao {
     @Insert
     void insertCompanies(Company... companies);
 
-    @Query("DELETE FROM device")
-    void deleteAllDevice();
-
-    @Query("DELETE FROM company")
-    void deleteAllCompany();
-
     @Update
     void updateCompanies(Company... companies);
 
@@ -119,7 +65,18 @@ public interface DeviceDao {
     @Update
     void updateDevices(Device... devices);
 
+    //Deletions
+
     @Delete
     void deleteDevices(Device... devices);
+
+    @Query("DELETE FROM device")
+    void deleteAllDevice();
+
+    @Query("DELETE FROM company")
+    void deleteAllCompany();
+
+    @Query("DELETE FROM device WHERE ownerCompanyId =:companyId")
+    void deleteDevicesFromCompany(int companyId);
 
 }

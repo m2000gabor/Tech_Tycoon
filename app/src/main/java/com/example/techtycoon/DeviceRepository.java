@@ -5,6 +5,7 @@ import android.app.Application;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 
 import androidx.lifecycle.LiveData;
@@ -16,15 +17,15 @@ import androidx.lifecycle.Observer;
 class DeviceRepository {
     private int orderBy=0;
     private int filter=-1;
+    private boolean desc=true;
 
     private DeviceDao mDao;
     private TransactionDao mTransactionDao;
     private LiveData<List<Device>> mAllDevs;
+    private List<Device> cachedAllDevices;
     private LiveData<List<Company>> mAllComps;
 
     private MutableLiveData<List<Device>> mutableAllDevices;
-    private Observer observer;
-    private boolean hasObserver=false;
 
 
     DeviceRepository(Application application) {
@@ -33,33 +34,42 @@ class DeviceRepository {
         mTransactionDao = db.transactionDao();
 
         mAllComps=mDao.getAllCompany();
+        mAllDevs=mDao.getAllDevices();
+
+        mAllDevs.observeForever(new Observer<List<Device>>() {
+            @Override
+            public void onChanged(List<Device> devices) {
+                cachedAllDevices=devices;
+                mutableAllDevices.setValue(orderDevices(devices));
+            }
+        });
 
         mutableAllDevices=new MutableLiveData<List<Device>>();
-        setSortBy(orderBy);
+        setSortBy(orderBy,true);
     }
 
-    //mutables
+    //get the mutable
     LiveData<List<Device>> mutable_getAllDevices() { return mutableAllDevices; }
 
-    void setSortBy(int sortBy){
-        orderBy=sortBy;
-        getDevices_with_sort_filter();
+    void setSortBy(int sortId,boolean desc){
+        orderBy=sortId;
+        this.desc=desc;
+        mutableAllDevices.setValue(orderDevices(cachedAllDevices));
     }
 
-    void setFilter(int filterBy){
-        filter=filterBy;
-        getDevices_with_sort_filter();
+    void setFilter(int filterById){
+        filter=filterById;
+        mutableAllDevices.setValue(orderDevices(cachedAllDevices));
     }
 
-
+    public void setDesc(boolean desc) {
+        this.desc = desc;
+        mutableAllDevices.setValue(orderDevices(cachedAllDevices));
+    }
 
     // Room executes all queries on a separate thread.
     // Observed LiveData will notify the observer when the data has changed.
-    LiveData<List<Device>> getAllDevices() { return mAllDevs; }
     LiveData<List<Company>> getAllCompanies() { return mAllComps;}
-
-
-    LiveData<List<Device>> getAllDevices_byCompanyIDs(int[] ownerIds){ return mDao.getAllDevices_byCompanyIDs(ownerIds); }
 
     List<Company> getAllCompaniesList() {
         List<Company> def=new LinkedList<Company>();
@@ -157,6 +167,7 @@ class DeviceRepository {
     void delOneCompanyById(int id){
         AppDatabase.databaseWriteExecutor.execute(() -> {
             mDao.delOneCompanyById(id);
+            mDao.deleteDevicesFromCompany(id);
         });
     }
 
@@ -177,7 +188,7 @@ class DeviceRepository {
     }
 
     void assistantToDatabase(Company[] companies,Device[] insert,Device[] update,Device[] delete){
-        for (Device d : insert) { d.id = 0; d.soldPieces=0; }
+        for (Device d : insert) { d.id = 0; d.setSoldPieces(0); }
         AppDatabase.databaseWriteExecutor.execute(() -> {
             mTransactionDao.assistantTransaction(companies,insert,update,delete);
         });
@@ -229,43 +240,19 @@ class DeviceRepository {
         }
     }
 
-    //depend on the last sort and filter settings
-    private void getDevices_with_sort_filter(){
-        if(hasObserver){mAllDevs.removeObserver(observer);};
-        if(filter==-1){
-            switch (orderBy){
-                default: mAllDevs=mDao.getAllDevices();break;
-                case 1: mAllDevs=mDao.orderedDevicesBy_SoldPieces(); break;
-                case 2: mAllDevs=mDao.orderedDevicesBy_Ram(); break;
-                case 3: mAllDevs=mDao.orderedDevicesBy_Memory(); break;
-                case 4: mAllDevs=mDao.orderedDevicesBy_Profit(); break;
-                case 5:mAllDevs=mDao.orderedDevicesBy_Name(); break;
-                case 6: mAllDevs=mDao.orderedDevicesBy_Price(); break;
-                case 7: mAllDevs=mDao.orderedDevicesBy_OverallIncome(); break;
-
+    private List<Device> orderDevices(List<Device> devices){
+        try {
+            if (filter != -1) {
+                devices = devices.stream().filter(device -> device.ownerCompanyId == filter).collect(Collectors.toList());
             }
-        } else{
-            switch (orderBy){
-                default: mAllDevs=mDao.getAllDevices_byCompanyIDs(new int[]{filter});break;
-                case 1: mAllDevs=mDao.orderedDevicesBy_SoldPieces(new int[]{filter}); break;
-                case 2: mAllDevs=mDao.orderedDevicesBy_Ram(new int[]{filter}); break;
-                case 3: mAllDevs=mDao.orderedDevicesBy_Memory(new int[]{filter}); break;
-                case 4: mAllDevs=mDao.orderedDevicesBy_Profit(new int[]{filter}); break;
-                case 5: mAllDevs=mDao.orderedDevicesBy_Name(new int[]{filter}); break;
-                case 6: mAllDevs=mDao.orderedDevicesBy_Price(new int[]{filter}); break;
-                case 7: mAllDevs=mDao.orderedDevicesBy_OverallIncome(new int[]{filter}); break;
+            if (orderBy == -100) {
+                devices.sort((a, b) -> a.name.compareTo(b.name));
+            } else if (desc) {
+                devices.sort((a, b) -> b.getFieldByNum(orderBy) - a.getFieldByNum(orderBy));
+            } else {
+                devices.sort((a, b) -> a.getFieldByNum(orderBy) - b.getFieldByNum(orderBy));
             }
-        }
-
-        observer=new Observer<List<Device>>() {
-            @Override
-            public void onChanged(List<Device> deviceList) {
-                mutableAllDevices.setValue(deviceList);
-            }
-        };
-
-        mAllDevs.observeForever(observer);
-        hasObserver=true;
+        }catch (NullPointerException ignored){}
+        return devices;
     }
-
 }

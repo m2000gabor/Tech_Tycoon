@@ -6,6 +6,7 @@ import androidx.room.PrimaryKey;
 
 //TODO new attributes
 //TODO save the name of the owner company
+//todo extended device class with statistic
 
 @Entity
 public class Device {
@@ -29,8 +30,10 @@ public class Device {
     public int ownerCompanyId;
 
     @ColumnInfo(name="soldPieces")
-    public int soldPieces;
+    private int soldPieces;
 
+    @ColumnInfo(name="trend")
+    private int trend;
 
     //attributes
 
@@ -135,9 +138,26 @@ public class Device {
         };
     }
 
+    //field setters getters
+    public int getSoldPieces() {
+        return soldPieces;
+    }
+    public void setSoldPieces(int soldPieces) {
+        if(soldPieces>this.soldPieces){trend=1;
+        }else if(soldPieces<this.soldPieces){trend=-1;
+        }else{trend=0;}
+        this.soldPieces = soldPieces;
+    }
+    public int getTrend() {
+        return trend;
+    }
+    public void setTrend(int trend) {
+        this.trend=trend;
+    }
     public int getPrice(){return cost+profit;}
     public int getOverallIncome(){ return soldPieces*profit; }
 
+    //converters
     public static int[] mtxToArray(int[][] mtx){
         int length=0;
         for (int i=0;i<NUMBER_OF_BUDGETS;i++){
@@ -155,7 +175,6 @@ public class Device {
         }
         return arr;
     }
-
     static int[][] intArrayToMtx(int[] arr){
         int maxLength=0;
         for (int i=0;i<NUMBER_OF_BUDGETS;i++){
@@ -176,10 +195,20 @@ public class Device {
         return mtx;
     }
 
-    //-1 returns the profit
+    /**
+     *
+     * @param attrID
+     * -1: profit
+     * -2:
+     * @return
+     */
     public int getFieldByNum(int attrID){
         int i=-1;
         switch (attrID){
+            case -5:i=this.id;break;
+            case -4:i=this.getPrice();break;
+            case -3:i=this.getOverallIncome();break;
+            case -2:i=this.soldPieces;break;
             case -1:i=this.profit;break;
             case 0:i=this.ram; break;
             case 1:i=this.memory; break;
@@ -191,7 +220,6 @@ public class Device {
         }
         return i;
     }
-
     public void setFieldByNum(int attrID,int value){
         switch (attrID){
             case -1:this.profit=value;break;

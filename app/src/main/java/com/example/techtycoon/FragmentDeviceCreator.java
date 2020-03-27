@@ -112,11 +112,6 @@ public class FragmentDeviceCreator extends Fragment {
             @Override
             public void onClick(View v) {
                 addDevice();
-                /*
-                FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.fragment_device_creator, new FragmentMyCompany(), "frag1");
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();*/
             }
         });
 
@@ -124,7 +119,7 @@ public class FragmentDeviceCreator extends Fragment {
         //root.findViewById(R.id.resetDeviceCreator).setOnClickListener(v -> reset(true));
         root.findViewById(R.id.exitDeviceCreator).setOnClickListener(v -> getActivity().getSupportFragmentManager().popBackStack());
 
-        //setUp insertButton
+        //setUp insertBasicButton
         root.findViewById(R.id.insertBasic).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -60,8 +60,8 @@ public abstract class AbstractAssistant {
         double s = 0;
         int soldP = 0;
         for (Device d : list) {
-            s += d.getFieldByNum(type) * d.soldPieces;
-            soldP += d.soldPieces;
+            s += d.getFieldByNum(type) * d.getSoldPieces();
+            soldP += d.getSoldPieces();
         }
         return s / soldP;
     }

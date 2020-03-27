@@ -46,6 +46,7 @@ public class FragmentMyCompany extends Fragment {
     private TextView nameOfMyCompanyTextView;
     private TextView moneyTextView;
     private TextView profitTextView;
+    private TextView cashFlowTextView;
     private TextView marketingTextView;
     private TextView slotsTextView;
 
@@ -73,9 +74,8 @@ public class FragmentMyCompany extends Fragment {
         super.onCreate(savedInstanceState);
         // Get a new or existing ViewModel from the ViewModelProvider.
         deviceViewModel =new ViewModelProvider(this).get(DeviceViewModel.class);
-        deviceViewModel.orderDevices_ByCode2(7);
+        deviceViewModel.orderDevices_ByCode2(-3,true);
         deviceList = deviceViewModel.mutable_getAllDevices();
-        //myCompanyLiveData =deviceViewModel.getLiveCompany_byID(deviceViewModel.getAllCompaniesList().get(0).companyId);
     }
 
     @Override
@@ -124,7 +124,6 @@ public class FragmentMyCompany extends Fragment {
         root.findViewById(R.id.buyMarketingButton).setOnClickListener(this::buyMarketing);
         root.findViewById(R.id.buyNewSlotButton).setOnClickListener(this::buyNewSlot);
 
-
         // Add an observer on the LiveData returned by getAlphabetizedWords.
         // The onChanged() method fires when the observed data changes and the activity is
         // in the foreground.
@@ -154,6 +153,7 @@ public class FragmentMyCompany extends Fragment {
             }
         });
         profitTextView= root.findViewById(R.id.profitTextView);
+        cashFlowTextView= root.findViewById(R.id.cashFlowTextView);
         moneyTextView= root.findViewById(R.id.moneyTextView);
         slotsTextView= root.findViewById(R.id.slotsTextView);
         marketingTextView= root.findViewById(R.id.marketingTextView);
@@ -235,6 +235,22 @@ public class FragmentMyCompany extends Fragment {
                     playerCompany=myCompany;
                     nameOfMyCompanyTextView.setText(c.name);
                     profitTextView.setText(String.format(Locale.getDefault(),"%d$",c.lastProfit));
+                    String cashFlowPos=String.valueOf(c.marketPosition);
+                    switch (cashFlowPos) {
+                        case "1":
+                            cashFlowPos = "1st";
+                            break;
+                        case "2":
+                            cashFlowPos = "2nd";
+                            break;
+                        case "3":
+                            cashFlowPos = "3rd";
+                            break;
+                        default:
+                            cashFlowPos = cashFlowPos + "th";
+                            break;
+                    }
+                    cashFlowTextView.setText(String.format("Cash flow: %s",cashFlowPos));
                     moneyTextView.setText(String.format(Locale.getDefault(),"%d$",c.money));
                     marketingTextView.setText(String.format(Locale.getDefault(),"Marketing: %d",c.marketing));
                     slotsTextView.setText(String.format(Locale.getDefault(),"Slots: %d/%d",c.usedSlots,c.maxSlots));
@@ -272,6 +288,8 @@ public class FragmentMyCompany extends Fragment {
                     myCompany.money-=DevelopmentValidator.calculateMarketingCost(myCompany.marketing);
                     myCompany.marketing+=10;
                     deviceViewModel.updateCompanies(myCompany);
+                    textView.setText(String.format(Locale.getDefault(),"Do you want to buy 10 marketing for %d$?",
+                            DevelopmentValidator.calculateMarketingCost(myCompany.marketing)));
                 }else{
                     Toast.makeText(getContext(),"You don't have enough money!",Toast.LENGTH_SHORT).show();
                     ll.setVisibility(View.GONE);
@@ -297,10 +315,13 @@ public class FragmentMyCompany extends Fragment {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(myCompany.money>=DevelopmentValidator.nextSlotCost(myCompany.maxSlots) ){
+                if(DevelopmentValidator.nextSlotCost(myCompany.maxSlots) !=-1 &&
+                        myCompany.money>=DevelopmentValidator.nextSlotCost(myCompany.maxSlots) ){
                     myCompany.money-=DevelopmentValidator.nextSlotCost(myCompany.maxSlots);
                     myCompany.maxSlots+=1;
                     deviceViewModel.updateCompanies(myCompany);
+                    textView.setText(String.format(Locale.getDefault(),"Do you want to buy a new slot for %d$?",
+                            DevelopmentValidator.nextSlotCost(myCompany.maxSlots)) );
                 }else{
                     Toast.makeText(getContext(),"You don't have enough money!",Toast.LENGTH_SHORT).show();
                     ll.setVisibility(View.GONE);

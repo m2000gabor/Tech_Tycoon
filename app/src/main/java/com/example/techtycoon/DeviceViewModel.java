@@ -4,7 +4,6 @@ import android.app.Application;
 
 import java.util.List;
 
-import androidx.annotation.Nullable;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
@@ -19,7 +18,6 @@ public class DeviceViewModel extends AndroidViewModel {
     public DeviceViewModel (Application application) {
         super(application);
         mRepository = new DeviceRepository(application);
-        //mAllDevices = mRepository.getAllDevices();
         mAllDevices = mRepository.mutable_getAllDevices();
         mAllCompanies=mRepository.getAllCompanies();
     }
@@ -33,7 +31,8 @@ public class DeviceViewModel extends AndroidViewModel {
     Device getDevice_byID(int ID){return mRepository.getDevice_byID(ID);}
     public List<Device> getAllDevicesList(){return mRepository.getAllDevicesList();}
 
-    void orderDevices_ByCode2 (int code) { mRepository.setSortBy(code);}
+    void orderDevices_ByCode2 (int code,boolean desc) { mRepository.setSortBy(code,desc);}
+    void setOrder(boolean isDescending){mRepository.setDesc(isDescending);}
 
     void filter_byCompanyID(int ownerId){mRepository.setFilter(ownerId);}
 

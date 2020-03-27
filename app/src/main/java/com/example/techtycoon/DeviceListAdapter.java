@@ -57,10 +57,10 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
         if (devices != null) {
             Device current = devices.get(position);
             holder.deviceNameItemView.setText(current.name);
-            holder.deviceIncomeTextView.setText(String.format(Locale.getDefault(),"%d$",current.soldPieces*current.profit));
+            holder.deviceIncomeTextView.setText(String.format(Locale.getDefault(),"%d$",current.getSoldPieces()*current.profit));
             holder.deviceStorageTextView.setText(String.format(Locale.getDefault(),"Storage: %d",current.getScore_Storage()));
             holder.deviceBodyTextView.setText(String.format(Locale.getDefault(),"Body: %d",current.getScore_Body()));
-            holder.soldPiecesTextView.setText(String.format(Locale.getDefault(),"Sold: %d",current.soldPieces));
+            holder.soldPiecesTextView.setText(String.format(Locale.getDefault(),"Sold: %d",current.getSoldPieces()));
         } else {
             // Covers the case of data not being ready yet.
             holder.deviceNameItemView.setText("No device name");

@@ -1,13 +1,10 @@
 package com.example.techtycoon;
 
-
-import com.example.techtycoon.Assistant.AbstractAssistant;
-
 import androidx.room.ColumnInfo;
-import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+//todo extended company class with statistic
 @Entity
 public class Company {
     @PrimaryKey(autoGenerate = true)
@@ -21,6 +18,9 @@ public class Company {
 
     @ColumnInfo(name = "lastProfit")
     public int lastProfit;
+
+    @ColumnInfo
+    public int marketPosition; //The company with the biggest profit is the 1st ...
 
     //todo use levels as a matrix
     @ColumnInfo(name = "levels")
@@ -66,7 +66,10 @@ public class Company {
         this.usedSlots=0;
         this.levels=Converter.intArrayToString(levels);
         assistantType=-1;
+        this.marketPosition=0;
     }
+
+    //getters setters
 
     public String getCompanyName(){return this.name;}
     public int  getCompanyId(){return this.companyId;}

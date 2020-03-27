@@ -7,7 +7,7 @@ import java.util.List;
 
 
 public class Simulator {
-    ///Simulator 2.6.2 - new profiles
+    ///Simulator 2.7 - optimized price handling
 
     private DeviceViewModel deviceViewModel;
     private static final int ATTRIBUTES_IN_ARRAY =5;
@@ -40,12 +40,11 @@ public class Simulator {
         }
 
         int[] sold=new int[deviceList.size()];
-        for(int i=0;i<deviceList.size();i++){sold[i]=0; deviceList.get(i).soldPieces=0;}
 
         selling(sold,deviceList,companyList);
 
         //save the number of sold items
-        for(int i=0;i<deviceList.size();i++){deviceList.get(i).soldPieces=sold[i];}
+        for(int i=0;i<deviceList.size();i++){deviceList.get(i).setSoldPieces(sold[i]);}
         //null companies last profit
         for(int i=0;i<companyList.size();i++){
             companyList.get(i).lastProfit=0;
@@ -54,13 +53,6 @@ public class Simulator {
         }
 
         earning(sold,deviceList,companyList);
-
-        //Company[] varargsComp =companyList.toArray(new Company[0]);
-        //Device[] varargsDev=deviceList.toArray(new Device[0]);
-
-        //apply changes
-        //deviceViewModel.updateCompanies(varargsComp);
-        //deviceViewModel.updateDevices(varargsDev);
 
         //set averages
         double sumPrice=0;
@@ -84,9 +76,6 @@ public class Simulator {
             averages[j]+=MARKET_SPEED*((sumBody[j]/customerNum)-averages[j]);
         }
 
-        deviceViewModel.updateCompanies(companyList.toArray(new Company[0]));
-        deviceViewModel.updateDevices(deviceList.toArray(new Device[0]));
-
         return new Wrapped_DeviceAndCompanyList(deviceList,companyList);
     }
 
@@ -98,23 +87,23 @@ public class Simulator {
             compsToDevList.add(companyList.get(j));
         }
         ///int[0] is the number of customers per month!
-        ///custmNum,price,ram,mem,design,material,color,ip,bezel
+        ///custNum,price,ram,mem,design,material,color,ip,bezel
 
 
         //Profiles:
-        int[] midRange={1000,7,5,5,4,2,2,2,2};
+        int[] midRange={1000,6,5,5,4,2,2,2,2};
         sellingToOneProfile2(sold,deviceList,compsToDevList,midRange);
 
-        int[] top={200,5,10,10,3,5,2,3,3};
+        int[] top={400,2,10,10,3,5,2,3,3};
         sellingToOneProfile2(sold,deviceList,compsToDevList,top);
 
         int[] cheep={300,10,4,4,1,1,1,2,1};
         sellingToOneProfile2(sold,deviceList,compsToDevList,cheep);
 
-        int[] beauty={50,7,2,2,10,7,8,2,5};
+        int[] beauty={50,4,2,2,10,7,8,2,5};
         sellingToOneProfile2(sold,deviceList,compsToDevList,beauty);
 
-        customerNum=1550;
+        customerNum=midRange[0]+top[0]+cheep[0]+beauty[0];
 
     }
 
@@ -128,8 +117,12 @@ public class Simulator {
         double value;
         double sumPoints=0;
         for (int i=0;i<length;i++){
-            price=(double) fx(deviceList.get(i).getPrice(), lastAvgPrice);
-            price=Math.pow(price,weights[1]*0.2);
+            if(deviceList.get(i).getPrice()>2*lastAvgPrice){
+                price=(double) fx(Math.pow(deviceList.get(i).getPrice(),(deviceList.get(i).getPrice()/lastAvgPrice)-1), lastAvgPrice);
+            }else{
+                price=(double) fx(deviceList.get(i).getPrice(), lastAvgPrice);
+            }
+            price=Math.pow(price,weights[1]*0.07);
             value=(double) Math.pow(fx(deviceList.get(i).ram+1, lastAvgRam),weights[2]*0.2);
             value+= (double) Math.pow(fx(deviceList.get(i).memory+1, lastAvgMemory),weights[3]*0.2);
 
@@ -173,7 +166,8 @@ public class Simulator {
     private static double fx(double value,double average) {
         double norm=value/average;
         if(norm<=1.0) {
-            return Math.pow(norm,2);
+            return Math.pow(norm, 2);
+        //}else if(norm>2){return Math.pow(norm-2,2)+fx(2*average,average);
         }else{return Math.pow(norm-1,0.5)+fx(average,average);}
     }
 

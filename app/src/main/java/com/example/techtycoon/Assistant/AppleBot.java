@@ -121,7 +121,7 @@ public class AppleBot extends AbstractAssistant{
         }
 
         //works???
-        myDevices.sort(Comparator.comparingInt((Device d)->d.profit*d.soldPieces ));
+        myDevices.sort(Comparator.comparingInt((Device d)->d.profit*d.getSoldPieces() ));
         int[] sumOfLevels=new int[myDevices.size()];
         int maxSum=-1;
         for (int i = 0; i < myDevices.size(); i++) {
@@ -162,7 +162,7 @@ public class AppleBot extends AbstractAssistant{
                     // cut the prices if the companyContext is 1
                     int i=0;
                     //sort by popularity
-                    myDevices.sort(Comparator.comparingInt((Device d)->d.soldPieces ));
+                    myDevices.sort(Comparator.comparingInt((Device d)->d.getSoldPieces() ));
 
                     while(i<deviceList.size() && !producibleByTheCompany(myCompany,deviceList.get(i)) ){i++;}
                     if(i<deviceList.size()){
@@ -187,9 +187,9 @@ public class AppleBot extends AbstractAssistant{
                     myCompany.logs = myCompany.logs+"Our high-end device goes well!\n";
                     //search for underperformer
                     for (int j = 0; j<myDevices.size(); j++) {
-                        if(getRegion(deviceList.stream().map( (device -> device.soldPieces)).collect(Collectors.toList()), myDevices.get(j).soldPieces)<=2 &&
-                                getRegion(deviceList.stream().map( (d -> d.soldPieces * d.profit)).collect(Collectors.toList()),
-                                        myDevices.get(j).soldPieces*myDevices.get(j).profit) <=2 ){
+                        if(getRegion(deviceList.stream().map( (Device::getSoldPieces)).collect(Collectors.toList()), myDevices.get(j).getSoldPieces())<=2 &&
+                                getRegion(deviceList.stream().map( (d -> d.getSoldPieces() * d.profit)).collect(Collectors.toList()),
+                                        myDevices.get(j).getSoldPieces()*myDevices.get(j).profit) <=2 ){
                             myDevices.get(j).profit*=0.9;
                             ret.update.add(myDevices.get(j));
                             myCompany.logs = myCompany.logs+myDevices.get(j).name+" is underperforming. Little discount is made. \n";
@@ -205,9 +205,9 @@ public class AppleBot extends AbstractAssistant{
                     }
                     //search for really underperformer and change it to a premium dev
                     for (int j = 0; j<myDevices.size(); j++) {
-                        if(getRegion(deviceList.stream().map( (device -> device.soldPieces)).collect(Collectors.toList()), myDevices.get(j).soldPieces)<=1 &&
-                                getRegion(deviceList.stream().map( (d -> d.soldPieces * d.profit)).collect(Collectors.toList()),
-                                        myDevices.get(j).soldPieces*myDevices.get(j).profit) <=1 ){
+                        if(getRegion(deviceList.stream().map( (Device::getSoldPieces)).collect(Collectors.toList()), myDevices.get(j).getSoldPieces())<=1 &&
+                                getRegion(deviceList.stream().map( (d -> d.getSoldPieces() * d.profit)).collect(Collectors.toList()),
+                                        myDevices.get(j).getSoldPieces()*myDevices.get(j).profit) <=1 ){
                             myCompany.logs = myCompany.logs+myDevices.get(j).name+" is terribly underperforming. Replace it with a premium device \n";
                             //change it to premium
                             int maxInd=0;
