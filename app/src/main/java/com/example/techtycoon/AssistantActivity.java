@@ -3,10 +3,6 @@ package com.example.techtycoon;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.example.techtycoon.Assistant.AbstractAssistant;
-import com.example.techtycoon.Assistant.AppleBot;
-import com.example.techtycoon.Assistant.AverageBot;
-import com.example.techtycoon.Assistant.Bot1;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,7 +29,7 @@ public class AssistantActivity extends AppCompatActivity {
             R.id.marketingAvgAssistantSwitch,
             R.id.general1AssistantSwitch,
             R.id.general2AssistantSwitch,
-            R.id.general3AssistantSwitch,
+            R.id.appleBot2Switch,
             R.id.fullAssistant1Switch,
             R.id.fullAssistant2Switch
     };

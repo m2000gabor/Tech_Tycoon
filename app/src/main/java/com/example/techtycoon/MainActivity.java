@@ -1,13 +1,13 @@
 package com.example.techtycoon;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     public static final int NEW_DEVICE_ACTIVITY_REQUEST_CODE = 1;
     public static final int NEW_COMPANY_ACTIVITY_REQUEST_CODE = 2;
 
-    private static final int[] STARTING_LEVELS={1,1,1,1,1,1,1};
+    public static final int[] STARTING_LEVELS={1,1,1,1,1,1,1};
 
     DeviceViewModel deviceViewModel;
 
@@ -87,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
     public void nothing2(View view){}
 
     public void start_again(View view){
+        resetSharedPref();
         Company[] companies={
                 new Company("Apple",10,STARTING_LEVELS),
                 new Company("Samsung",10,STARTING_LEVELS),
@@ -98,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
         deviceViewModel.startAgain(companies);
     }
     public void start_again_bots(View view){
+        resetSharedPref();
         Company[] companies={
                 new Company("Apple",1,STARTING_LEVELS),
                 new Company("Strawberry",1,STARTING_LEVELS),
@@ -138,5 +140,9 @@ public class MainActivity extends AppCompatActivity {
         }else{
             Toast.makeText(getApplicationContext(),"Result is not OK",Toast.LENGTH_LONG).show();
         }
+    }
+
+    void resetSharedPref(){
+        //todo make a global sharedpref handler
     }
 }

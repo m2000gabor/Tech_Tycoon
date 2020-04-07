@@ -93,6 +93,7 @@ public class Device {
         }
         this.soldPieces=0;
     }
+
     public Device(String name,int profit,int cost,int ownerCompanyId) {
         this.name = name;
         this.profit = profit;
@@ -108,6 +109,7 @@ public class Device {
         this.cost=d.cost;
         this.ownerCompanyId=d.ownerCompanyId;
         this.soldPieces=0;
+        this.trend=d.trend;
 
         for(int i=0;i<NUMBER_OF_ATTRIBUTES;i++){
             setFieldByNum(i,d.getFieldByNum(i));
@@ -205,7 +207,10 @@ public class Device {
     public int getFieldByNum(int attrID){
         int i=-1;
         switch (attrID){
-            case -5:i=this.id;break;
+            case -8:i=this.id;break;
+            case -7:i=this.getScore_OverallPerformance();break;
+            case -6:i=this.getScore_Storage();break;
+            case -5:i=this.getScore_Body();break;
             case -4:i=this.getPrice();break;
             case -3:i=this.getOverallIncome();break;
             case -2:i=this.soldPieces;break;
@@ -249,6 +254,9 @@ public class Device {
     }
     public final int getScore_Body(){
         return design+material+color+ip+bezel;
+    }
+    public final int getScore_OverallPerformance(){
+        return getScore_Body()+getScore_Storage();
     }
 
 }

@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Locale;
 
 public class ChooseBodyActivity extends AppCompatActivity {
-    private static final int NUM_OF_ATTR=5;
     private int[] BODY_MAX_POINTS;
     TextView[] valueTextViews;
     TextView[] costTextViews;
@@ -25,6 +24,7 @@ public class ChooseBodyActivity extends AppCompatActivity {
 
     int[] levels;
     int[] result;
+    int cost=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,12 +63,11 @@ public class ChooseBodyActivity extends AppCompatActivity {
         seekbars.add(findViewById(R.id.ipSeekBar));
         seekbars.add(findViewById(R.id.bezelsSeekBar));
 
-        result=new int[NUM_OF_ATTR+1];
-        result[0]=0; //overall cost of the body
-        for (int i=0;i<NUM_OF_ATTR;i++){
+        result=new int[Device.CHILDREN_OF_BUDGETS[1]];
+        for (int i=0;i<Device.CHILDREN_OF_BUDGETS[1];i++){
             valueTextViews[i].setText(String.format(Locale.getDefault(),"%d/%d points",BODY_MAX_POINTS[i],1) );
             costTextViews[i].setText(String.format(Locale.getDefault(),"%d$",DeviceValidator.getCostOfBody(i,1)) );
-            result[i+1]=1;
+            result[i]=1;
         }
 
         //set up an onclicklistener
@@ -77,7 +76,7 @@ public class ChooseBodyActivity extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 progress++;
                 int i=seekbars.indexOf(seekBar);
-                result[i+1]=progress;
+                result[i]=progress;
                 valueTextViews[i].setText(String.format(Locale.getDefault(),"%d/%d points",BODY_MAX_POINTS[i],progress) );
                 costTextViews[i].setText(String.format(Locale.getDefault(),"%d$",DeviceValidator.getCostOfBody(i,progress)) );
             }
@@ -90,7 +89,7 @@ public class ChooseBodyActivity extends AppCompatActivity {
         };
 
         //set max and onclick listener
-        for (int i=0;i<NUM_OF_ATTR;i++){
+        for (int i=0;i<Device.CHILDREN_OF_BUDGETS[1];i++){
             seekbars.get(i).setMax(levels[i+2]-1);
             seekbars.get(i).setOnSeekBarChangeListener(mListener);
         }
@@ -99,9 +98,10 @@ public class ChooseBodyActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                for (int i=0;i<NUM_OF_ATTR;i++){result[0]+=DeviceValidator.getCostOfBody(i,result[i+1]);}
+                for (int i=0;i<Device.CHILDREN_OF_BUDGETS[1];i++){cost+=DeviceValidator.getCostOfBody(i,result[1]);}
                 Intent intent=new Intent();
                 intent.putExtra(FragmentDeviceCreator.BODY_RESULTS,result);
+                intent.putExtra("cost",cost);
                 setResult(RESULT_OK,intent);
                 finish();
             }

@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.example.techtycoon.Assistant.AssistantManager;
-import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
@@ -15,29 +14,32 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.text.Selection;
 import android.view.View;
 import android.widget.Toast;
 
 import com.example.techtycoon.ui.main.SectionsPagerAdapter;
 
+import java.nio.channels.SelectableChannel;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-public class TabbedActivity extends AppCompatActivity {
+public class TabbedActivity extends AppCompatActivity  implements ChooseADeviceDialogFragment.NoticeDialogListener {
     public static HashMap<String,Integer> NAME_newestPartOfTheSeries=new HashMap<>();
 
     DeviceViewModel deviceViewModel;
     Simulator simulator;
     AssistantManager assistantManager;
     boolean assistantTurn;
+    ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tabbed);
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
-        ViewPager viewPager = findViewById(R.id.view_pager);
+        viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
@@ -48,14 +50,14 @@ public class TabbedActivity extends AppCompatActivity {
 
         assistantManager=new AssistantManager();
         //get sharedPref
-        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-        assistantTurn=sharedPref.getBoolean("isAssistantTurn",false);
+        assistantTurn=getSharedPreferences("isAssistantTurn",MODE_PRIVATE).getBoolean("isAssistantTurn",false);
 
         FloatingActionButton fab = findViewById(R.id.fabSimulate);
         if(assistantTurn){fab.setImageResource(R.drawable.ic_account_circle_white_24dp);}
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                SharedPreferences  sharedPref =getPreferences(Context.MODE_PRIVATE);
                 if(!assistantTurn){
                 //get sharedPrefs
                 float lastAvgPrice = sharedPref.getFloat(getString(R.string.simulator_lastAvgPrice), 5);
@@ -66,21 +68,21 @@ public class TabbedActivity extends AppCompatActivity {
                 float lastAvgColors = sharedPref.getFloat(getString(R.string.simulator_lastAvgColors), 1);
                 float lastAvgIp = sharedPref.getFloat(getString(R.string.simulator_lastAvgIp), 1);
                 float lastAvgBezels = sharedPref.getFloat(getString(R.string.simulator_lastAvgBezels), 1);
-                double[] arr={(double) lastAvgDesign,(double)lastAvgMaterial,(double)lastAvgColors,(double) lastAvgIp,(double)lastAvgBezels};
+                double[] arr={(double) lastAvgRam,(double) lastAvgMemory,(double) lastAvgDesign,(double)lastAvgMaterial,(double)lastAvgColors,(double) lastAvgIp,(double)lastAvgBezels};
 
-                simulator=new Simulator(deviceViewModel,lastAvgPrice,lastAvgRam,lastAvgMemory,arr);
+                simulator=new Simulator(deviceViewModel.getAllDevicesList(),deviceViewModel.getAllCompaniesList(),lastAvgPrice,arr);
                 Wrapped_DeviceAndCompanyList simulatorResults=simulator.simulate();
                 oneMonthSimulated(simulatorResults);
 
                 SharedPreferences.Editor editor = sharedPref.edit();
                 editor.putFloat(getString(R.string.simulator_lastAvgPrice), (float) simulator.lastAvgPrice);
-                editor.putFloat(getString(R.string.simulator_lastAvgMemory),(float) simulator.lastAvgMemory);
-                editor.putFloat(getString(R.string.simulator_lastAvgRam),(float) simulator.lastAvgRam);
-                editor.putFloat(getString(R.string.simulator_lastAvgDesign),(float) simulator.averages[0]);
-                editor.putFloat(getString(R.string.simulator_lastAvgMaterial),(float) simulator.averages[1]);
-                editor.putFloat(getString(R.string.simulator_lastAvgColors),(float) simulator.averages[2]);
-                editor.putFloat(getString(R.string.simulator_lastAvgIp),(float) simulator.averages[3]);
-                editor.putFloat(getString(R.string.simulator_lastAvgBezels),(float) simulator.averages[4]);
+                editor.putFloat(getString(R.string.simulator_lastAvgMemory),(float) simulator.attrAverages[0]);
+                editor.putFloat(getString(R.string.simulator_lastAvgRam),(float) simulator.attrAverages[1]);
+                editor.putFloat(getString(R.string.simulator_lastAvgDesign),(float) simulator.attrAverages[2]);
+                editor.putFloat(getString(R.string.simulator_lastAvgMaterial),(float) simulator.attrAverages[3]);
+                editor.putFloat(getString(R.string.simulator_lastAvgColors),(float) simulator.attrAverages[4]);
+                editor.putFloat(getString(R.string.simulator_lastAvgIp),(float) simulator.attrAverages[5]);
+                editor.putFloat(getString(R.string.simulator_lastAvgBezels),(float) simulator.attrAverages[6]);
                 editor.apply();
                 fab.setImageResource(R.drawable.ic_account_circle_white_24dp);
                 //Toast.makeText(getApplicationContext(), "1 month simulated", Toast.LENGTH_SHORT).show();
@@ -119,13 +121,23 @@ public class TabbedActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK && data.getBooleanExtra("IS_DELETE",false)) {
             deviceViewModel.delOneDeviceById(data.getIntExtra("ID",-1));
             Toast.makeText(getBaseContext(), "Successful deletion", Toast.LENGTH_LONG).show();
-        }else if(resultCode == RESULT_OK && data.getBooleanExtra("isProfitChanged",false)){
-            int id=data.getIntExtra("ID",-1);
-            int profit=data.getIntExtra("profit",-1);
-            Device device=deviceViewModel.getDevice_byID(id);
-            device.profit=profit;
-            deviceViewModel.updateDevices(device);
-            Toast.makeText(getBaseContext(), "Profit is updated", Toast.LENGTH_SHORT).show();
+        }else {
+            if(resultCode == RESULT_OK && data.getBooleanExtra("isProfitChanged",false)){
+                int id=data.getIntExtra("ID",-1);
+                int profit=data.getIntExtra("profit",-1);
+                Device device=deviceViewModel.getDevice_byID(id);
+                device.profit=profit;
+                deviceViewModel.updateDevices(device);
+                Toast.makeText(getBaseContext(), "Profit is updated", Toast.LENGTH_SHORT).show();
+            }
+            if(resultCode == RESULT_OK && data.getBooleanExtra("isNameChanged",false)){
+                int id=data.getIntExtra("ID",-1);
+                String name=data.getStringExtra("name");
+                Device device=deviceViewModel.getDevice_byID(id);
+                device.name=name;
+                deviceViewModel.updateDevices(device);
+                Toast.makeText(getBaseContext(), "Name is updated", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -136,5 +148,20 @@ public class TabbedActivity extends AppCompatActivity {
         }
         deviceViewModel.updateCompanies(results.companies.toArray(new Company[0]));
         deviceViewModel.updateDevices(results.devices.toArray(new Device[0]));
+    }
+
+    //called from the chooseDeviceForCloning dialogFragment
+    @Override
+    public void selectedDeviceID(int id) {
+        FragmentDeviceCreator fragmentDeviceCreator= (FragmentDeviceCreator)
+                getSupportFragmentManager().findFragmentById(R.id.fragment_device_creator);
+
+        if (fragmentDeviceCreator != null) {
+            fragmentDeviceCreator.loadInADevice(id);
+        }else{
+            fragmentDeviceCreator= (FragmentDeviceCreator)
+                    getSupportFragmentManager().findFragmentById(R.id.fragment_my_company);
+            fragmentDeviceCreator.loadInADevice(id);
+        }
     }
 }

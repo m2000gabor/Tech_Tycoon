@@ -241,7 +241,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="Save"
-            android:layout_margin="@dimen/text_margin"/>
+            android:layout_margin="@dimen/text_margin_small"/>
 
         <Button
             android:id="@+id/exitDeviceCreator"
@@ -249,7 +249,15 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="Exit"
-            android:layout_margin="@dimen/text_margin"/>
+            android:layout_margin="@dimen/text_margin_small"/>
+
+        <Button
+            android:id="@+id/cloneButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="clone"
+            android:layout_margin="@dimen/text_margin_small"/>
 
         <Button
             android:id="@+id/insertBasic"
@@ -257,7 +265,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="Basic"
-            android:layout_margin="@dimen/text_margin"/>
+            android:layout_margin="@dimen/text_margin_small"/>
 
     </LinearLayout>
 </ScrollView>

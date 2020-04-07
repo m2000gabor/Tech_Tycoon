@@ -79,4 +79,18 @@ public class Company {
     public void setLevels_USE_THIS(int[] arr){this.levels=Converter.intArrayToString(arr);}
     public int[] getLevels_USE_THIS(){return Converter.stringToIntArray(this.levels);}
     public boolean hasFreeSlot(){ return maxSlots>usedSlots; }
+    public int getMarketValue(){
+        int r=0;
+        for(int i=0;i<getLevels_USE_THIS().length;i++){
+            for (int j = 2; j <= getLevels_USE_THIS()[i]; j++) {
+                r+=DevelopmentValidator.getOneDevelopmentCost(i,j);
+            }
+        }
+        for (int i = 2; i <= this.maxSlots; i++) {
+            r+=DevelopmentValidator.nextSlotCost(i);
+        }
+        r*=0.8;
+        r+=lastProfit*10;
+        return r;
+    }
 }

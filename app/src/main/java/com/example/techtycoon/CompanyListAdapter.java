@@ -18,12 +18,14 @@ public class CompanyListAdapter extends RecyclerView.Adapter<CompanyListAdapter.
         private final TextView companyNameItemView;
         private final TextView companylastProfitItemView;
         private final TextView companyMoneyItemView;
+        private final TextView companyValueItemView;
 
         private CompanyViewHolder(View itemView) {
             super(itemView);
             companyNameItemView = itemView.findViewById(R.id.companyNameTextView);
             companylastProfitItemView = itemView.findViewById(R.id.companyLastlySoldTextView);
             companyMoneyItemView = itemView.findViewById(R.id.companysMoneyTextView);
+            companyValueItemView = itemView.findViewById(R.id.companysMarketValueTextView);
         }
     }
 
@@ -54,6 +56,7 @@ public class CompanyListAdapter extends RecyclerView.Adapter<CompanyListAdapter.
             holder.companyNameItemView.setText(current.getCompanyName());
             holder.companylastProfitItemView.setText(String.format(Locale.getDefault(),"Last profit: %d$",current.lastProfit));
             holder.companyMoneyItemView.setText(String.format(Locale.getDefault(),"%d$",current.money));
+            holder.companyValueItemView.setText(String.format(Locale.getDefault(),"Value: %,d$",current.getMarketValue()));
         } else {
             // Covers the case of data not being ready yet.
             holder.companyNameItemView.setText("Unknown");

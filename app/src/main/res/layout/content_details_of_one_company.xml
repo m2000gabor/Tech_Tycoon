@@ -31,6 +31,14 @@
             android:text="Money" />
 
         <TextView
+            android:id="@+id/marketValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="22sp"
+            android:layout_margin="10sp"
+            android:text="MarketValue" />
+
+        <TextView
             android:id="@+id/companyId"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

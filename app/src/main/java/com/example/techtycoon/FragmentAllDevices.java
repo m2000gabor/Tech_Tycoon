@@ -130,7 +130,8 @@ public class FragmentAllDevices extends Fragment {
             //Getting the instance of Spinner and applying OnItemSelectedListener on it
             this.spin =sp;
             spin.setOnItemSelectedListener(this);
-            String[] sortingOptions = {"SortBy","Name","ID","Price","Overall income","Sold pieces","Profit per item","Ram", "Memory"};
+            String[] sortingOptions = {"SortBy","Name","ID","Performance","Storage","Body","Price","Income","Sold pieces","Profit per item",
+                    "Ram", "Memory","Design","Material","Color","IP","Bezels"};
 
             //Creating the ArrayAdapter instance having the nameOfCompanies list
             ArrayAdapter aa = new ArrayAdapter(getContext(),android.R.layout.simple_spinner_item,sortingOptions );
@@ -145,7 +146,7 @@ public class FragmentAllDevices extends Fragment {
             if(position==0 || position==1){
                 deviceViewModel.orderDevices_ByCode2(-100,isDesc);
             }else{
-                deviceViewModel.orderDevices_ByCode2(position-7,isDesc);}
+                deviceViewModel.orderDevices_ByCode2(position-10,isDesc);}
         }
         @Override
         public void onNothingSelected(AdapterView<?> arg0) {

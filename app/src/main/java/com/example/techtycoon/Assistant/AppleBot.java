@@ -3,7 +3,6 @@ package com.example.techtycoon.Assistant;
 import android.util.Pair;
 
 import com.example.techtycoon.Company;
-import com.example.techtycoon.DetailsOfOneCompany;
 import com.example.techtycoon.DevelopmentValidator;
 import com.example.techtycoon.Device;
 import com.example.techtycoon.DeviceValidator;
@@ -17,8 +16,25 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class AppleBot extends AbstractAssistant{
+    final int goodPointImportance;
+    final int newSlotImportance;
+    final int badThingImportance;
+    final int[] marketingImportance;
 
-    AppleBot() { }
+    AppleBot() {
+        goodPointImportance=5;
+        newSlotImportance=10;
+        badThingImportance=6;
+        marketingImportance=new int[]{10,6,4,3,1};
+    }
+
+    AppleBot(int goodPointImportance,int newSlotImportance,int badThingImportance,int[] marketingImportance){
+        this.goodPointImportance=goodPointImportance;
+        this.newSlotImportance=newSlotImportance;
+        this.badThingImportance=badThingImportance;
+        this.marketingImportance=marketingImportance.clone();
+    }
+
 
      Wrapped_DeviceAndCompanyList work(List<Company> companyList, List<Device> deviceList, List<Device> myDevices, Company myCompany, Wrapped_DeviceAndCompanyList ret){
         /*
@@ -157,8 +173,8 @@ public class AppleBot extends AbstractAssistant{
             switch (getRegion(Arrays.stream(sumOfLevels).boxed().collect(Collectors.toList()), maxSum)) {
                 case 1:
                 case 2:
-                    //place a popular device promoting our unique feature
-                    //find and copy a popular dev and add our feature,
+                    //release a popular device promoting our unique feature
+                    //find and copy a popular dev and add our unique feature,
                     // cut the prices if the companyContext is 1
                     int i=0;
                     //sort by popularity
@@ -170,7 +186,7 @@ public class AppleBot extends AbstractAssistant{
                         myCompany.logs = myCompany.logs+"A popular device named"+deviceList.get(i).name+" is copied\n";
                         //cut price if company context is 1
                         if(companyContext==1){newD.profit*=0.8;
-                            myCompany.logs = myCompany.logs+"The company's position is bad so copied device's profit is cut\n";}
+                            myCompany.logs = myCompany.logs+"The company's position is bad so the profit of copied device is cut\n";}
                         //set our big feature(s)
                         //whats that?
                         newD.setFieldByNum(bestAttrIds.get(0).first,myCompany.getLevels_USE_THIS()[bestAttrIds.get(0).first]);
@@ -237,7 +253,7 @@ public class AppleBot extends AbstractAssistant{
 
 
     private int findLongTermGoal(List<Company> companyList,Company myCompany){
-        //longtermGoals to choose from:
+        //long term goals to choose from:
         /* goal:
         -2: make more devices = buy new slot
         -1: become marketing giant
@@ -254,9 +270,11 @@ public class AppleBot extends AbstractAssistant{
         int costOfTheGoal=0;
         //are we the best in something?
         int[] myLevels=myCompany.getLevels_USE_THIS();
+
         int[] better=new int[myLevels.length];//then me
         int[] same=new int[myLevels.length];
         int[] worse=new int[myLevels.length];//then me
+        //attrId,difference
         for (int i=0;i<companyList.size();i++) {
             int[] others=companyList.get(i).getLevels_USE_THIS();
             for (int j=0;j<others.length;j++) {
@@ -283,8 +301,9 @@ public class AppleBot extends AbstractAssistant{
             //choose the cheapest one
             int minAttrId=-1;
             int i=uniqueStrengths;
-            while(DevelopmentValidator.getOneDevelopmentCost(interestingAttrs.get(i),myCompany.getLevels_USE_THIS()[interestingAttrs.get(i)]) ==-1 &&
-                    i<goodPoints){i++;}
+            while(i<goodPoints &&
+                    DevelopmentValidator.getOneDevelopmentCost(interestingAttrs.get(i),myCompany.getLevels_USE_THIS()[interestingAttrs.get(i)]) ==-1){
+                i++;}
             if(i!=goodPoints){minAttrId=interestingAttrs.get(i);}
             for(i++;i<goodPoints;i++){
                 if(DevelopmentValidator.getOneDevelopmentCost(minAttrId,myCompany.getLevels_USE_THIS()[minAttrId])>
@@ -296,7 +315,7 @@ public class AppleBot extends AbstractAssistant{
             if(minAttrId!=-1){
                 goal=minAttrId;
                 costOfTheGoal=DevelopmentValidator.getOneDevelopmentCost(goal,myCompany.getLevels_USE_THIS()[minAttrId]);
-                importance=5;
+                importance=goodPointImportance;
             }
         }
 
@@ -307,13 +326,13 @@ public class AppleBot extends AbstractAssistant{
             int minAttrId=interestingAttrs.get(i);
             for(i++;i<badThings;i++){
                 if(DevelopmentValidator.getOneDevelopmentCost(minAttrId,myCompany.getLevels_USE_THIS()[minAttrId])>
-                        DevelopmentValidator.getOneDevelopmentCost(interestingAttrs.get(i),myCompany.getLevels_USE_THIS()[interestingAttrs.get(i)]) ){
+                        DevelopmentValidator.getOneDevelopmentCost(interestingAttrs.get(i),myCompany.getLevels_USE_THIS()[interestingAttrs.get(i)])){
                     minAttrId=interestingAttrs.get(i);
                 }
             }
             goal=minAttrId;
             costOfTheGoal=DevelopmentValidator.getOneDevelopmentCost(goal,myCompany.getLevels_USE_THIS()[minAttrId]);
-            importance=6;
+            importance=badThingImportance;
         }
 
         //marketing
@@ -321,27 +340,26 @@ public class AppleBot extends AbstractAssistant{
         for (Company c :companyList) {
             marketings.add(c.marketing);
         }
-        if(badThings==0 && getRegion(marketings,myCompany.marketing)<4){
-            if(importance<2*(5-getRegion(marketings,myCompany.marketing)) ) {
-                goal = -1;
-                costOfTheGoal=0;
-                int wouldBeMarketing=myCompany.marketing;
-                while (getRegion(marketings,wouldBeMarketing)<4){
-                    costOfTheGoal+=DevelopmentValidator.calculateMarketingCost(wouldBeMarketing);
-                    wouldBeMarketing+=10;
-                }
-                importance=2*(5-getRegion(marketings,myCompany.marketing));
+
+        if(importance<=marketingImportance[getRegion(marketings,myCompany.marketing)-1]) {
+            goal = -1;
+            costOfTheGoal=0;
+            int wouldBeMarketing=myCompany.marketing;
+            while (getRegion(marketings,wouldBeMarketing)<4){
+                costOfTheGoal+=DevelopmentValidator.calculateMarketingCost(wouldBeMarketing);
+                wouldBeMarketing+=10;
             }
+            importance=2*(5-getRegion(marketings,myCompany.marketing));
         }
+
 
 
         ///TODO Functional way: List<Integer> maxSlotFieldOfCompanies = companyList.stream().map( company -> company.maxSlots).collect(Collectors.toList());
         //newSlot
         if(DevelopmentValidator.nextSlotCost(myCompany.maxSlots) !=-1){
-            final int newSlotImportance=5;
             double timeToBuyANewSlot=DevelopmentValidator.nextSlotCost(myCompany.maxSlots)/(double)myCompany.lastProfit;
             double timeToReachTheGoal=costOfTheGoal/(double) myCompany.lastProfit;
-            if((importance/timeToReachTheGoal)<(2*newSlotImportance/timeToBuyANewSlot)){
+            if((importance/timeToReachTheGoal)<(newSlotImportance/timeToBuyANewSlot)){
                 goal=-2;
                 costOfTheGoal=DevelopmentValidator.nextSlotCost(myCompany.maxSlots);
                 importance=newSlotImportance;
@@ -360,13 +378,12 @@ public class AppleBot extends AbstractAssistant{
         return sumOfLevels;
     }
 
-    private boolean producibleByTheCompany(Company c, Device d){
-        boolean isProduceable=true;
+    public static boolean producibleByTheCompany(Company c, Device d){
         int[] cLevels=c.getLevels_USE_THIS();
-        for (int i=0;i<cLevels.length && isProduceable;i++){
-            isProduceable=cLevels[i]>=d.getFieldByNum(i);
+        for (int i=0;i<cLevels.length;i++){
+            if(cLevels[i]<d.getFieldByNum(i)){return false;}
         }
-        return isProduceable;
+        return true;
     }
 
 }

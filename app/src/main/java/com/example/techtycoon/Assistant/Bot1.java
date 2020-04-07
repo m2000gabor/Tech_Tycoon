@@ -43,6 +43,7 @@ public class Bot1 extends AbstractAssistant{
         //get the importanceScore of the newSlot
         double newSlotContext=10-myCompany.usedSlots;
         double newSlotScore = newSlotImp * newSlotContext / DevelopmentValidator.nextSlotCost(myCompany.maxSlots);
+        if( DevelopmentValidator.nextSlotCost(myCompany.maxSlots) ==-1){newSlotScore=0;}
         pairs.add(new Pair<>(-2,newSlotScore));
 
         //get the marketing's context for the importance score
@@ -60,18 +61,16 @@ public class Bot1 extends AbstractAssistant{
         pairs.add(new Pair<>(-1,marketingScore));
 
         for (int i = 0; i < Device.NUMBER_OF_ATTRIBUTES; i++) {
-                    /*double context = Math.min(Math.abs(
-                            avg(deviceList.toArray(new Device[0]), i) - avg(myDevices.toArray(new Device[0]), i)) /
-                            (avg(deviceList.toArray(new Device[0]), i) * 10), 10);*/
             LinkedList<Integer> list=new LinkedList<Integer>();
             for(Device d:deviceList){list.add(d.getFieldByNum(i));}
             double context=2*getRegion(list,myCompany.getLevels_USE_THIS()[i]);
-            double score = devImportance[i] * context / DevelopmentValidator.getOneDevelopmentCost(i,
-                    myCompany.getLevels_USE_THIS()[i]);
+            double score;
+            if( DevelopmentValidator.getOneDevelopmentCost(i,myCompany.getLevels_USE_THIS()[i])== -1){score=0;
+            }else{score = devImportance[i] * context / DevelopmentValidator.getOneDevelopmentCost(i,
+                    myCompany.getLevels_USE_THIS()[i]);}
             pairs.add(new Pair<>(i,score));
         }
         //most important is at the 0 index
-        //Arrays.sort(importanceScores,Collections.reverseOrder());
         Collections.sort(pairs, new Comparator<Pair<Integer,Double>>() {
             @Override
             public int compare(Pair<Integer,Double> o1, Pair<Integer,Double> o2) {
@@ -94,7 +93,9 @@ public class Bot1 extends AbstractAssistant{
             } else if (key == -2) {
                 myCompany.logs=myCompany.logs+"Trying to buy a new slot...\n";
                 //new slot is the highest priority
-                if (myCompany.money >= DevelopmentValidator.nextSlotCost(myCompany.maxSlots)) {
+                if (myCompany.money >= DevelopmentValidator.nextSlotCost(myCompany.maxSlots) &&
+                        DevelopmentValidator.nextSlotCost(myCompany.maxSlots) !=-1
+                ) {
                     myCompany.money -= DevelopmentValidator.nextSlotCost(myCompany.maxSlots);
                     myCompany.maxSlots += 1;
                     myCompany.logs=myCompany.logs+"Assistant bought a new slot!\n";
@@ -104,7 +105,9 @@ public class Bot1 extends AbstractAssistant{
                 myCompany.logs=myCompany.logs+"Trying to improve the "+key+". attribute...\n";
                 //an attribute dev is the highest priority
                 if (myCompany.money >= DevelopmentValidator.getOneDevelopmentCost(key,
-                        myCompany.getLevels_USE_THIS()[key])) {
+                        myCompany.getLevels_USE_THIS()[key]) &&
+                        DevelopmentValidator.getOneDevelopmentCost(key,myCompany.getLevels_USE_THIS()[key]) !=-1
+                ) {
                     int[] lvls = myCompany.getLevels_USE_THIS();
                     myCompany.money -= DevelopmentValidator.getOneDevelopmentCost(key,
                             myCompany.getLevels_USE_THIS()[key]);

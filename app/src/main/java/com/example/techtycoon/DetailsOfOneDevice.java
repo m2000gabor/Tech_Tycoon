@@ -17,6 +17,8 @@ public class DetailsOfOneDevice extends AppCompatActivity {
     int id;
     int companyId;
     int profit;
+    String name;
+    Intent replyIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +42,7 @@ public class DetailsOfOneDevice extends AppCompatActivity {
 
         //get data from previous activity
         Intent intent = getIntent();
-        String nev = intent.getStringExtra(MainActivity.NAME_FIELD);
+        name = intent.getStringExtra(MainActivity.NAME_FIELD);
         profit=intent.getIntExtra(MainActivity.MAIN_MONETARILY_INFO,0);
         companyId=intent.getIntExtra(MainActivity.DEVICE_COMPANY_ID,0);
         int price=intent.getIntExtra(MainActivity.DEVICE_PRICE,0);
@@ -50,7 +52,7 @@ public class DetailsOfOneDevice extends AppCompatActivity {
         id=intent.getIntExtra("ID",-1);
 
         //display data
-        nevTextV.setText("Nev: "+nev);
+        nevTextV.setText("Name: "+name);
         priceTextV.setText(String.format(Locale.getDefault(),"Price: %d$",price));
         profitTextV.setText(String.format(Locale.getDefault(),"Profit: %d$",profit));
         deviceIDTextV.setText(String.format(Locale.getDefault(),"Device ID: %d",id));
@@ -62,6 +64,8 @@ public class DetailsOfOneDevice extends AppCompatActivity {
 
         setResult(RESULT_OK,new Intent().putExtra(MainActivity.TASK_OF_RECYCLER_VIEW,MainActivity.DISPLAY_DEVICES_REQUEST_CODE));
 
+        //init intent
+        replyIntent=new Intent();
     }
 
     public void delThisOne(View view) {
@@ -89,7 +93,6 @@ public class DetailsOfOneDevice extends AppCompatActivity {
             ((Button) v).setText("Edit");
 
             //make a replyIntent
-            Intent replyIntent=new Intent();
             replyIntent.putExtra("isProfitChanged", true);
             replyIntent.putExtra("ID", id);
             replyIntent.putExtra("profit", profit);
@@ -97,4 +100,27 @@ public class DetailsOfOneDevice extends AppCompatActivity {
         }
     }
 
+    public void editName(View v){
+        TextView textView=findViewById(R.id.name);
+        if(textView.getVisibility()==View.VISIBLE) {
+            EditText editText = findViewById(R.id.nameEditable);
+            textView.setVisibility(View.GONE);
+            editText.setText(name);
+            editText.setVisibility(View.VISIBLE);
+            ((Button) v).setText("Save");
+        }else{
+            EditText editText = findViewById(R.id.nameEditable);
+            name = editText.getText().toString();
+            editText.setVisibility(View.GONE);
+            textView.setText(String.format(Locale.getDefault(),"Name: %s",name));
+            textView.setVisibility(View.VISIBLE);
+            ((Button) v).setText("Edit");
+
+            //make a replyIntent
+            replyIntent.putExtra("isNameChanged", true);
+            replyIntent.putExtra("ID", id);
+            replyIntent.putExtra("name", name);
+            setResult(RESULT_OK, replyIntent);
+        }
+    }
 }

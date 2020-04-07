@@ -2,6 +2,7 @@ package com.example.techtycoon;
 
 //primary source for assistant, should be used in fragments too
 public class DeviceValidator {
+    //TODO real dynamic costs
     private static final double[] MEMORY_COSTS={2,4};
     private static final int[] BODY_COSTS={5,3,1,2,3};
 
@@ -29,11 +30,11 @@ public class DeviceValidator {
     }
 
     static double getCostOfMemory(int j,int value){
-        return value * MEMORY_COSTS[j];
+        return value * MEMORY_COSTS[j]*2;
     }
 
     static int getCostOfBody(int index,int value){
-        int cost=0;
+        double cost=0;
         switch(index) {
             //design,material,color,ip,bezel
             case 0:
@@ -41,10 +42,10 @@ public class DeviceValidator {
             case 2:
             case 3:
             case 4:
-                cost =BODY_COSTS[index]*value;
+                cost =BODY_COSTS[index]*value*1.5;
                 break;
         }
-        return cost;
+        return (int) cost;
     }
 
     public static int getOverallCost(Device device){

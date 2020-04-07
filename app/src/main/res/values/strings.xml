@@ -11,14 +11,14 @@
     <string name="title_activity_device_creator">DeviceCreator</string>
     <string name="title_activity_choose_memory">ChooseMemoryActivity</string>
 
-    <string name="simulator_lastAvgPrice">LastAvgPrice</string>
-    <string name="simulator_lastAvgMemory">LastAvgMemory</string>
-    <string name="simulator_lastAvgRam">LastAvgRam</string>
-    <string name="simulator_lastAvgDesign">simulator_lastAvgDesign</string>
-    <string name="simulator_lastAvgMaterial">simulator_lastAvgMaterial</string>
-    <string name="simulator_lastAvgColors">simulator_lastAvgColors</string>
-    <string name="simulator_lastAvgIp">simulator_lastAvgIp</string>
-    <string name="simulator_lastAvgBezels">simulator_lastAvgBezels</string>
+    <string name="simulator_lastAvgPrice">Last Average Price</string>
+    <string name="simulator_lastAvgMemory">Last Average Memory</string>
+    <string name="simulator_lastAvgRam">Last Average Ram</string>
+    <string name="simulator_lastAvgDesign">Last Average Design</string>
+    <string name="simulator_lastAvgMaterial">Last Average Material</string>
+    <string name="simulator_lastAvgColors">Last Average Colors</string>
+    <string name="simulator_lastAvgIp">Last Average Ip</string>
+    <string name="simulator_lastAvgBezels">Last Average Bezels</string>
 
     <string name="title_activity_all_companies">allCompanies</string>
     <string name="title_activity_tabbed">TabbedActivity</string>

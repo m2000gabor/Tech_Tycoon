@@ -87,10 +87,10 @@
         android:layout_margin="@dimen/text_margin_small"/>
 
         <Switch
-            android:id="@+id/general3AssistantSwitch"
+            android:id="@+id/appleBot2Switch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Inventor"
+            android:text="Apple bot 2"
             android:textSize="@dimen/text_size_small"
             android:layout_margin="@dimen/text_margin_small"/>
 

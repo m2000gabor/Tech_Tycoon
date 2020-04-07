@@ -50,9 +50,6 @@ public class FragmentMyCompany extends Fragment {
     private TextView marketingTextView;
     private TextView slotsTextView;
 
-    @Nullable
-    Company playerCompany;
-
     public FragmentMyCompany() {}
 
     /**
@@ -61,7 +58,6 @@ public class FragmentMyCompany extends Fragment {
      *
      * @return A new instance of fragment FragmentMyCompany.
      */
-    // TODO: Rename and change types and number of parameters
     public static FragmentMyCompany newInstance() {
         FragmentMyCompany fragment = new FragmentMyCompany();
         Bundle args = new Bundle();
@@ -232,7 +228,6 @@ public class FragmentMyCompany extends Fragment {
                 @Override
                 public void onChanged(@Nullable final Company c) {
                     myCompany=c;
-                    playerCompany=myCompany;
                     nameOfMyCompanyTextView.setText(c.name);
                     profitTextView.setText(String.format(Locale.getDefault(),"%d$",c.lastProfit));
                     String cashFlowPos=String.valueOf(c.marketPosition);

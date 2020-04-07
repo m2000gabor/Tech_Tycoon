@@ -59,7 +59,7 @@ public class AssistantManager {
                         aa=new RandomBot();
                         break;
                     case 5:
-                        aa=new CoAssistant_inventor();
+                        aa=new AppleBot2();
                         break;
                     case 6:
                         aa= new Bot1();

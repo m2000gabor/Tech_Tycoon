@@ -1,7 +1,6 @@
 package com.example.techtycoon.Assistant;
 
 import com.example.techtycoon.Company;
-import com.example.techtycoon.DetailsOfOneCompany;
 import com.example.techtycoon.DevelopmentValidator;
 import com.example.techtycoon.Device;
 import com.example.techtycoon.Wrapped_DeviceAndCompanyList;
@@ -91,10 +90,19 @@ public abstract class AbstractAssistant {
     //tools
     static class nameBuilder {
         static String buildName(String prevName, int nameConvention) {
-            String r = prevName.concat("+");
+            String r;
             switch (nameConvention) {
+                default:r = prevName.concat("+");break;
                 case 1:
                     String series = prevName.split("[0-9]", 2)[0];
+                    //remove + which is not part of the series name
+                    boolean foundAPlusSign=false;
+                    while(series.charAt(series.length()-1) == '+'){
+                        foundAPlusSign=true;
+                        series=series.substring(0,series.length()-1);
+                    }
+                    if(foundAPlusSign){series=series+" ";}
+                    //find the series name in the table
                     if (NAME_newestPartOfTheSeries.containsKey(series)) {
                         Integer num = NAME_newestPartOfTheSeries.get(series);
                         num++;
@@ -104,12 +112,14 @@ public abstract class AbstractAssistant {
                         r = series.concat(" 2");
                         NAME_newestPartOfTheSeries.put(series + " ", 2);
                     }
+                    break;
             }
             return r;
         }
     }
 
-    /*return the $param myCompany 's position
+    /**
+     * return the $param myCompany 's position
      *  1 - lowest income
      *  2 - lower then the avg
      *  3 - avg (nearly never)

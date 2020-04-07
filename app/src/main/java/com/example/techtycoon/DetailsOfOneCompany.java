@@ -25,6 +25,7 @@ public class DetailsOfOneCompany extends AppCompatActivity {
 
     //views
     TextView moneyTextV;
+    TextView marketValueTextV;
     TextView levelsTextV;
     TextView marketingTextV;
     TextView slotsTextV;
@@ -44,6 +45,7 @@ public class DetailsOfOneCompany extends AppCompatActivity {
         //find views
         TextView nevTextV =findViewById(R.id.name);
         moneyTextV =findViewById(R.id.money);
+        marketValueTextV =findViewById(R.id.marketValue);
         TextView companyIDTextV =findViewById(R.id.companyId);
         levelsTextV=findViewById(R.id.levels);
         marketingTextV=findViewById(R.id.marketingTextV);
@@ -130,9 +132,10 @@ public class DetailsOfOneCompany extends AppCompatActivity {
 
     void updateCompany(boolean updateTheDatabase){
         if(updateTheDatabase){deviceViewModel.updateCompanies(company);};
-        moneyTextV.setText(String.format(Locale.getDefault(),"Money: %d",company.money));
+        moneyTextV.setText(String.format(Locale.getDefault(),"Money: %d$",company.money));
+        marketValueTextV.setText(String.format(Locale.getDefault(),"Market value: %,d$",company.getMarketValue()));
         marketingTextV.setText(String.format(Locale.getDefault(),"Marketing: %d",company.marketing));
-        slotsTextV.setText(String.format(Locale.getDefault(),"Slots: %d/%d",company.maxSlots,company.usedSlots));
+        slotsTextV.setText(String.format(Locale.getDefault(),"Max slots: %d, Used slots: %d",company.maxSlots,company.usedSlots));
         logsTextV.setText(company.logs);
         levelsTextV.setText(Converter.intArrayToString(company.getLevels_USE_THIS()));
         if(DevelopmentValidator.nextSlotCost(company.maxSlots)!=-1){

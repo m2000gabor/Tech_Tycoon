@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".GeneralStatsActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
+
+        <TextView
+            android:id="@+id/lastAvgPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/text_margin"
+            android:text="lastAvgPrice"
+            android:textSize="@dimen/text_size" />
+
+        <TextView
+            android:id="@+id/lastAvgMemory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/text_margin"
+            android:text="lastAvgMemory"
+            android:textSize="@dimen/text_size" />
+
+        <TextView
+            android:id="@+id/lastAvgRam"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/text_margin"
+            android:text="lastAvgRam"
+            android:textSize="@dimen/text_size" />
+
+        <TextView
+            android:id="@+id/lastAvgDesign"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/text_margin"
+            android:text="lastAvgDesign"
+            android:textSize="@dimen/text_size" />
+
+        <TextView
+            android:id="@+id/lastAvgMaterial"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/text_margin"
+            android:text="lastAvgMaterial"
+            android:textSize="@dimen/text_size" />
+
+        <TextView
+            android:id="@+id/lastAvgColors"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/text_margin"
+            android:text="lastAvgColors"
+            android:textSize="@dimen/text_size" />
+
+        <TextView
+            android:id="@+id/lastAvgIp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/text_margin"
+            android:text="lastAvgIp"
+            android:textSize="@dimen/text_size" />
+
+        <TextView
+            android:id="@+id/lastAvgBezels"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/text_margin"
+            android:text="lastAvgBezels"
+            android:textSize="@dimen/text_size" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

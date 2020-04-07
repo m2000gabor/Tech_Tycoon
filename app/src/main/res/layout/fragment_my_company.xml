@@ -254,26 +254,30 @@
                     android:background="@color/colorSecondary"
                     android:layout_margin="5dp" />
 
-                <Button
-                    android:id="@+id/startDevelopmentActivity"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:text="Development"
-                    app:layout_constraintBottom_toTopOf="@+id/startDeviceCreator"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    android:orientation="horizontal">
 
-                <Button
-                    android:id="@+id/startDeviceCreator"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:text="Create a device"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    />
+                    <Button
+                        android:layout_marginStart="@dimen/text_margin_small"
+                        android:id="@+id/startDevelopmentActivity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Development" />
+
+                    <Button
+                        android:id="@+id/startDeviceCreator"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/text_margin_small"
+                        android:layout_weight="1"
+                        android:text="Create a device"
+                        />
+
+                </LinearLayout>
+
 
                 <View
                     android:layout_width="match_parent"
@@ -287,10 +291,6 @@
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/text_size"
                     android:text="My devices:" />
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:paddingEnd="@dimen/text_size_small"
@@ -339,15 +339,17 @@
                         android:id="@+id/myDevicesRecyclerView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/text_margin_small"
                         android:background="@drawable/my_border"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+                        app:layout_constraintVertical_bias="1.0"
                         tools:itemCount="8"
-                        android:layout_marginBottom="@dimen/text_size"
                         tools:listitem="@layout/recyclerview_item_small_device" />
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 

@@ -3,10 +3,10 @@ package com.example.techtycoon;
 import static java.lang.Integer.max;
 
 public class DevelopmentValidator {
-    private final static int[] SLOT_COSTS={50000,100000,150000,200000,250000,300000,350000,400000,500000,750000,1000000};
-    private final static int[][] DEV_COSTS = {
+    private final static int[] SLOT_COSTS={100000,150000,200000,250000,300000,350000,400000,500000,750000,1000000};
+    private final static int[][] DEVELOPMENT_COSTS = {
             /*ram*/{100000, 200000, 300000, 500000, 750000, 1000000, 3000000},
-            /*memory*/{100000, 200000, 250000, 400000, 600000, 800000, 1000000, 1300000, 1500000, 2500000},
+            /*memory*/{100000, 200000, 250000, 400000, 600000, 800000, 1000000, 1300000, 1500000},
             /*design*/{100000, 150000, 200000, 250000, 500000, 750000, 100000, 150000, 2000000},
             /*material*/{20000, 50000, 100000, 150000, 200000, 300000, 500000, 1000000, 1500000},
             /*colors*/{50000, 75000, 100000, 150000, 200000, 250000, 300000},
@@ -21,9 +21,9 @@ public class DevelopmentValidator {
     * lowest level is 1
      */
     public static int getOneDevelopmentCost(int attrID,int actualLvl){
-        if( DEV_COSTS[attrID].length <= actualLvl-1){
+        if( DEVELOPMENT_COSTS[attrID].length <= actualLvl-1){
             return -1;
-        }else{return DEV_COSTS[attrID][actualLvl-1];}
+        }else{return DEVELOPMENT_COSTS[attrID][actualLvl-1];}
     }
 
     /*
@@ -39,7 +39,7 @@ public class DevelopmentValidator {
     }
 
     public static int getMaxLevel(int attrID){
-        return DEV_COSTS[attrID].length;
+        return DEVELOPMENT_COSTS[attrID].length;
     }
 
     /*

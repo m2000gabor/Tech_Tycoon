@@ -1,11 +1,13 @@
 package com.example.techtycoon;
 
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -22,6 +24,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.techtycoon.Assistant.AppleBot;
+
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
@@ -35,7 +40,9 @@ public class FragmentDeviceCreator extends Fragment {
     private static final int CHOOSE_BODY_REQUEST = 2;
     static final String BODY_RESULTS="bodyRes";
     private int ram;
+    private int ramMaxLevel;
     private int memory;
+    private int memoryMaxLevel;
     private int[] bodyResults;
     private int[] costs;
 
@@ -56,7 +63,6 @@ public class FragmentDeviceCreator extends Fragment {
     private TextView chosenIp;
     private TextView chosenBezel;
     private ImageView isSetBodyImage;
-
 
     private List<Company> companies;
     private DeviceViewModel deviceViewModel;
@@ -116,8 +122,16 @@ public class FragmentDeviceCreator extends Fragment {
         });
 
         //set up exit button
-        //root.findViewById(R.id.resetDeviceCreator).setOnClickListener(v -> reset(true));
         root.findViewById(R.id.exitDeviceCreator).setOnClickListener(v -> getActivity().getSupportFragmentManager().popBackStack());
+
+        //set up clone button
+        root.findViewById(R.id.cloneButton).setOnClickListener(v->{
+            if(isCompanySet && myCompanysIndex!=-1){
+                showAlertDialog();
+            }else{
+                Toast.makeText(getContext(), "Set a company", Toast.LENGTH_LONG).show();
+            }
+        });
 
         //setUp insertBasicButton
         root.findViewById(R.id.insertBasic).setOnClickListener(new View.OnClickListener() {
@@ -143,14 +157,14 @@ public class FragmentDeviceCreator extends Fragment {
         });
 
         //start memorychooser
-        RelativeLayout startMemoryChooserRelativelayout = root.findViewById(R.id.startMemoryChooserRelativeLayout);
-        startMemoryChooserRelativelayout.setOnClickListener(new View.OnClickListener() {
+        RelativeLayout startMemoryChooserRelativeLayout = root.findViewById(R.id.startMemoryChooserRelativeLayout);
+        startMemoryChooserRelativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(isCompanySet){
                     Intent chooseMemory = new Intent(getContext(),ChooseMemoryActivity.class);
-                    chooseMemory.putExtra(MainActivity.RAM_LVL,ram);
-                    chooseMemory.putExtra(MainActivity.MEMORY_LVL,memory);
+                    chooseMemory.putExtra(MainActivity.RAM_LVL,ramMaxLevel);
+                    chooseMemory.putExtra(MainActivity.MEMORY_LVL,memoryMaxLevel);
                     startActivityForResult(chooseMemory,CHOOSE_MEMORY_REQUEST);
                 }else {
                     Toast.makeText(getContext(),"Choose a manufacturer",Toast.LENGTH_SHORT).show();
@@ -159,8 +173,8 @@ public class FragmentDeviceCreator extends Fragment {
         });
 
         //setUp bodyChooser
-        RelativeLayout startBodyChooserRelativelayout = root.findViewById(R.id.startBodyChooserRelativeLayout);
-        startBodyChooserRelativelayout.setOnClickListener(new View.OnClickListener() {
+        RelativeLayout startBodyChooserRelativeLayout = root.findViewById(R.id.startBodyChooserRelativeLayout);
+        startBodyChooserRelativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(isCompanySet){
@@ -174,7 +188,7 @@ public class FragmentDeviceCreator extends Fragment {
         });
 
         new MySpinnerAdapter(spin);
-        if(myCompanysIndex!=-1){spin.setSelection(myCompanysIndex);}
+        if(myCompanysIndex!=-1){spin.setSelection(myCompanysIndex+1);}
 
         // Inflate the layout for this fragment
         return root;
@@ -192,7 +206,7 @@ public class FragmentDeviceCreator extends Fragment {
             Device device=new Device(deviceName,profit,0,maker.companyId,null);
             device.setFieldByNum(0,ram);
             device.setFieldByNum(1,memory);
-            device.setBodyParams(bodyResults[1],bodyResults[2],bodyResults[3],bodyResults[4],bodyResults[5]);
+            device.setBodyParams(bodyResults[0],bodyResults[1],bodyResults[2],bodyResults[3],bodyResults[4]);
             device.cost=DeviceValidator.getOverallCost(device);
             deviceViewModel.insertDevice(device);
             deviceViewModel.updateCompanies(maker);
@@ -207,33 +221,13 @@ public class FragmentDeviceCreator extends Fragment {
         if (resultCode == RESULT_OK){
             switch (requestCode){
                 case CHOOSE_MEMORY_REQUEST:
-                    ram=data.getIntExtra("amountOfRam",1);
-                    memory=data.getIntExtra("amountOfMemory",1);
-                    costs[0]=data.getIntExtra("costs",99);
-                    currentCostField.setText(String.format(Locale.getDefault(),"The current cost is %d$", getOverallCost()));
-                    isMemorySet = true;
-                    isSetMemoryImage.setImageDrawable(getActivity().getDrawable(R.drawable.ic_check_green_24dp));
-                    chosenMem.setText(String.format(Locale.getDefault(),"Memory: %dGB", (int) Math.round(Math.pow(2,memory)) ));
-                    chosenRam.setText(String.format(Locale.getDefault(),"Ram: %dGB", (int) Math.round(Math.pow(2,ram))));
-                    chosenMem.setVisibility(View.VISIBLE);
-                    chosenRam.setVisibility(View.VISIBLE);
+                    int r=data.getIntExtra("amountOfRam",1);
+                    int m=data.getIntExtra("amountOfMemory",1);
+                    int c=data.getIntExtra("cost",99);
+                    setupStorage(r,m,c);
                     break;
                 case CHOOSE_BODY_REQUEST:
-                    bodyResults=data.getIntArrayExtra(BODY_RESULTS);
-                    costs[1]=bodyResults[0];
-                    currentCostField.setText(String.format(Locale.getDefault(),"The current cost is %d$", getOverallCost()));
-                    isBodySet=true;
-                    isSetBodyImage.setImageDrawable(getActivity().getDrawable(R.drawable.ic_check_green_24dp));
-                    chosenDesign.setText(String.format(Locale.getDefault(),"Design: %dp", bodyResults[1]));
-                    chosenMaterial.setText(String.format(Locale.getDefault(),"Material: %dp", bodyResults[2]));
-                    chosenColors.setText(String.format(Locale.getDefault(),"Colors: %dp", bodyResults[3]));
-                    chosenIp.setText(String.format(Locale.getDefault(),"Ip: %dp", bodyResults[4]));
-                    chosenBezel.setText(String.format(Locale.getDefault(),"Bezel: %dp", bodyResults[5]));
-                    chosenDesign.setVisibility(View.VISIBLE);
-                    chosenMaterial.setVisibility(View.VISIBLE);
-                    chosenColors.setVisibility(View.VISIBLE);
-                    chosenBezel.setVisibility(View.VISIBLE);
-                    chosenIp.setVisibility(View.VISIBLE);
+                    setupBody(data.getIntExtra("cost",99),data.getIntArrayExtra(BODY_RESULTS));
                     break;
             }
         }
@@ -248,7 +242,8 @@ public class FragmentDeviceCreator extends Fragment {
             for(int i=1;i<=companies.size();i++){
                 tmp[i]=companies.get(i-1).name;
                 if(getArguments()!=null && getArguments().getInt("ID",-1) !=-1 &&  getArguments().getInt("ID",-1)==companies.get(i-1).companyId){
-                    myCompanysIndex=i;
+                    myCompanysIndex=i-1;
+                    isCompanySet=true;
                 }
             }
 
@@ -274,10 +269,11 @@ public class FragmentDeviceCreator extends Fragment {
             }else{
                 Company selectedCompany=companies.get(position-1);
                 isCompanySet=true;
+                myCompanysIndex=position-1;
                 reset(false);
                 levels=selectedCompany.getLevels_USE_THIS();
-                ram=levels[0];
-                memory=levels[1];
+                ramMaxLevel=levels[0];
+                memoryMaxLevel=levels[1];
                 if(selectedCompany.maxSlots==companies.get(position-1).usedSlots){
                     noFreeSlotAlert(selectedCompany);
                 }
@@ -294,7 +290,7 @@ public class FragmentDeviceCreator extends Fragment {
         return overallCost; }
 
     private void reset(boolean isFullReset){
-        if(isFullReset){spin.setSelection(0);deviceNameField.setText("");}
+        if(isFullReset){spin.setSelection(0);deviceNameField.setText("");myCompanysIndex=-1;isCompanySet=false;}
         companies=deviceViewModel.getAllCompaniesList();
         profitField.setText("");
         currentCostField.setText("The current cost is 0$");
@@ -326,6 +322,60 @@ public class FragmentDeviceCreator extends Fragment {
         spin.setSelection(0);
     }
 
+    private void showAlertDialog(){
+        List<Device> producible=new LinkedList<>();
+        List<Device> allDev=deviceViewModel.getAllDevicesList();
+        for (Device d : allDev) {
+            if(AppleBot.producibleByTheCompany(companies.get(myCompanysIndex),d)){producible.add(d);}
+        }
+        DialogFragment dialog=new ChooseADeviceDialogFragment(producible);
+        dialog.show(getChildFragmentManager(),"cloneDevice");
+    }
+
+    public void loadInADevice(int deviceID){
+        Device device=deviceViewModel.getDevice_byID(deviceID);
+        int storageCost=(int) Math.round(DeviceValidator.getCostOfMemory(0,device.memory))+
+                (int) Math.round(DeviceValidator.getCostOfMemory(1,device.ram));
+        int bodyCost=0;
+        for(int i=0;i<Device.CHILDREN_OF_BUDGETS[1];i++){
+            bodyCost+=DeviceValidator.getCostOfBody(i,device.getFieldByNum(i+Device.CHILDREN_OF_BUDGETS[0]));
+        }
+        setupStorage(device.ram,device.memory,storageCost);
+        setupBody(bodyCost,device.getParams()[1]);
+        deviceNameField.setText(device.name);
+        profitField.setText(String.valueOf(device.profit));
+    }
+
+    private void setupStorage(int ram,int memory,int storageCost){
+        this.ram=ram;
+        this.memory=memory;
+        costs[0]=storageCost;
+        currentCostField.setText(String.format(Locale.getDefault(),"The current cost is %d$", getOverallCost()));
+        isMemorySet = true;
+        isSetMemoryImage.setImageDrawable(getActivity().getDrawable(R.drawable.ic_check_green_24dp));
+        chosenMem.setText(String.format(Locale.getDefault(),"Memory: %dGB", (int) Math.round(Math.pow(2,memory)) ));
+        chosenRam.setText(String.format(Locale.getDefault(),"Ram: %dGB", (int) Math.round(Math.pow(2,ram))));
+        chosenMem.setVisibility(View.VISIBLE);
+        chosenRam.setVisibility(View.VISIBLE);
+    }
+
+    private void setupBody(int bodyCost,int[] bodyParams){
+        bodyResults=bodyParams;
+        costs[1]=bodyCost;
+        currentCostField.setText(String.format(Locale.getDefault(),"The current cost is %d$", getOverallCost()));
+        isBodySet=true;
+        isSetBodyImage.setImageDrawable(getActivity().getDrawable(R.drawable.ic_check_green_24dp));
+        chosenDesign.setText(String.format(Locale.getDefault(),"Design: %dp", bodyResults[0]));
+        chosenMaterial.setText(String.format(Locale.getDefault(),"Material: %dp", bodyResults[1]));
+        chosenColors.setText(String.format(Locale.getDefault(),"Colors: %dp", bodyResults[2]));
+        chosenIp.setText(String.format(Locale.getDefault(),"Ip: %dp", bodyResults[3]));
+        chosenBezel.setText(String.format(Locale.getDefault(),"Bezel: %dp", bodyResults[4]));
+        chosenDesign.setVisibility(View.VISIBLE);
+        chosenMaterial.setVisibility(View.VISIBLE);
+        chosenColors.setVisibility(View.VISIBLE);
+        chosenBezel.setVisibility(View.VISIBLE);
+        chosenIp.setVisibility(View.VISIBLE);
+    }
 
 }
 
