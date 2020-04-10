@@ -8,9 +8,22 @@ import com.example.techtycoon.Wrapped_DeviceAndCompanyList;
 import java.util.List;
 import java.util.Random;
 
-class RandomBot extends AbstractAssistant {
+import static com.example.techtycoon.Assistant.ToolsForAssistants.*;
+
+class RandomBot implements AbstractAssistant {
+
     @Override
-    Wrapped_DeviceAndCompanyList work(List<Company> companyList, List<Device> deviceList, List<Device> myDevices, Company myCompany, Wrapped_DeviceAndCompanyList ret) {
+    public List<String> getInputHints() {
+        return null;
+    }
+
+    @Override
+    public String getAssistantName() {
+        return "Random bot";
+    }
+
+    @Override
+    public Wrapped_DeviceAndCompanyList work(List<Company> companyList, List<Device> deviceList, List<Device> myDevices, Company myCompany, Wrapped_DeviceAndCompanyList ret) {
                 //not working
         //activates only when profit is below the average, no development, no new slot
                 //random

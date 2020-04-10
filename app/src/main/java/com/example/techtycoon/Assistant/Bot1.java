@@ -3,7 +3,6 @@ package com.example.techtycoon.Assistant;
 import android.util.Pair;
 
 import com.example.techtycoon.Company;
-import com.example.techtycoon.DetailsOfOneCompany;
 import com.example.techtycoon.DevelopmentValidator;
 import com.example.techtycoon.Device;
 import com.example.techtycoon.DeviceValidator;
@@ -14,11 +13,24 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Bot1 extends AbstractAssistant{
+import static com.example.techtycoon.Assistant.ToolsForAssistants.*;
+
+
+class Bot1 implements AbstractAssistant {
 
     Bot1() {}
 
-     Wrapped_DeviceAndCompanyList work(List<Company> companyList, List<Device> deviceList, List<Device> myDevices, Company myCompany, Wrapped_DeviceAndCompanyList ret){
+    @Override
+    public List<String> getInputHints() {
+        return null;
+    }
+
+    @Override
+    public String getAssistantName() {
+        return "Bot1";
+    }
+
+    public Wrapped_DeviceAndCompanyList work(List<Company> companyList, List<Device> deviceList, List<Device> myDevices,Company myCompany, Wrapped_DeviceAndCompanyList ret){
         String status;
         int marketingCost= DevelopmentValidator.calculateMarketingCost(myCompany.marketing);
         //profile of the assistant

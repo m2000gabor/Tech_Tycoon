@@ -71,6 +71,14 @@
             android:text="Slots:" />
 
         <TextView
+            android:id="@+id/assistantStatusTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="22sp"
+            android:layout_margin="10sp"
+            android:text="Assistant status:" />
+
+        <TextView
         android:id="@+id/companyLogs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

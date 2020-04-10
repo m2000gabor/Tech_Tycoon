@@ -3,13 +3,32 @@ package com.example.techtycoon.Assistant;
 import com.example.techtycoon.Company;
 import com.example.techtycoon.Device;
 import com.example.techtycoon.Wrapped_DeviceAndCompanyList;
+import static com.example.techtycoon.Assistant.ToolsForAssistants.*;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.example.techtycoon.Assistant.AbstractAssistant.max_Overall;
-
 public class AssistantManager {
+    private final static List<AbstractAssistant> ASSISTANTS= Arrays.asList(
+            new CoAssistant_marketingGoal(),
+            new CoAssistant_avgMarketing(),
+            new AverageBot(),
+            new XiaomiBot(),
+            new AppleBot(),
+            new AppleBot2(),
+            new Bot1()
+    );
+
+    public static List<String> getInputHints(int assistantId){
+        return ASSISTANTS.get(assistantId).getInputHints();
+    }
+
+    public static List<String> getAssistantNames(){
+        List<String> names=new LinkedList<>();
+        ASSISTANTS.forEach( a -> names.add(a.getAssistantName()));
+        return names;
+    }
 
     public AssistantManager(){
     };
@@ -29,50 +48,23 @@ public class AssistantManager {
                 Wrapped_DeviceAndCompanyList updatesFromAnAssistant=new Wrapped_DeviceAndCompanyList(myDevices,companyList);
                 myCompany.logs="";
                 //Basic assistant moves (all assistant start with these)
-                if(myDevices.size()==0){return updatesFromAnAssistant;}
-                if(myCompany.hasFreeSlot()){
-                    Device newDev=new Device(myDevices.get(max_Overall(myDevices)));
-                    newDev.profit*=1.2;
-                    newDev.name= AbstractAssistant.nameBuilder.buildName(newDev.name,0);
-                    updatesFromAnAssistant.insert.add(newDev);
-                    myCompany.usedSlots+=updatesFromAnAssistant.insert.size();
-                }
+                if(myDevices.size()==0){continue;}
 
-                AbstractAssistant aa=new AbstractAssistant() {
-                    @Override
-                    Wrapped_DeviceAndCompanyList work(List<Company> companyList, List<Device> deviceList, List<Device> myDevices, Company myCompany, Wrapped_DeviceAndCompanyList ret) {
-                        return ret;
-                    }
-                };
-
-                switch (companyList.get(i).assistantType){
-                    case 1:
-                        aa=new CoAssistant_marketingGoal();
-                        break;
-                    case 2:
-                        aa=new CoAssistant_avgMarketing();
-                        break;
-                    case 3:
-                        aa=new AverageBot();
-                        break;
-                    case 4:
-                        aa=new RandomBot();
-                        break;
-                    case 5:
-                        aa=new AppleBot2();
-                        break;
-                    case 6:
-                        aa= new Bot1();
-                        break;
-                    case 7:
-                        aa=new AppleBot();
-                        break;
-                }
+                AbstractAssistant aa=ASSISTANTS.get(companyList.get(i).assistantType);
                 updatesFromAnAssistant=aa.work(companyList, deviceList,myDevices,myCompany,updatesFromAnAssistant);
                 r.insert.addAll(updatesFromAnAssistant.insert);
                 r.delete.addAll(updatesFromAnAssistant.delete);
                 r.update.addAll(updatesFromAnAssistant.update);
                 r.UpdateCompanies.addAll(updatesFromAnAssistant.UpdateCompanies);
+
+                //last security steps
+                if(myCompany.hasFreeSlot()){
+                    Device newDev=new Device(myDevices.get(max_Overall(myDevices)));
+                    newDev.profit*=1.2;
+                    newDev.name= ToolsForAssistants.nameBuilder.buildName(newDev.name,0);
+                    updatesFromAnAssistant.insert.add(newDev);
+                    myCompany.usedSlots+=updatesFromAnAssistant.insert.size();
+                }
             }
         }
         return r;

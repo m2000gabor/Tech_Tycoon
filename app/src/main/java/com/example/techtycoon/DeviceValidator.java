@@ -52,4 +52,10 @@ public class DeviceValidator {
         double overallCost=0;
         for (int i=0;i<Device.NUMBER_OF_BUDGETS;i++){overallCost+=getCostOfBudgets(i,-1,-1,device);}
         return (int) Math.round(overallCost);}
+
+    public static int getOverallCost(int[] attributes){
+        Device dev=new Device("a",0,0,0,attributes);
+        double overallCost=0;
+        for (int i=0;i<Device.NUMBER_OF_BUDGETS;i++){overallCost+=getCostOfBudgets(i,-1,-1,dev);}
+        return (int) Math.round(overallCost);}
 }

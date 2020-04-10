@@ -38,6 +38,7 @@ public class DeviceViewModel extends AndroidViewModel {
 
 
     void insertDevice(Device device) { mRepository.insertDevice(device); }
+    void insertDevices(Device... devices) { mRepository.insertDevices(devices); }
     void insertCompanies(Company... companies) { mRepository.insertCompanies(companies); }
 
     void updateCompanies(Company... companies) { mRepository.updateCompanies(companies); }
@@ -58,7 +59,8 @@ public class DeviceViewModel extends AndroidViewModel {
 
     public void assistantToDatabase(Wrapped_DeviceAndCompanyList assistantResults){
 
-        mRepository.assistantToDatabase(assistantResults.UpdateCompanies.toArray(new Company[0]),
+        mRepository.assistantToDatabase(
+                assistantResults.UpdateCompanies.toArray(new Company[0]),
                 assistantResults.insert.toArray(new Device[0]),
                 assistantResults.update.toArray(new Device[0]),
                 assistantResults.delete.toArray(new Device[0]));

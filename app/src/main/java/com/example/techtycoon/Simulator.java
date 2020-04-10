@@ -22,7 +22,7 @@ public class Simulator {
         this.deviceList = deviceList;
         this.companyList =companyList;
         this.lastAvgPrice=lastAvgPrice;
-        this.attrAverages=attributeAvgs;
+        this.attrAverages=attributeAvgs.clone();
     }
 
     public static Simulator getInstance(List<Device> deviceList, List<Company> companyList){
@@ -101,23 +101,28 @@ public class Simulator {
 
         //Profiles:
         customerNum=0;
+        //todo profile class
 
 
         int[] midRange={6,6,5,3,3,3,3};
-        customerNum+=midRange[0];
-        sellingToOneProfile2(sold,deviceList,compsToDevList, new double[]{1000,1.2,4},midRange);
+        int midCust=1200;
+        customerNum+=midCust;
+        sellingToOneProfile2(sold,deviceList,compsToDevList, new double[]{midCust,1.5,2},midRange);
 
         int[] top={10,10,4,6,3,4,4};
-        customerNum+=top[0];
-        sellingToOneProfile2(sold,deviceList,compsToDevList,new double[]{800,0.7,6},top);
+        int topCust=300;
+        customerNum+=topCust;
+        sellingToOneProfile2(sold,deviceList,compsToDevList,new double[]{topCust,1.7,4},top);
 
         int[] cheep={5,5,2,2,2,3,2};
+        int cheapCust=500;
         customerNum+=cheep[0];
-        sellingToOneProfile2(sold,deviceList,compsToDevList,new double[]{500,2.5,2},cheep);
+        sellingToOneProfile2(sold,deviceList,compsToDevList,new double[]{cheapCust,3,2.5},cheep);
 
         int[] beauty={2,2,10,7,8,2,5};
-        customerNum+=beauty[0];
-        sellingToOneProfile2(sold,deviceList,compsToDevList, new double[]{50,1.5,3},beauty);
+        int beautyCust=50;
+        customerNum+=beautyCust;
+        sellingToOneProfile2(sold,deviceList,compsToDevList, new double[]{beautyCust,1.5,2},beauty);
 
     }
 

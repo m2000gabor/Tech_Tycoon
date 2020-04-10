@@ -28,7 +28,7 @@ public class FragmentAllDevices extends Fragment {
     private DeviceListAdapter adapter;
     private LiveData<List<Device>> deviceList;
     private Spinner companySpinner;
-    private boolean isDesc=false;
+    private boolean isDesc=true;
 
     public static FragmentAllDevices newInstance() {
         FragmentAllDevices fragment = new FragmentAllDevices();

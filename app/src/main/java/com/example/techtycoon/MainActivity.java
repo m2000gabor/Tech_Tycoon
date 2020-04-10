@@ -8,6 +8,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
@@ -84,7 +87,61 @@ public class MainActivity extends AppCompatActivity {
     /** Called when the user touches the List Devices button */
     public void nothing(View view) {}
 
-    public void nothing2(View view){}
+    public void populateForTest(View view){
+        resetSharedPref();
+        //make levels
+        int[] attributes=new int[Device.NUMBER_OF_ATTRIBUTES];
+        int[] levels=new int[Device.NUMBER_OF_ATTRIBUTES];
+        for (int i = 0; i < Device.NUMBER_OF_ATTRIBUTES; i++) {
+            attributes[i]=2;
+            levels[i]=3;
+        }
+
+        //make the companies
+        Company c1=new Company("admin",1,levels);
+        c1.companyId=1;
+        c1.maxSlots=10;
+        c1.money=10000000;
+        deviceViewModel.startAgain(c1);
+
+        //make the devices
+        List<Device> deviceList=new LinkedList<>();
+        //átlag
+        Device d1=new Device("átlag",100,DeviceValidator.getOverallCost(attributes),1,attributes);
+        Device d2=new Device("átlag2",100,DeviceValidator.getOverallCost(attributes),1,attributes);
+
+        //erősek
+        attributes[0]++;
+        attributes[4]++;
+        Device d3=new Device("csúcs",100,DeviceValidator.getOverallCost(attributes),1,attributes);
+        Device d4=new Device("csúcs drágán",200,DeviceValidator.getOverallCost(attributes),1,attributes);
+        Device d5=new Device("csúcs olcsón",70,DeviceValidator.getOverallCost(attributes),1,attributes);
+
+        //gyengek
+        attributes[0]--;
+        attributes[0]--;
+        attributes[4]--;
+        Device d6=new Device("kicsit gy",100,DeviceValidator.getOverallCost(attributes),1,attributes);
+        Device d7=new Device("kicsit gy olcs",70,DeviceValidator.getOverallCost(attributes),1,attributes);
+        attributes[4]--;
+        attributes[5]--;
+        Device d8=new Device("nagyon gy",100,DeviceValidator.getOverallCost(attributes),1,attributes);
+        Device d9=new Device("nagyon gy olcs",70,DeviceValidator.getOverallCost(attributes),1,attributes);
+
+
+        deviceList.add(d1);
+        deviceList.add(d2);
+        deviceList.add(d3);
+        deviceList.add(d4);
+        deviceList.add(d5);
+        deviceList.add(d6);
+        deviceList.add(d7);
+        deviceList.add(d8);
+        deviceList.add(d9);
+        c1.usedSlots=deviceList.size();
+        deviceViewModel.updateCompanies(c1);
+        deviceViewModel.insertDevices(deviceList.toArray(new Device[0]));
+    }
 
     public void start_again(View view){
         resetSharedPref();

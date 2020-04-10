@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.techtycoon.Assistant.AppleBot;
+import com.example.techtycoon.Assistant.ToolsForAssistants;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -326,7 +327,7 @@ public class FragmentDeviceCreator extends Fragment {
         List<Device> producible=new LinkedList<>();
         List<Device> allDev=deviceViewModel.getAllDevicesList();
         for (Device d : allDev) {
-            if(AppleBot.producibleByTheCompany(companies.get(myCompanysIndex),d)){producible.add(d);}
+            if(ToolsForAssistants.producibleByTheCompany(companies.get(myCompanysIndex),d)){producible.add(d);}
         }
         DialogFragment dialog=new ChooseADeviceDialogFragment(producible);
         dialog.show(getChildFragmentManager(),"cloneDevice");

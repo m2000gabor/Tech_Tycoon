@@ -29,6 +29,7 @@ public class DetailsOfOneCompany extends AppCompatActivity {
     TextView levelsTextV;
     TextView marketingTextV;
     TextView slotsTextV;
+    TextView assistantStatusTextView;
     TextView logsTextV;
     Button oneRoundMarketingButton;
     Button buySlotButton;
@@ -50,6 +51,7 @@ public class DetailsOfOneCompany extends AppCompatActivity {
         levelsTextV=findViewById(R.id.levels);
         marketingTextV=findViewById(R.id.marketingTextV);
         slotsTextV=findViewById(R.id.slotsTextV);
+        assistantStatusTextView=findViewById(R.id.assistantStatusTextView);
         logsTextV=findViewById(R.id.companyLogs);
         oneRoundMarketingButton=findViewById(R.id.oneRoundMarketing);
         buySlotButton=findViewById(R.id.buySlot);
@@ -136,6 +138,7 @@ public class DetailsOfOneCompany extends AppCompatActivity {
         marketValueTextV.setText(String.format(Locale.getDefault(),"Market value: %,d$",company.getMarketValue()));
         marketingTextV.setText(String.format(Locale.getDefault(),"Marketing: %d",company.marketing));
         slotsTextV.setText(String.format(Locale.getDefault(),"Max slots: %d, Used slots: %d",company.maxSlots,company.usedSlots));
+        assistantStatusTextView.setText(company.assistantType+": "+company.assistantStatus);
         logsTextV.setText(company.logs);
         levelsTextV.setText(Converter.intArrayToString(company.getLevels_USE_THIS()));
         if(DevelopmentValidator.nextSlotCost(company.maxSlots)!=-1){

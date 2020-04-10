@@ -125,6 +125,11 @@ class DeviceRepository {
             mDao.insertOneDevice(dev);
         });
     }
+    void insertDevices(Device... devices) {
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            mDao.insertDevices(devices);
+        });
+    }
     void insertCompanies(Company... companies) {
         AppDatabase.databaseWriteExecutor.execute(() -> {
             mDao.insertCompanies(companies);

@@ -223,7 +223,7 @@ public class FragmentMyCompany extends Fragment {
                 myCompanyLiveData.removeObservers(getViewLifecycleOwner());
             }catch (NullPointerException ignored){}
 
-            myCompanyLiveData =deviceViewModel.getLiveCompany_byID(companyID);
+            myCompanyLiveData = deviceViewModel.getLiveCompany_byID(companyID);
             Observer<Company> companyObserver = new Observer<Company>() {
                 @Override
                 public void onChanged(@Nullable final Company c) {

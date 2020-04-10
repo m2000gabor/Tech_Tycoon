@@ -15,7 +15,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class AppleBot extends AbstractAssistant{
+import static com.example.techtycoon.Assistant.ToolsForAssistants.*;
+
+public class AppleBot implements AbstractAssistant{
     final int goodPointImportance;
     final int newSlotImportance;
     final int badThingImportance;
@@ -35,8 +37,17 @@ public class AppleBot extends AbstractAssistant{
         this.marketingImportance=marketingImportance.clone();
     }
 
+    @Override
+    public List<String> getInputHints() {
+        return null;
+    }
 
-     Wrapped_DeviceAndCompanyList work(List<Company> companyList, List<Device> deviceList, List<Device> myDevices, Company myCompany, Wrapped_DeviceAndCompanyList ret){
+    @Override
+    public String getAssistantName() {
+        return "Apple Bot";
+    }
+
+    public Wrapped_DeviceAndCompanyList work(List<Company> companyList, List<Device> deviceList, List<Device> myDevices, Company myCompany, Wrapped_DeviceAndCompanyList ret){
         /*
         monopol company
           3 key development points: slot, marketing, research
@@ -113,7 +124,7 @@ public class AppleBot extends AbstractAssistant{
         if(flag_newAttribute){
             myCompany.logs = myCompany.logs + "An attribute is freshly developed.\nA new device with that attribute is made!\n";
             Device newDev= new Device(nameBuilder.buildName(worstDev.name,1)
-                    ,(int) Math.round(max(myDevices.toArray(new Device[0]),-1)*1.2),0
+                    ,(int) Math.round(max(myDevices,-1)*1.2),0
                     ,myCompany.companyId,myCompany.getLevels_USE_THIS());
             newDev.cost=DeviceValidator.getOverallCost(newDev);
             if (myCompany.hasFreeSlot()) {
@@ -376,14 +387,6 @@ public class AppleBot extends AbstractAssistant{
             sumOfLevels+=d.getFieldByNum(j);
         }
         return sumOfLevels;
-    }
-
-    public static boolean producibleByTheCompany(Company c, Device d){
-        int[] cLevels=c.getLevels_USE_THIS();
-        for (int i=0;i<cLevels.length;i++){
-            if(cLevels[i]<d.getFieldByNum(i)){return false;}
-        }
-        return true;
     }
 
 }

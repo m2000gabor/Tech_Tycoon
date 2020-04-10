@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.storage.StorageManager;
 import android.text.Selection;
 import android.view.View;
 import android.widget.Toast;

@@ -13,6 +13,16 @@ public class Wrapped_DeviceAndCompanyList {
         UpdateCompanies=new LinkedList<>();
     }
 
+    public Wrapped_DeviceAndCompanyList(List<Device> devices, Company company) {
+        this.devices = devices;
+        this.companies = new LinkedList<>();;
+        this.companies.add(company);
+        insert=new LinkedList<>();
+        update=new LinkedList<>();
+        delete=new LinkedList<>();
+        UpdateCompanies=new LinkedList<>();
+    }
+
     public List<Device> devices;
     public List<Device> insert;
     public List<Device> update;

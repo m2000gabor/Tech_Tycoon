@@ -78,6 +78,16 @@ public class Company {
     public void setLevels(String levels) {this.levels = levels;}
     public void setLevels_USE_THIS(int[] arr){this.levels=Converter.intArrayToString(arr);}
     public int[] getLevels_USE_THIS(){return Converter.stringToIntArray(this.levels);}
+    public boolean incrementLevel(int attributeId){
+        if(DevelopmentValidator.getOneDevelopmentCost(attributeId,getLevels_USE_THIS()[attributeId])<= money &&
+                DevelopmentValidator.getOneDevelopmentCost(attributeId,getLevels_USE_THIS()[attributeId])!=-1 ){
+            this.money-=DevelopmentValidator.getOneDevelopmentCost(attributeId,getLevels_USE_THIS()[attributeId]);
+            int[] levels=getLevels_USE_THIS();
+            levels[attributeId]++;
+            setLevels_USE_THIS(levels);
+            return true;
+        }else{return false;}
+    }
     public boolean hasFreeSlot(){ return maxSlots>usedSlots; }
     public int getMarketValue(){
         int r=0;

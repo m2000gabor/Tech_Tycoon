@@ -3,7 +3,7 @@ package com.example.techtycoon.Assistant;
 import android.util.Pair;
 
 import com.example.techtycoon.Company;
-import com.example.techtycoon.DetailsOfOneCompany;
+import static com.example.techtycoon.Assistant.ToolsForAssistants.*;
 import com.example.techtycoon.DevelopmentValidator;
 import com.example.techtycoon.Device;
 import com.example.techtycoon.DeviceValidator;
@@ -14,16 +14,26 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-public class AverageBot extends AbstractAssistant {
+public class AverageBot implements AbstractAssistant {
     private final int[] profile = {10, 5, 3, 4, 2, 2, 2, 2, 2};
 
     AverageBot(){}
+
+    @Override
+    public List<String> getInputHints() {
+        return null;
+    }
+
+    @Override
+    public String getAssistantName() {
+        return "Average Bot";
+    }
 
     private int getImportance(int attrId){
         return profile[attrId+2];
     }
 
-     Wrapped_DeviceAndCompanyList work(List<Company> companyList, List<Device> deviceList, List<Device> myDevices, Company myCompany, Wrapped_DeviceAndCompanyList ret) {
+    public  Wrapped_DeviceAndCompanyList work(List<Company> companyList, List<Device> deviceList, List<Device> myDevices, Company myCompany, Wrapped_DeviceAndCompanyList ret) {
         /*
                Name: Avg
                 Description: if something is worse than the avg try to update it

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -14,101 +13,117 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/headerOfAssistants"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Assistant"
-            android:layout_margin="@dimen/text_margin"
-            android:textSize="@dimen/text_size"/>
-
-        <Switch
-            android:id="@+id/headerAssistantSwitch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Activity"
-            android:textSize="@dimen/text_size_small"
-            android:layout_margin="@dimen/text_margin"/>
-
-
-    </LinearLayout>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <Switch
-                android:id="@+id/marketingGoalAssistantSwitch"
+            <TextView
+                android:id="@+id/headerOfAssistants"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Marketing Goal assistant"
-                android:textSize="@dimen/text_size_small"
-                android:layout_margin="@dimen/text_margin_small"/>
+                android:layout_margin="@dimen/text_margin"
+                android:text="Assistant"
+                android:textSize="@dimen/text_size" />
 
-            <EditText
-                android:id="@+id/marketingGoalInputField"
-                android:layout_width="80sp"
+            <Switch
+                android:id="@+id/headerAssistantSwitch"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:inputType="numberDecimal"
-                android:textSize="@dimen/text_size_small"
-                android:layout_margin="@dimen/text_margin_small"/>
+                android:layout_margin="@dimen/text_margin"
+                android:text="Activity"
+                android:textSize="@dimen/text_size_small" />
 
 
         </LinearLayout>
 
-        <Switch
-            android:id="@+id/marketingAvgAssistantSwitch"
+        <Spinner
+            android:id="@+id/chooseAssistantSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+            <EditText
+            android:id="@+id/inputDecimalField1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Marketing Average assistant"
-            android:textSize="@dimen/text_size_small"
-            android:layout_margin="@dimen/text_margin_small"/>
+            android:inputType="numberDecimal"
+            />
 
-        <Switch
-            android:id="@+id/general1AssistantSwitch"
+            <EditText
+                android:id="@+id/inputDecimalField2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                />
+
+            <EditText
+                android:id="@+id/inputDecimalField3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                />
+
+            <EditText
+                android:id="@+id/inputDecimalField4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                />
+            <EditText
+                android:id="@+id/inputDecimalField5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                />
+            <EditText
+                android:id="@+id/inputDecimalField6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                />
+            <EditText
+                android:id="@+id/inputDecimalField7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                />
+            <EditText
+                android:id="@+id/inputDecimalField8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                />
+            <EditText
+                android:id="@+id/inputDecimalField9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                />
+        <EditText
+            android:id="@+id/inputDecimalField10"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Average bot"
-            android:textSize="@dimen/text_size_small"
-            android:layout_margin="@dimen/text_margin_small"/>
-
-        <Switch
-        android:id="@+id/general2AssistantSwitch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Random"
-        android:textSize="@dimen/text_size_small"
-        android:layout_margin="@dimen/text_margin_small"/>
-
-        <Switch
-            android:id="@+id/appleBot2Switch"
+            android:inputType="numberDecimal"
+            />
+        <EditText
+            android:id="@+id/inputDecimalField11"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Apple bot 2"
-            android:textSize="@dimen/text_size_small"
-            android:layout_margin="@dimen/text_margin_small"/>
-
-        <Switch
-            android:id="@+id/fullAssistant1Switch"
+            android:inputType="numberDecimal"
+            />
+        <EditText
+            android:id="@+id/inputDecimalField12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Full1 - Bot1"
-            android:textSize="@dimen/text_size_small"
-            android:layout_margin="@dimen/text_margin_small"/>
-
-        <Switch
-            android:id="@+id/fullAssistant2Switch"
+            android:inputType="numberDecimal"
+            />
+        <EditText
+            android:id="@+id/inputDecimalField13"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Full2 - AppleBot"
-            android:textSize="@dimen/text_size_small"
-            android:layout_margin="@dimen/text_margin_small"/>
+            android:inputType="numberDecimal"
+            />
 
     </LinearLayout>
 
