@@ -13,13 +13,18 @@ import static com.example.techtycoon.Assistant.ToolsForAssistants.*;
 class RandomBot implements AbstractAssistant {
 
     @Override
-    public List<String> getInputHints() {
+    public List<String> getInputLabels() {
         return null;
     }
 
     @Override
     public String getAssistantName() {
         return "Random bot";
+    }
+
+    @Override
+    public String getDefaultStatus() {
+        return "";
     }
 
     @Override

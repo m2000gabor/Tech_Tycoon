@@ -9,8 +9,11 @@
     tools:showIn="@layout/activity_assistant">
 
     <LinearLayout
+        android:id="@+id/assistantActivityRootLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingStart="@dimen/text_margin"
+        android:paddingEnd="@dimen/text_margin"
         android:orientation="vertical">
 
         <LinearLayout
@@ -41,89 +44,6 @@
             android:id="@+id/chooseAssistantSpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-
-
-            <EditText
-            android:id="@+id/inputDecimalField1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="numberDecimal"
-            />
-
-            <EditText
-                android:id="@+id/inputDecimalField2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:inputType="numberDecimal"
-                />
-
-            <EditText
-                android:id="@+id/inputDecimalField3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:inputType="numberDecimal"
-                />
-
-            <EditText
-                android:id="@+id/inputDecimalField4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:inputType="numberDecimal"
-                />
-            <EditText
-                android:id="@+id/inputDecimalField5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:inputType="numberDecimal"
-                />
-            <EditText
-                android:id="@+id/inputDecimalField6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:inputType="numberDecimal"
-                />
-            <EditText
-                android:id="@+id/inputDecimalField7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:inputType="numberDecimal"
-                />
-            <EditText
-                android:id="@+id/inputDecimalField8"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:inputType="numberDecimal"
-                />
-            <EditText
-                android:id="@+id/inputDecimalField9"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:inputType="numberDecimal"
-                />
-        <EditText
-            android:id="@+id/inputDecimalField10"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="numberDecimal"
-            />
-        <EditText
-            android:id="@+id/inputDecimalField11"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="numberDecimal"
-            />
-        <EditText
-            android:id="@+id/inputDecimalField12"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="numberDecimal"
-            />
-        <EditText
-            android:id="@+id/inputDecimalField13"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="numberDecimal"
-            />
 
     </LinearLayout>
 

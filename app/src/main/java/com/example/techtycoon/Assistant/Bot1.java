@@ -21,7 +21,7 @@ class Bot1 implements AbstractAssistant {
     Bot1() {}
 
     @Override
-    public List<String> getInputHints() {
+    public List<String> getInputLabels() {
         return null;
     }
 
@@ -30,19 +30,24 @@ class Bot1 implements AbstractAssistant {
         return "Bot1";
     }
 
-    public Wrapped_DeviceAndCompanyList work(List<Company> companyList, List<Device> deviceList, List<Device> myDevices,Company myCompany, Wrapped_DeviceAndCompanyList ret){
-        String status;
+    @Override
+    public String getDefaultStatus() {
+        return "";
+    }
+
+    public Wrapped_DeviceAndCompanyList work(List<Company> companyList, List<Device> deviceList, List<Device> myDevices, Company myCompany, Wrapped_DeviceAndCompanyList ret){
         int marketingCost= DevelopmentValidator.calculateMarketingCost(myCompany.marketing);
         //profile of the assistant
-        final int[] devImportance={5,5,3,3,3,3,3};
         final double marketingImp=0.2;
         final int newSlotImp=10;
+        final int[] devImportance={5,5,3,3,3,3,3};
+
 
         //context of my company
         //should the assist move, how important is it?
         int companyPosition= getCompanyContext(companyList,myCompany);
         //status:"companyContext,madeMoveId1,madeMoveId2..."
-        status=String.valueOf(companyPosition);
+        String status=String.valueOf(companyPosition);
         int tryTimes=1;
         if(companyPosition==4){tryTimes++;
         }else if(companyPosition==3 ){tryTimes=3;

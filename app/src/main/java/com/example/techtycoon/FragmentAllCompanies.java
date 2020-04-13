@@ -8,7 +8,6 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,20 +16,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
-import static android.app.Activity.RESULT_OK;
 
 
 public class FragmentAllCompanies extends Fragment {
     final static int[] sharedPrefKeyIds={R.string.simulator_lastAvgPrice,R.string.simulator_lastAvgRam,
             R.string.simulator_lastAvgMemory,R.string.simulator_lastAvgDesign,R.string.simulator_lastAvgMaterial,
             R.string.simulator_lastAvgColors,R.string.simulator_lastAvgIp,R.string.simulator_lastAvgBezels};
-    public static final String GENERAL_STATS="generalStats";
+    static final String GENERAL_STATS="generalStats";
     private DeviceViewModel deviceViewModel;
     private CompanyListAdapter adapter;
 
@@ -53,8 +49,6 @@ public class FragmentAllCompanies extends Fragment {
         View root =inflater.inflate(R.layout.fragment_all_companies, container, false);
 
         RecyclerView recyclerView = root.findViewById(R.id.companiesRecyclerView);
-        LiveData<List<Company>> companies = deviceViewModel.getAllCompanies();
-
 
         //onclick
         View.OnClickListener mOnClickListener = v -> {
@@ -63,10 +57,7 @@ public class FragmentAllCompanies extends Fragment {
             Company current=adapter.getCompanyFromCache(itemPosition);
 
             //get device fields
-            String nev = current.name;
             int id = current.companyId;
-            int money = current.money;
-            int[] levels=current.getLevels_USE_THIS();
 
             //make intent
             Intent intent = new Intent();

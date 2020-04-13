@@ -12,13 +12,18 @@ class CoAssistant_marketingGoal implements AbstractAssistant{
     CoAssistant_marketingGoal() {}
 
     @Override
-    public List<String> getInputHints() {
+    public List<String> getInputLabels() {
         return Collections.singletonList("Set a marketing goal");
     }
 
     @Override
     public String getAssistantName() {
         return "Marketing goal";
+    }
+
+    @Override
+    public String getDefaultStatus() {
+        return "0;";
     }
 
     @Override

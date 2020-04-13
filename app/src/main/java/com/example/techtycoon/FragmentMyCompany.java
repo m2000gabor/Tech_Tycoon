@@ -170,17 +170,19 @@ public class FragmentMyCompany extends Fragment {
         startDeviceCreatorButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(myCompany.hasFreeSlot()){
-                FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-                FragmentDeviceCreator newFr=new FragmentDeviceCreator();
-                Bundle args = new Bundle();
-                args.putInt("ID",myCompany.companyId);
-                newFr.setArguments(args);
-                fragmentTransaction.replace(R.id.fragment_my_company, newFr, "frag1");
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-                }else{
-                    noFreeSlotAlert(myCompany);
+                if(myCompany!=null){
+                    if(myCompany.hasFreeSlot()){
+                        FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+                        FragmentDeviceCreator newFr=new FragmentDeviceCreator();
+                        Bundle args = new Bundle();
+                        args.putInt("ID",myCompany.companyId);
+                        newFr.setArguments(args);
+                        fragmentTransaction.replace(R.id.fragment_my_company, newFr, "frag1");
+                        fragmentTransaction.addToBackStack(null);
+                        fragmentTransaction.commit();
+                    }else{
+                        noFreeSlotAlert(myCompany);
+                    }
                 }
             }
         });
@@ -227,28 +229,30 @@ public class FragmentMyCompany extends Fragment {
             Observer<Company> companyObserver = new Observer<Company>() {
                 @Override
                 public void onChanged(@Nullable final Company c) {
-                    myCompany=c;
-                    nameOfMyCompanyTextView.setText(c.name);
-                    profitTextView.setText(String.format(Locale.getDefault(),"%d$",c.lastProfit));
-                    String cashFlowPos=String.valueOf(c.marketPosition);
-                    switch (cashFlowPos) {
-                        case "1":
-                            cashFlowPos = "1st";
-                            break;
-                        case "2":
-                            cashFlowPos = "2nd";
-                            break;
-                        case "3":
-                            cashFlowPos = "3rd";
-                            break;
-                        default:
-                            cashFlowPos = cashFlowPos + "th";
-                            break;
+                    if(c!=null){
+                        myCompany=c;
+                        nameOfMyCompanyTextView.setText(c.name);
+                        profitTextView.setText(String.format(Locale.getDefault(),"%d$",c.lastProfit));
+                        String cashFlowPos=String.valueOf(c.marketPosition);
+                        switch (cashFlowPos) {
+                            case "1":
+                                cashFlowPos = "1st";
+                                break;
+                            case "2":
+                                cashFlowPos = "2nd";
+                                break;
+                            case "3":
+                                cashFlowPos = "3rd";
+                                break;
+                            default:
+                                cashFlowPos = cashFlowPos + "th";
+                                break;
+                        }
+                        cashFlowTextView.setText(String.format("Cash flow: %s",cashFlowPos));
+                        moneyTextView.setText(String.format(Locale.getDefault(),"%d$",c.money));
+                        marketingTextView.setText(String.format(Locale.getDefault(),"Marketing: %d",c.marketing));
+                        slotsTextView.setText(String.format(Locale.getDefault(),"Slots: %d/%d",c.usedSlots,c.maxSlots));
                     }
-                    cashFlowTextView.setText(String.format("Cash flow: %s",cashFlowPos));
-                    moneyTextView.setText(String.format(Locale.getDefault(),"%d$",c.money));
-                    marketingTextView.setText(String.format(Locale.getDefault(),"Marketing: %d",c.marketing));
-                    slotsTextView.setText(String.format(Locale.getDefault(),"Slots: %d/%d",c.usedSlots,c.maxSlots));
                 }
             };
             myCompanyLiveData.observe(getViewLifecycleOwner(),companyObserver);

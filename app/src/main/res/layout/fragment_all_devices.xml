@@ -46,7 +46,7 @@
             android:id="@+id/ascOrDescImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_sort_black_24dp"/>
+            android:src="@drawable/ic_sort_by_alpha_black_24dp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

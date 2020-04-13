@@ -1,12 +1,13 @@
 package com.example.techtycoon;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+
+import com.example.techtycoon.Assistant.AssistantManager;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -16,6 +17,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 
 //TODO time
+//todo group the classes in packages
 //TODO detailed stats
 //todo store the discontinued devices
 //todo release time for companies (now the new devices come too frequent)
@@ -88,7 +90,6 @@ public class MainActivity extends AppCompatActivity {
     public void nothing(View view) {}
 
     public void populateForTest(View view){
-        resetSharedPref();
         //make levels
         int[] attributes=new int[Device.NUMBER_OF_ATTRIBUTES];
         int[] levels=new int[Device.NUMBER_OF_ATTRIBUTES];
@@ -141,10 +142,11 @@ public class MainActivity extends AppCompatActivity {
         c1.usedSlots=deviceList.size();
         deviceViewModel.updateCompanies(c1);
         deviceViewModel.insertDevices(deviceList.toArray(new Device[0]));
+
+        startTabbedActivityReset();
     }
 
     public void start_again(View view){
-        resetSharedPref();
         Company[] companies={
                 new Company("Apple",10,STARTING_LEVELS),
                 new Company("Samsung",10,STARTING_LEVELS),
@@ -154,16 +156,38 @@ public class MainActivity extends AppCompatActivity {
                 new Company("Admin",1000000000,STARTING_LEVELS)};
 
         deviceViewModel.startAgain(companies);
+        startTabbedActivityReset();
     }
     public void start_again_bots(View view){
-        resetSharedPref();
         Company[] companies={
                 new Company("Apple",1,STARTING_LEVELS),
                 new Company("Strawberry",1,STARTING_LEVELS),
                 new Company("Samsung",1,STARTING_LEVELS),
                 new Company("Sony",1,STARTING_LEVELS),
+                new Company("Xiaomi",1,STARTING_LEVELS),
                 new Company("Player",1,STARTING_LEVELS)};
+        //Apple - applebot
+        companies[0].assistantType=4;
+        companies[0].assistantStatus=AssistantManager.getDefaultStatus(4);
+
+        //Strawberry - applebot2
+        companies[1].assistantType=5;
+        companies[1].assistantStatus=AssistantManager.getDefaultStatus(5);
+
+        //Samsung - bot1
+        companies[2].assistantType=6;
+        companies[2].assistantStatus=AssistantManager.getDefaultStatus(6);
+
+        //Sony - Average Bot
+        companies[3].assistantType=2;
+        companies[3].assistantStatus=AssistantManager.getDefaultStatus(2);
+
+        //Xiaomi - xiaomi bot
+        companies[4].assistantType=3;
+        companies[4].assistantStatus=AssistantManager.getDefaultStatus(3);
+
         deviceViewModel.startAgain(companies);
+        startTabbedActivityReset();
     }
 
     public void startAddNewCompanyActivity(){
@@ -172,7 +196,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void startTabbedActivity(View view){
-        startActivity(new Intent().setClass(this,TabbedActivity.class));
+        startActivity(new Intent().setClass(this,TabbedActivity.class).putExtra("NEED_RESET",false));
+    }
+    public void startTabbedActivityReset(){
+        startActivity(new Intent().setClass(this,TabbedActivity.class).putExtra("NEED_RESET",true));
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -199,7 +226,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    void resetSharedPref(){
-        //todo make a global sharedpref handler
-    }
 }

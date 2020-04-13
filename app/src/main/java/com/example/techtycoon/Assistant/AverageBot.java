@@ -9,32 +9,12 @@ import com.example.techtycoon.Device;
 import com.example.techtycoon.DeviceValidator;
 import com.example.techtycoon.Wrapped_DeviceAndCompanyList;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
-public class AverageBot implements AbstractAssistant {
-    private final int[] profile = {10, 5, 3, 4, 2, 2, 2, 2, 2};
-
-    AverageBot(){}
-
-    @Override
-    public List<String> getInputHints() {
-        return null;
-    }
-
-    @Override
-    public String getAssistantName() {
-        return "Average Bot";
-    }
-
-    private int getImportance(int attrId){
-        return profile[attrId+2];
-    }
-
-    public  Wrapped_DeviceAndCompanyList work(List<Company> companyList, List<Device> deviceList, List<Device> myDevices, Company myCompany, Wrapped_DeviceAndCompanyList ret) {
-        /*
+/*
                Name: Avg
                 Description: if something is worse than the avg try to update it
                 Action tree:
@@ -44,6 +24,48 @@ public class AverageBot implements AbstractAssistant {
                 Details:
                     -if the profit is low than decrease the profits on the devices
         */
+public class AverageBot implements AbstractAssistant {
+    private int[] profile;
+
+    AverageBot(){}
+
+    @Override
+    public List<String> getInputLabels() {
+        return Arrays.asList(
+                "New Slot",
+                "Marketing",
+                "Ram",
+                "Memory",
+                "Design",
+                "Material",
+                "Color",
+                "IP",
+                "Bezels"
+        );
+    }
+
+    @Override
+    public String getAssistantName() {
+        return "Average Bot";
+    }
+
+    @Override
+    public String getDefaultStatus() {
+        return "10;5;3;4;2;2;2;2;2";
+    }
+
+    private int getImportance(int attrId){
+        return profile[attrId+2];
+    }
+
+    public  Wrapped_DeviceAndCompanyList work(List<Company> companyList, List<Device> deviceList, List<Device> myDevices, Company myCompany, Wrapped_DeviceAndCompanyList ret) {
+        //get profile
+        String[] s=myCompany.assistantStatus.split(";");
+        profile=new int[9];
+        for(int i =0;i<s.length;i++) {
+            profile[i] = Integer.parseInt(s[i]);
+        }
+
         int marketingCost = DevelopmentValidator.calculateMarketingCost(myCompany.marketing);
         //first: attrId; second: importance from the profile
         LinkedList<Pair<Integer,Integer>> toDoList=new LinkedList<>();

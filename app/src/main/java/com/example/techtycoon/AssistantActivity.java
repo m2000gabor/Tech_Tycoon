@@ -10,10 +10,13 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.util.Pair;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -25,13 +28,12 @@ import java.util.List;
 import java.util.Locale;
 
 public class AssistantActivity extends AppCompatActivity {
-    //todo Choose assistant from a list and customize below
     DeviceViewModel deviceViewModel;
     Company myCompany;
     int id;
     int currentAssistantType;
     private int originalAssistantType;
-    List<EditText> inputFields;
+    List<Pair<TextView,EditText>> inputFields;
 
     Switch headerAssistantSwitch;
     Spinner assistantSpinner;
@@ -70,20 +72,26 @@ public class AssistantActivity extends AppCompatActivity {
         headerAssistantSwitch.setChecked(myCompany.assistantType != -1);
 
         //input fields
+        LinearLayout parentLayout=findViewById(R.id.assistantActivityRootLinearLayout);
         inputFields = new LinkedList<>();
-        inputFields.add(findViewById(R.id.inputDecimalField1));
-        inputFields.add(findViewById(R.id.inputDecimalField2));
-        inputFields.add(findViewById(R.id.inputDecimalField3));
-        inputFields.add(findViewById(R.id.inputDecimalField4));
-        inputFields.add(findViewById(R.id.inputDecimalField5));
-        inputFields.add(findViewById(R.id.inputDecimalField6));
-        inputFields.add(findViewById(R.id.inputDecimalField7));
-        inputFields.add(findViewById(R.id.inputDecimalField8));
-        inputFields.add(findViewById(R.id.inputDecimalField9));
-        inputFields.add(findViewById(R.id.inputDecimalField10));
-        inputFields.add(findViewById(R.id.inputDecimalField11));
-        inputFields.add(findViewById(R.id.inputDecimalField12));
-        inputFields.add(findViewById(R.id.inputDecimalField13));
+        int i=0;
+        while(i<15){
+            TextView label=new TextView(AssistantActivity.this);
+            label.setText("Label:");
+
+            EditText e=new EditText(AssistantActivity.this);
+            e.setInputType(EditorInfo.TYPE_CLASS_NUMBER);
+
+            LinearLayout row=new LinearLayout(AssistantActivity.this);
+            row.setOrientation(LinearLayout.HORIZONTAL);
+
+            row.addView(label);
+            row.addView(e);
+
+            parentLayout.addView(row);
+            inputFields.add(new Pair<>(label,e));
+            i++;
+        }
 
         //setup the spinner
         assistantSpinner = findViewById(R.id.chooseAssistantSpinner);
@@ -157,37 +165,43 @@ public class AssistantActivity extends AppCompatActivity {
     private void setAssistantInput(List<String> inputs) {
         if (currentAssistantType != -1) {
             headerAssistantSwitch.setChecked(true);
-            List<String> hints = AssistantManager.getInputHints(currentAssistantType);
+            List<String> labels = AssistantManager.getInputLabels(currentAssistantType);
+            List<String> defaultValues = statusToInputFields(AssistantManager.getDefaultStatus(currentAssistantType));
             int i = 0;
-            while (hints != null && i < hints.size()) {
+            while (labels != null && i < labels.size()) {
                 if(inputs==null || originalAssistantType!=currentAssistantType) {
-                    inputFields.get(i).setText("");
-                    inputFields.get(i).setHint(hints.get(i));
+                    inputFields.get(i).first.setText(String.format("%s:", labels.get(i)));
+                    inputFields.get(i).second.setText("");
+                    inputFields.get(i).second.setHint(defaultValues.get(i));
                 }else{
-                    inputFields.get(i).setText(inputs.get(i));
+                    inputFields.get(i).first.setText(String.format("%s:", labels.get(i)));
+                    inputFields.get(i).second.setText(inputs.get(i));
                 }
-                inputFields.get(i).setVisibility(View.VISIBLE);
+                inputFields.get(i).first.setVisibility(View.VISIBLE);
+                inputFields.get(i).second.setVisibility(View.VISIBLE);
                 i++;
             }
             while (i < inputFields.size()) {
-                inputFields.get(i).setVisibility(View.GONE);
+                inputFields.get(i).first.setVisibility(View.GONE);
+                inputFields.get(i).second.setVisibility(View.GONE);
                 i++;
             }
         } else {
             headerAssistantSwitch.setChecked(false);
             int i = 0;
             while (i < inputFields.size()) {
-                inputFields.get(i).setVisibility(View.GONE);
+                inputFields.get(i).first.setVisibility(View.GONE);
+                inputFields.get(i).second.setVisibility(View.GONE);
                 i++;
             }
         }
     }
 
     private List<String> getAssistantInput() {
-        List<String> hints = AssistantManager.getInputHints(currentAssistantType);
+        List<String> labels = AssistantManager.getInputLabels(currentAssistantType);
         List<String> inputs = new LinkedList<>();
-        for (int i = 0; hints != null && i < hints.size(); i++) {
-            String in = inputFields.get(i).getText().toString();
+        for (int i = 0; labels != null && i < labels.size(); i++) {
+            String in = inputFields.get(i).second.getText().toString();
             if (in.equals("")) {
                 throw new IllegalArgumentException();
             }

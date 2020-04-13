@@ -17,29 +17,37 @@ import java.util.stream.Collectors;
 
 import static com.example.techtycoon.Assistant.ToolsForAssistants.*;
 
+/*
+monopol company
+  3 key development points: slot, marketing, research
+ release points: overpriced, unique(best tech); lower priced high-middle;
+ goal: prices should increase in general in the market, higher attributes should be used by more people
+
+ 0: choose a longTerm goal
+ 1: revise the longTerm goal in the changed market, might change it
+ 2: determine a shortTerm/instant goal
+ 3: decide whether save money for the long term or react to the market
+ */
 public class AppleBot implements AbstractAssistant{
-    final int goodPointImportance;
-    final int newSlotImportance;
-    final int badThingImportance;
-    final int[] marketingImportance;
+    int goodPointImportance;
+    int newSlotImportance;
+    int badThingImportance;
+    int[] marketingImportance;
 
-    AppleBot() {
-        goodPointImportance=5;
-        newSlotImportance=10;
-        badThingImportance=6;
-        marketingImportance=new int[]{10,6,4,3,1};
-    }
-
-    AppleBot(int goodPointImportance,int newSlotImportance,int badThingImportance,int[] marketingImportance){
-        this.goodPointImportance=goodPointImportance;
-        this.newSlotImportance=newSlotImportance;
-        this.badThingImportance=badThingImportance;
-        this.marketingImportance=marketingImportance.clone();
-    }
+    AppleBot() {}
 
     @Override
-    public List<String> getInputHints() {
-        return null;
+    public List<String> getInputLabels() {
+        return Arrays.asList(
+                "Good point",
+                "New slot",
+                "Bad thing",
+                "Marketing - region 1",
+                "Marketing - region 2",
+                "Marketing - region 3",
+                "Marketing - region 4",
+                "Marketing - region 5"
+        );
     }
 
     @Override
@@ -47,20 +55,24 @@ public class AppleBot implements AbstractAssistant{
         return "Apple Bot";
     }
 
+    @Override
+    public String getDefaultStatus() {
+        return "5;10;6;10;6;4;3;1";
+    }
+
     public Wrapped_DeviceAndCompanyList work(List<Company> companyList, List<Device> deviceList, List<Device> myDevices, Company myCompany, Wrapped_DeviceAndCompanyList ret){
-        /*
-        monopol company
-          3 key development points: slot, marketing, research
-         release points: overpriced, unique(best tech); lower priced high-middle;
-         goal: prices should increase in general in the market, higher attributes should be used by more people
+        //status:
+        String[] status=myCompany.assistantStatus.split(";");
+        goodPointImportance=Integer.parseInt(status[0]);
+        newSlotImportance=Integer.parseInt(status[1]);
+        badThingImportance=Integer.parseInt(status[2]);
+        marketingImportance=new int[5];
+        marketingImportance[0]=Integer.parseInt(status[3]);
+        marketingImportance[1]=Integer.parseInt(status[4]);
+        marketingImportance[2]=Integer.parseInt(status[5]);
+        marketingImportance[3]=Integer.parseInt(status[6]);
+        marketingImportance[4]=Integer.parseInt(status[7]);
 
-         0: choose a longTerm goal
-         1: revise the longTerm goal in the changed market, might change it
-         2: determine a shortTerm/instant goal
-         3: decide whether save money for the long term or react to the market
-         */
-
-        //status:"companyContext"?
         /* goal:
         -4: spread our unique, strong future
         -3: go up the prices
@@ -189,9 +201,9 @@ public class AppleBot implements AbstractAssistant{
                     // cut the prices if the companyContext is 1
                     int i=0;
                     //sort by popularity
-                    myDevices.sort(Comparator.comparingInt((Device d)->d.getSoldPieces() ));
+                    myDevices.sort(Comparator.comparingInt(Device::getSoldPieces));
 
-                    while(i<deviceList.size() && !producibleByTheCompany(myCompany,deviceList.get(i)) ){i++;}
+                    while(i<deviceList.size() && !myCompany.producibleByTheCompany(deviceList.get(i)) ){i++;}
                     if(i<deviceList.size()){
                         Device newD=new Device(deviceList.get(i));
                         myCompany.logs = myCompany.logs+"A popular device named"+deviceList.get(i).name+" is copied\n";
@@ -205,6 +217,13 @@ public class AppleBot implements AbstractAssistant{
                         for (int j = 0; bestAttrIds.get(j).second > 100; j++) {
                             newD.setFieldByNum(bestAttrIds.get(j).first,myCompany.getLevels_USE_THIS()[bestAttrIds.get(j).first]);
                             myCompany.logs = myCompany.logs+bestAttrIds.get(0)+". attribute is set to the new device\n";
+                        }
+                        //release
+                        if(myCompany.hasFreeSlot()){
+                            ret.insert.add(newD);
+                        }else{
+                            ret.delete.add(myDevices.get(min_Overall(myDevices)));
+                            ret.insert.add(newD);
                         }
                     }
                     break;

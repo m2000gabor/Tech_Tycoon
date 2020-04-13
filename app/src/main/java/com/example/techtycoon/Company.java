@@ -5,6 +5,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 //todo extended company class with statistic
+//todo used slots field should be calculated by a function and not store it
 @Entity
 public class Company {
     @PrimaryKey(autoGenerate = true)
@@ -102,5 +103,13 @@ public class Company {
         r*=0.8;
         r+=lastProfit*10;
         return r;
+    }
+
+    public boolean producibleByTheCompany(Device d){
+        int[] cLevels=this.getLevels_USE_THIS();
+        for (int i=0;i<cLevels.length;i++){
+            if(cLevels[i]<d.getFieldByNum(i)){return false;}
+        }
+        return true;
     }
 }

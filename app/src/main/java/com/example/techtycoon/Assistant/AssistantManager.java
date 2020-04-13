@@ -3,7 +3,6 @@ package com.example.techtycoon.Assistant;
 import com.example.techtycoon.Company;
 import com.example.techtycoon.Device;
 import com.example.techtycoon.Wrapped_DeviceAndCompanyList;
-import static com.example.techtycoon.Assistant.ToolsForAssistants.*;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -20,8 +19,12 @@ public class AssistantManager {
             new Bot1()
     );
 
-    public static List<String> getInputHints(int assistantId){
-        return ASSISTANTS.get(assistantId).getInputHints();
+    public static List<String> getInputLabels(int assistantId){
+        return ASSISTANTS.get(assistantId).getInputLabels();
+    }
+
+    public static String getDefaultStatus(int assistantId){
+        return ASSISTANTS.get(assistantId).getDefaultStatus();
     }
 
     public static List<String> getAssistantNames(){
@@ -56,15 +59,6 @@ public class AssistantManager {
                 r.delete.addAll(updatesFromAnAssistant.delete);
                 r.update.addAll(updatesFromAnAssistant.update);
                 r.UpdateCompanies.addAll(updatesFromAnAssistant.UpdateCompanies);
-
-                //last security steps
-                if(myCompany.hasFreeSlot()){
-                    Device newDev=new Device(myDevices.get(max_Overall(myDevices)));
-                    newDev.profit*=1.2;
-                    newDev.name= ToolsForAssistants.nameBuilder.buildName(newDev.name,0);
-                    updatesFromAnAssistant.insert.add(newDev);
-                    myCompany.usedSlots+=updatesFromAnAssistant.insert.size();
-                }
             }
         }
         return r;

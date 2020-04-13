@@ -13,13 +13,18 @@ class CoAssistant_avgMarketing implements AbstractAssistant {
     CoAssistant_avgMarketing() {}
 
     @Override
-    public List<String> getInputHints() {
+    public List<String> getInputLabels() {
         return null;
     }
 
     @Override
     public String getAssistantName() {
         return "Average marketing";
+    }
+
+    @Override
+    public String getDefaultStatus() {
+        return "";
     }
 
     @Override

@@ -11,6 +11,17 @@ import static com.example.techtycoon.TabbedActivity.NAME_newestPartOfTheSeries;
 
 public class ToolsForAssistants {
     //tools
+    static Device createClosestDevice(Company myCompany,Device original){
+        Device clone=new Device(original);
+        for (int i = 0; i < Device.NUMBER_OF_ATTRIBUTES; i++) {
+            if(clone.getFieldByNum(i)>myCompany.getLevels_USE_THIS()[i]){
+                clone.setFieldByNum(i,myCompany.getLevels_USE_THIS()[i]);
+            }
+        }
+        clone.ownerCompanyId=myCompany.companyId;
+        return clone;
+    }
+
     static int avg_lastProfit(List<Company> companyList) {
         int sum = 0;
         for (Company c : companyList) {
@@ -18,7 +29,6 @@ public class ToolsForAssistants {
         }
         return sum / companyList.size();
     }
-
     static double avg_marketing(List<Company> companyList) {
         double sum = 0;
         for (Company c : companyList) {
@@ -27,6 +37,11 @@ public class ToolsForAssistants {
         return sum / companyList.size();
     }
 
+    /**
+     *
+     * @param deviceList
+     * @return the minIndex of the device with the lowest income
+     */
     static int min_Overall(List<Device> deviceList) {
         int minOverallIncome = deviceList.get(0).getOverallIncome();
         int minIndex = 0;
@@ -103,7 +118,6 @@ public class ToolsForAssistants {
         static String buildName(String prevName, int nameConvention) {
             String r;
             switch (nameConvention) {
-                default:r = prevName.concat("+");break;
                 case 1:
                     String series = prevName.split("[0-9]", 2)[0];
                     //remove + which is not part of the series name
@@ -113,6 +127,7 @@ public class ToolsForAssistants {
                         series=series.substring(0,series.length()-1);
                     }
                     if(foundAPlusSign){series=series+" ";}
+                    if(series.charAt(series.length()-1) != ' '){series=series+" ";}
                     //find the series name in the table
                     if (NAME_newestPartOfTheSeries.containsKey(series)) {
                         Integer num = NAME_newestPartOfTheSeries.get(series);
@@ -124,17 +139,10 @@ public class ToolsForAssistants {
                         NAME_newestPartOfTheSeries.put(series + " ", 2);
                     }
                     break;
+                default:r = prevName.concat("+");break;
             }
             return r;
         }
-    }
-
-    public static boolean producibleByTheCompany(Company c, Device d){
-        int[] cLevels=c.getLevels_USE_THIS();
-        for (int i=0;i<cLevels.length;i++){
-            if(cLevels[i]<d.getFieldByNum(i)){return false;}
-        }
-        return true;
     }
 
     /**

@@ -142,7 +142,10 @@ public class FragmentDeviceCreator extends Fragment {
                     Toast.makeText(getContext(), "Set a company with free slots", Toast.LENGTH_LONG).show();
                 } else {
                     Company maker=companies.get(spin.getSelectedItemPosition()-1);
-                    String deviceName = "test by "+maker.name;
+                    String deviceName;
+                    if(deviceNameField.getText().toString().equals("")){
+                        deviceName= "test by "+maker.name;
+                    }else{deviceName=deviceNameField.getText().toString();}
                     int profit = 100;
                     maker.usedSlots++;
                     int[] params=new int[Device.NUMBER_OF_ATTRIBUTES];
@@ -327,7 +330,7 @@ public class FragmentDeviceCreator extends Fragment {
         List<Device> producible=new LinkedList<>();
         List<Device> allDev=deviceViewModel.getAllDevicesList();
         for (Device d : allDev) {
-            if(ToolsForAssistants.producibleByTheCompany(companies.get(myCompanysIndex),d)){producible.add(d);}
+            if(companies.get(myCompanysIndex).producibleByTheCompany(d)){producible.add(d);}
         }
         DialogFragment dialog=new ChooseADeviceDialogFragment(producible);
         dialog.show(getChildFragmentManager(),"cloneDevice");

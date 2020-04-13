@@ -103,7 +103,7 @@ public class Device {
     }
 
     public Device(Device d) {
-        this.id=-1;
+        this.id=0;
         this.name = d.name;
         this.profit = d.profit;
         this.cost=d.cost;

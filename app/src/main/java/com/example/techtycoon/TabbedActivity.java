@@ -14,14 +14,11 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.os.storage.StorageManager;
-import android.text.Selection;
 import android.view.View;
 import android.widget.Toast;
 
 import com.example.techtycoon.ui.main.SectionsPagerAdapter;
 
-import java.nio.channels.SelectableChannel;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -51,14 +48,35 @@ public class TabbedActivity extends AppCompatActivity  implements ChooseADeviceD
 
         assistantManager=new AssistantManager();
         //get sharedPref
-        assistantTurn=getSharedPreferences("isAssistantTurn",MODE_PRIVATE).getBoolean("isAssistantTurn",false);
+        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        if(getIntent().getBooleanExtra("NEED_RESET",false)){
+            assistantTurn=false;
+            editor.putFloat(getString(R.string.simulator_lastAvgPrice), 100);
+            editor.putFloat(getString(R.string.simulator_lastAvgMemory),1);
+            editor.putFloat(getString(R.string.simulator_lastAvgRam),1);
+            editor.putFloat(getString(R.string.simulator_lastAvgDesign),1);
+            editor.putFloat(getString(R.string.simulator_lastAvgMaterial),1);
+            editor.putFloat(getString(R.string.simulator_lastAvgColors),1);
+            editor.putFloat(getString(R.string.simulator_lastAvgIp),1);
+            editor.putFloat(getString(R.string.simulator_lastAvgBezels),1);
+
+            Set<String> nameTableKeysSet=NAME_newestPartOfTheSeries.keySet();
+            editor.putStringSet("nameTableKeys",nameTableKeysSet);
+            for (String key :nameTableKeysSet) {editor.putInt(key,1);}
+            editor.apply();
+
+            //Log.d("SharedPrefDeletion", "Need deletion");
+        }else{
+            //Log.d("SharedPrefDeletion", "Dont need deletion");
+            assistantTurn=getSharedPreferences("isAssistantTurn",MODE_PRIVATE).getBoolean("isAssistantTurn",false);
+        }
 
         FloatingActionButton fab = findViewById(R.id.fabSimulate);
         if(assistantTurn){fab.setImageResource(R.drawable.ic_account_circle_white_24dp);}
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SharedPreferences  sharedPref =getPreferences(Context.MODE_PRIVATE);
                 if(!assistantTurn){
                 //get sharedPrefs
                 float lastAvgPrice = sharedPref.getFloat(getString(R.string.simulator_lastAvgPrice), 5);
@@ -75,7 +93,6 @@ public class TabbedActivity extends AppCompatActivity  implements ChooseADeviceD
                 Wrapped_DeviceAndCompanyList simulatorResults=simulator.simulate();
                 oneMonthSimulated(simulatorResults);
 
-                SharedPreferences.Editor editor = sharedPref.edit();
                 editor.putFloat(getString(R.string.simulator_lastAvgPrice), (float) simulator.lastAvgPrice);
                 editor.putFloat(getString(R.string.simulator_lastAvgMemory),(float) simulator.attrAverages[0]);
                 editor.putFloat(getString(R.string.simulator_lastAvgRam),(float) simulator.attrAverages[1]);
