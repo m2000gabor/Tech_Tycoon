@@ -1,8 +1,14 @@
-package com.example.techtycoon;
+package com.example.techtycoon.ui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.example.techtycoon.DevelopmentValidator;
+import com.example.techtycoon.Device;
+import com.example.techtycoon.DeviceValidator;
+import com.example.techtycoon.FragmentDeviceCreator;
+import com.example.techtycoon.MainActivity;
+import com.example.techtycoon.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,7 +42,7 @@ public class ChooseBodyActivity extends AppCompatActivity {
 
         BODY_MAX_POINTS=new int[Device.NUMBER_OF_ATTRIBUTES];
         for(int i=0;i<Device.NUMBER_OF_ATTRIBUTES-2;i++){
-            BODY_MAX_POINTS[i]=DevelopmentValidator.getMaxLevel(i+2);};
+            BODY_MAX_POINTS[i]= DevelopmentValidator.getMaxLevel(i+2);};
 
         //get int
         levels=getIntent().getIntArrayExtra(MainActivity.LEVELS);
@@ -65,8 +71,9 @@ public class ChooseBodyActivity extends AppCompatActivity {
 
         result=new int[Device.CHILDREN_OF_BUDGETS[1]];
         for (int i=0;i<Device.CHILDREN_OF_BUDGETS[1];i++){
+            Device.DeviceAttribute bodyAttribute=Device.getBodyAttributes().get(i);
             valueTextViews[i].setText(String.format(Locale.getDefault(),"%d/%d points",BODY_MAX_POINTS[i],1) );
-            costTextViews[i].setText(String.format(Locale.getDefault(),"%d$",DeviceValidator.getCostOfBody(i,1)) );
+            costTextViews[i].setText(String.format(Locale.getDefault(),"%d$", DeviceValidator.getCostOfBody(bodyAttribute,1)) );
             result[i]=1;
         }
 
@@ -77,8 +84,9 @@ public class ChooseBodyActivity extends AppCompatActivity {
                 progress++;
                 int i=seekbars.indexOf(seekBar);
                 result[i]=progress;
+                Device.DeviceAttribute bodyAttribute=Device.getBodyAttributes().get(i);
                 valueTextViews[i].setText(String.format(Locale.getDefault(),"%d/%d points",BODY_MAX_POINTS[i],progress) );
-                costTextViews[i].setText(String.format(Locale.getDefault(),"%d$",DeviceValidator.getCostOfBody(i,progress)) );
+                costTextViews[i].setText(String.format(Locale.getDefault(),"%d$",DeviceValidator.getCostOfBody(bodyAttribute,progress)) );
             }
 
             @Override
@@ -98,7 +106,7 @@ public class ChooseBodyActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                for (int i=0;i<Device.CHILDREN_OF_BUDGETS[1];i++){cost+=DeviceValidator.getCostOfBody(i,result[1]);}
+                for (Device.DeviceAttribute a: Device.getBodyAttributes()){cost+=DeviceValidator.getCostOfBody(a,result[1]);}
                 Intent intent=new Intent();
                 intent.putExtra(FragmentDeviceCreator.BODY_RESULTS,result);
                 intent.putExtra("cost",cost);

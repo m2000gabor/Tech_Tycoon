@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_allDevices"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".FragmentAllDevices">
@@ -18,37 +19,51 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0">
 
-        <Spinner
-            android:id="@+id/sortbySpinner"
+        <Button
+            android:id="@+id/filterByButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_marginStart="140dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.2" />
-
-        <Spinner
-            android:id="@+id/companySpinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@+id/sortbySpinner"
-            app:layout_constraintEnd_toStartOf="@id/ascOrDescImageView"
-            app:layout_constraintStart_toEndOf="@+id/sortbySpinner"
-            app:layout_constraintTop_toTopOf="@+id/sortbySpinner" />
+            android:layout_marginEnd="@dimen/text_margin"
+            style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
+            android:contentDescription="Filter by"
+            android:text="Filter"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
-            android:contentDescription="Reverse order"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/sortbySpinner"
-            app:layout_constraintBottom_toBottomOf="@+id/sortbySpinner"
+            android:id="@+id/sortByImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/text_margin"
+            android:contentDescription="Sort by"
+            android:src="@drawable/ic_sort_black_24dp"
+            app:layout_constraintEnd_toStartOf="@+id/ascOrDescImageView"
+            app:layout_constraintTop_toTopOf="@+id/ascOrDescImageView" />
+
+        <ImageButton
             android:id="@+id/ascOrDescImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_sort_by_alpha_black_24dp"/>
+            android:contentDescription="Reverse order"
+            android:src="@drawable/ic_sort_by_alpha_black_24dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!--
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/devicesRecyclerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="?android:colorBackground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_allDevices_ConstrainLayout1"
+        tools:listitem="@layout/recyclerview_item_device" />
+-->
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/devicesRecyclerView"
@@ -61,6 +76,5 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fragment_allDevices_ConstrainLayout1"
         tools:listitem="@layout/recyclerview_item_device" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

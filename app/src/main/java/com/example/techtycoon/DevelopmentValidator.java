@@ -1,7 +1,5 @@
 package com.example.techtycoon;
 
-import androidx.annotation.Nullable;
-
 import static java.lang.Integer.max;
 
 public class DevelopmentValidator {
@@ -22,8 +20,18 @@ public class DevelopmentValidator {
     * returns -1 if the attribute is maxed out
     * lowest level is 1
      */
-    public static int getOneDevelopmentCost(int attrID,int actualLvl){
-        if( DEVELOPMENT_COSTS[attrID].length <= actualLvl-1){
+    public static int getOneDevelopmentCost(Device.DeviceAttribute attr, int actualLvl){
+        int attrID=-1;
+        switch (attr){
+            case STORAGE_RAM: attrID =0;break;
+            case STORAGE_MEMORY:attrID =1;break;
+            case BODY_DESIGN:attrID =2;break;
+            case BODY_MATERIAL:attrID =3;break;
+            case BODY_COLOR:attrID =4;break;
+            case BODY_IP:attrID =5;break;
+            case BODY_BEZEL:attrID =6;break;
+        }
+        if(DEVELOPMENT_COSTS[attrID].length <= actualLvl-1){
             return -1;
         }else{return DEVELOPMENT_COSTS[attrID][actualLvl-1];}
     }
@@ -34,8 +42,10 @@ public class DevelopmentValidator {
      */
     public static int[] getAllDevelopmentCost(int[] levels){
         int[] r=new int[levels.length];
-        for(int i=0;i<levels.length;i++){
-            r[i]=getOneDevelopmentCost(i,levels[i]);
+        int i=0;
+        for(Device.DeviceAttribute a: Device.getAllAttribute()){
+            r[i]=getOneDevelopmentCost(a,levels[i]);
+            i++;
         }
         return r;
     }
@@ -54,6 +64,6 @@ public class DevelopmentValidator {
     }
 
     public static int calculateMarketingCost(int actualMarketingLevel){
-        return max(10000+(actualMarketingLevel*30),0);
+        return 5000+(actualMarketingLevel*100);
     }
 }

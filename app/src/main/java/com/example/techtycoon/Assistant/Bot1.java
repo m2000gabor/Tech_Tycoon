@@ -77,15 +77,17 @@ class Bot1 implements AbstractAssistant {
         double marketingScore=marketingImp * marketingContext / marketingCost ;
         pairs.add(new Pair<>(-1,marketingScore));
 
-        for (int i = 0; i < Device.NUMBER_OF_ATTRIBUTES; i++) {
+        int k=0;
+        for (Device.DeviceAttribute attribute:Device.getAllAttribute()) {
             LinkedList<Integer> list=new LinkedList<Integer>();
-            for(Device d:deviceList){list.add(d.getFieldByNum(i));}
-            double context=2*getRegion(list,myCompany.getLevels_USE_THIS()[i]);
+            for(Device d:deviceList){list.add(d.getFieldByAttribute(attribute));}
+            double context=2*getRegion(list,myCompany.getLevelByAttribute(attribute));
             double score;
-            if( DevelopmentValidator.getOneDevelopmentCost(i,myCompany.getLevels_USE_THIS()[i])== -1){score=0;
-            }else{score = devImportance[i] * context / DevelopmentValidator.getOneDevelopmentCost(i,
-                    myCompany.getLevels_USE_THIS()[i]);}
-            pairs.add(new Pair<>(i,score));
+            if( DevelopmentValidator.getOneDevelopmentCost(attribute,myCompany.getLevelByAttribute(attribute))== -1){score=0;
+            }else{score = devImportance[k] * context / DevelopmentValidator.getOneDevelopmentCost(attribute,
+                    myCompany.getLevelByAttribute(attribute));}
+            pairs.add(new Pair<>(k,score));
+            k++;
         }
         //most important is at the 0 index
         Collections.sort(pairs, new Comparator<Pair<Integer,Double>>() {
@@ -121,12 +123,12 @@ class Bot1 implements AbstractAssistant {
             } else {
                 myCompany.logs=myCompany.logs+"Trying to improve the "+key+". attribute...\n";
                 //an attribute dev is the highest priority
-                if (myCompany.money >= DevelopmentValidator.getOneDevelopmentCost(key,
+                if (myCompany.money >= DevelopmentValidator.getOneDevelopmentCost(Device.getAllAttribute().get(key),
                         myCompany.getLevels_USE_THIS()[key]) &&
-                        DevelopmentValidator.getOneDevelopmentCost(key,myCompany.getLevels_USE_THIS()[key]) !=-1
+                        DevelopmentValidator.getOneDevelopmentCost(Device.getAllAttribute().get(key),myCompany.getLevels_USE_THIS()[key]) !=-1
                 ) {
                     int[] lvls = myCompany.getLevels_USE_THIS();
-                    myCompany.money -= DevelopmentValidator.getOneDevelopmentCost(key,
+                    myCompany.money -= DevelopmentValidator.getOneDevelopmentCost(Device.getAllAttribute().get(key),
                             myCompany.getLevels_USE_THIS()[key]);
                     lvls[key]++;
                     myCompany.setLevels_USE_THIS(lvls);
@@ -148,7 +150,7 @@ class Bot1 implements AbstractAssistant {
             for (int i = 1; i < newStatusInts.length; i++) {
                 int attrId = newStatusInts[i];
                 if(attrId >=0){
-                    newDev.setFieldByNum(attrId, myCompany.getLevels_USE_THIS()[attrId]);}
+                    newDev.setFieldByAttribute(Device.getAllAttribute().get(attrId), myCompany.getLevels_USE_THIS()[attrId]);}
             }
 
             newDev.profit=priceMaker(newDev,deviceList,myDevices,newStatusInts[0]);

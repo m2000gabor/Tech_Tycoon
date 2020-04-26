@@ -166,9 +166,9 @@ public class MainActivity extends AppCompatActivity {
                 new Company("Sony",1,STARTING_LEVELS),
                 new Company("Xiaomi",1,STARTING_LEVELS),
                 new Company("Player",1,STARTING_LEVELS)};
-        //Apple - applebot
-        companies[0].assistantType=4;
-        companies[0].assistantStatus=AssistantManager.getDefaultStatus(4);
+        //Apple - applebot principle
+        companies[0].assistantType=7;
+        companies[0].assistantStatus=AssistantManager.getDefaultStatus(7);
 
         //Strawberry - applebot2
         companies[1].assistantType=5;

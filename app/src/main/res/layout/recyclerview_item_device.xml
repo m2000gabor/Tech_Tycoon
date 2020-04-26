@@ -1,61 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/linearLayout1"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/my_card_background"
-    android:layout_margin="5sp"
-    >
-
-    <TextView
-        android:id="@+id/deviceNameTextView"
-        android:layout_width="wrap_content"
+        android:id="@+id/linearLayout1"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:text="name"
-        android:textSize="@dimen/text_size"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_margin="5sp"
+        android:background="@drawable/my_card_background"
+        >
 
-    <TextView
-        android:id="@+id/incomeTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:text="0$"
-        android:textSize="@dimen/text_size"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/deviceNameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="name"
+            android:textSize="@dimen/text_size"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/deviceStorageTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8sp"
-        android:text="Storage: "
-        android:textSize="@dimen/text_size_small"
-        app:layout_constraintStart_toStartOf="@+id/deviceNameTextView"
-        app:layout_constraintTop_toBottomOf="@+id/deviceNameTextView" />
+        <TextView
+            android:id="@+id/incomeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:text="0$"
+            android:textSize="@dimen/text_size"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/deviceBodyTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="6sp"
-        android:text="Body: "
-        android:textSize="@dimen/text_size_small"
-        app:layout_constraintStart_toStartOf="@+id/deviceStorageTextView"
-        app:layout_constraintTop_toBottomOf="@+id/deviceStorageTextView" />
+        <TextView
+            android:id="@+id/deviceStorageTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Storage:  10 (1 1)"
+            android:textSize="@dimen/text_size_small"
+            app:layout_constraintStart_toStartOf="@+id/deviceNameTextView"
+            app:layout_constraintTop_toBottomOf="@+id/deviceNameTextView" />
 
-    <TextView
-        android:id="@+id/soldPiecesTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Sold: 0"
-        android:textSize="@dimen/text_size_small"
-        app:layout_constraintEnd_toEndOf="@+id/incomeTextView"
-        app:layout_constraintTop_toBottomOf="@+id/incomeTextView" />
+        <TextView
+            android:id="@+id/deviceBodyTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Body:  10 (1 1 1 1 1)"
+            android:textSize="@dimen/text_size_small"
+            app:layout_constraintStart_toStartOf="@+id/deviceStorageTextView"
+            app:layout_constraintTop_toBottomOf="@+id/deviceStorageTextView" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/soldPiecesTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sold: 0"
+            android:textSize="@dimen/text_size_small"
+            app:layout_constraintEnd_toEndOf="@+id/incomeTextView"
+            app:layout_constraintTop_toBottomOf="@+id/incomeTextView" />
+
+        <TextView
+            android:id="@+id/performanceTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textSize="@dimen/text_size_small"
+            app:layout_constraintEnd_toEndOf="@+id/soldPiecesTextView"
+            app:layout_constraintTop_toBottomOf="@+id/soldPiecesTextView" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+

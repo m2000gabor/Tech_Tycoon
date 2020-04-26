@@ -6,21 +6,11 @@ import com.example.techtycoon.Device;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.example.techtycoon.TabbedActivity.NAME_newestPartOfTheSeries;
 
 public class ToolsForAssistants {
-    //tools
-    static Device createClosestDevice(Company myCompany,Device original){
-        Device clone=new Device(original);
-        for (int i = 0; i < Device.NUMBER_OF_ATTRIBUTES; i++) {
-            if(clone.getFieldByNum(i)>myCompany.getLevels_USE_THIS()[i]){
-                clone.setFieldByNum(i,myCompany.getLevels_USE_THIS()[i]);
-            }
-        }
-        clone.ownerCompanyId=myCompany.companyId;
-        return clone;
-    }
 
     static int avg_lastProfit(List<Company> companyList) {
         int sum = 0;
@@ -43,11 +33,11 @@ public class ToolsForAssistants {
      * @return the minIndex of the device with the lowest income
      */
     static int min_Overall(List<Device> deviceList) {
-        int minOverallIncome = deviceList.get(0).getOverallIncome();
+        int minOverallIncome = deviceList.get(0).getIncome();
         int minIndex = 0;
         for (int i = 1; i < deviceList.size(); i++) {
-            if (deviceList.get(i).getOverallIncome() < minOverallIncome) {
-                minOverallIncome = deviceList.get(i).getOverallIncome();
+            if (deviceList.get(i).getIncome() < minOverallIncome) {
+                minOverallIncome = deviceList.get(i).getIncome();
                 minIndex = i;
             }
         }
@@ -55,62 +45,86 @@ public class ToolsForAssistants {
     }
 
     static int max_Overall(List<Device> deviceList) {
-        int maxOverallIncome = deviceList.get(0).getOverallIncome();
+        int maxOverallIncome = deviceList.get(0).getIncome();
         int maxIndex = 0;
         for (int i = 1; i < deviceList.size(); i++) {
-            if (deviceList.get(i).getOverallIncome() > maxOverallIncome) {
-                maxOverallIncome = deviceList.get(i).getOverallIncome();
+            if (deviceList.get(i).getIncome() > maxOverallIncome) {
+                maxOverallIncome = deviceList.get(i).getIncome();
                 maxIndex = i;
             }
         }
         return maxIndex;
     }
 
-    static double avg(List<Device> list, int type) {
+    static double avg(List<Device> list, Device.DeviceAttribute attribute) {
         double s = 0;
         int soldP = 0;
         for (Device d : list) {
-            s += d.getFieldByNum(type) * d.getSoldPieces();
+            s += d.getFieldByAttribute(attribute) * d.getSoldPieces();
             soldP += d.getSoldPieces();
         }
         return s / soldP;
     }
 
     //returns the min value
-    static int min(Device[] list, int type) {
+    static int min(List<Device> list, Device.DeviceAttribute type) {
         int minInd = 0;
-        for (int i = 0; i < list.length; i++) {
-            if (list[i].getFieldByNum(type) < list[minInd].getFieldByNum(type)) {
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getFieldByAttribute(type) < list.get(minInd).getFieldByAttribute(type)) {
                 minInd = i;
             }
         }
-        return list[minInd].getFieldByNum(type);
+        return list.get(minInd).getFieldByAttribute(type);
+    }
+
+    //returns the min index
+    static int minKer(List<Integer> list) {
+        int minInd = 0;
+        for (int i = 1; i < list.size(); i++) {
+            if (list.get(minInd) > list.get(i)) {
+                minInd = i;
+            }
+        }
+        return minInd;
     }
 
     /**
      * @return the max value
      */
-    static int max(List<Device> list, int type) {
+    static int max(List<Device> list, Device.DeviceAttribute type) {
         int maxInd = 0;
         for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).getFieldByNum(type) > list.get(maxInd).getFieldByNum(type)) {
+            if (list.get(i).getFieldByAttribute(type) > list.get(maxInd).getFieldByAttribute(type)) {
                 maxInd = i;
             }
         }
-        return list.get(maxInd).getFieldByNum(type);
+        return list.get(maxInd).getFieldByAttribute(type);
     }
 
     /**
      * @return the max index
      */
-    static int maxIndex(List<Device> list, int type) {
+    static int maxIndex(List<Device> list, Device.DeviceAttribute type) {
         int maxInd = 0;
         for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).getFieldByNum(type) > list.get(maxInd).getFieldByNum(type)) {
+            if (list.get(i).getFieldByAttribute(type) > list.get(maxInd).getFieldByAttribute(type)) {
                 maxInd = i;
             }
         }
         return maxInd;
+    }
+
+    /**
+     * @return the min index
+     */
+    static int minInd(List<Device> list, Device.DeviceAttribute type) {
+        int minInd = 0;
+        for (int i = 1; i < list.size(); i++) {
+            if (list.get(i).getFieldByAttribute(type) < list.get(minInd).getFieldByAttribute(type)) {
+                minInd = i;
+            }
+        }
+        return minInd;
     }
 
     //tools
@@ -205,14 +219,24 @@ public class ToolsForAssistants {
         }
         return (int) Math.round(100*((double)(value-min))/(max-min));
     }
+    static int getRegion100(List<Device> devs, Device.DeviceAttribute attribute, int value) {
+        List<Integer> list=devs.stream().map(d->d.getFieldByAttribute(attribute)).collect(Collectors.toList());
+        int min = value;
+        int max = value;
+        for (Integer n : list) {
+            if(n<min){min=n;
+            }else if(n>max){max=n;}
+        }
+        return (int) Math.round(100*((double)(value-min))/(max-min));
+    }
 
     static int priceMaker(Device newDevice, List<Device> allDevices, List<Device> myDevices, int myCompanyContext) {
         int profit = 0;
 
         //try to find similar devices
-        LinkedList<LinkedList<Device>> listOfLists = new LinkedList<LinkedList<Device>>();
+        LinkedList<LinkedList<Device>> listOfLists = new LinkedList<>();
         for (int i = 0; i < Device.NUMBER_OF_ATTRIBUTES + 1; i++) {
-            listOfLists.add(new LinkedList<Device>());
+            listOfLists.add(new LinkedList<>());
         }
         for (Device d : allDevices) {
             int diff = newDevice.equalAttributes(d);
@@ -222,22 +246,22 @@ public class ToolsForAssistants {
         if (listOfLists.get(0).size() > 1) {
             switch (myCompanyContext) {
                 case 1:
-                    profit = (int) Math.floor(min(listOfLists.get(0).toArray(new Device[0]), -1) * 0.8);
+                    profit = (int) Math.floor(min(listOfLists.get(0), Device.DeviceAttribute.PROFIT) * 0.8);
                     break;
                 case 2:
-                    profit = (int) Math.floor(min(listOfLists.get(0).toArray(new Device[0]), -1) * 0.9);
+                    profit = (int) Math.floor(min(listOfLists.get(0), Device.DeviceAttribute.PROFIT) * 0.9);
                     break;
                 case 3:
-                    profit = (int) Math.floor(avg(listOfLists.get(0), -1));
+                    profit = (int) Math.floor(avg(listOfLists.get(0), Device.DeviceAttribute.PROFIT));
                     break;
                 case 4:
                     profit = (int) Math.floor(
-                            (avg(listOfLists.get(0), -1) +
-                                    max(listOfLists.get(0), -1))
+                            (avg(listOfLists.get(0), Device.DeviceAttribute.PROFIT) +
+                                    max(listOfLists.get(0), Device.DeviceAttribute.PROFIT))
                                     / 2);
                     break;
                 case 5:
-                    profit = (int) (Math.floor(max(listOfLists.get(0), -1)) * 1.1);
+                    profit = (int) (Math.floor(max(listOfLists.get(0), Device.DeviceAttribute.PROFIT)) * 1.1);
                     break;
             }
         } else if (listOfLists.get(0).size() == 1) {
@@ -267,22 +291,22 @@ public class ToolsForAssistants {
                 int tempProfit = 0;
                 switch (myCompanyContext) {
                     case 1:
-                        tempProfit = (int) Math.floor(min(listOfLists.get(i).toArray(new Device[0]), -1) * 0.8);
+                        tempProfit = (int) Math.floor(min(listOfLists.get(i), Device.DeviceAttribute.PROFIT) * 0.8);
                         break;
                     case 2:
-                        tempProfit = (int) Math.floor(min(listOfLists.get(i).toArray(new Device[0]), -1) * 0.9);
+                        tempProfit = (int) Math.floor(min(listOfLists.get(i), Device.DeviceAttribute.PROFIT) * 0.9);
                         break;
                     case 3:
-                        tempProfit = (int) Math.floor(avg(listOfLists.get(i), -1));
+                        tempProfit = (int) Math.floor(avg(listOfLists.get(i), Device.DeviceAttribute.PROFIT));
                         break;
                     case 4:
                         tempProfit = (int) Math.floor(
-                                (avg(listOfLists.get(i), -1) +
-                                        max(listOfLists.get(i), -1))
+                                (avg(listOfLists.get(i), Device.DeviceAttribute.PROFIT) +
+                                        max(listOfLists.get(i), Device.DeviceAttribute.PROFIT))
                                         / 2);
                         break;
                     case 5:
-                        tempProfit = (int) Math.floor(1.1 * max(listOfLists.get(i), -1));
+                        tempProfit = (int) Math.floor(1.1 * max(listOfLists.get(i), Device.DeviceAttribute.PROFIT));
                         break;
                 }
                 profit += (1 + (i * 5)) * tempProfit;
@@ -294,7 +318,6 @@ public class ToolsForAssistants {
         return profit;
     }
 
-    //Unused actions, but good templates
     static boolean tryToBuy_NewSlot(Company myCompany) {
         if (DevelopmentValidator.nextSlotCost(myCompany.maxSlots) <= myCompany.money &&
                 DevelopmentValidator.nextSlotCost(myCompany.maxSlots) != -1) {
@@ -312,19 +335,6 @@ public class ToolsForAssistants {
             myCompany.money -= marketingCost;
             myCompany.marketing += 10;
             myCompany.logs = myCompany.logs + "The assistant bougth " + 10 + " marketing!\n";
-            return true;
-        } else {
-            return false;
-        }
-    }
-    static boolean tryToBuy_DevAttribute(Company myCompany, int attrId) {
-        if (myCompany.money >= DevelopmentValidator.getOneDevelopmentCost(attrId, myCompany.getLevels_USE_THIS()[attrId]) &&
-                DevelopmentValidator.getOneDevelopmentCost(attrId, myCompany.getLevels_USE_THIS()[attrId]) != -1) {
-            myCompany.money -= DevelopmentValidator.getOneDevelopmentCost(attrId, myCompany.getLevels_USE_THIS()[attrId]);
-            int[] levels = myCompany.getLevels_USE_THIS();
-            levels[attrId]++;
-            myCompany.setLevels_USE_THIS(levels);
-            myCompany.logs = myCompany.logs + attrId + ". attribute is upgraded!\n";
             return true;
         } else {
             return false;

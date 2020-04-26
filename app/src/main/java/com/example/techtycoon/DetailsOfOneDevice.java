@@ -60,7 +60,7 @@ public class DetailsOfOneDevice extends AppCompatActivity {
         ramTextV.setText(String.format(Locale.getDefault(),"RAM: %d GB",(int) Math.pow(2,devParams[0][0])));
         memoryTextV.setText(String.format(Locale.getDefault(),"Memory: %d GB",(int) Math.pow(2,devParams[0][1])));
         costTextV.setText(String.format(Locale.getDefault(),"Cost: %d$",cost));
-        bodyTextV.setText(Converter.intArrayToString(devParams[1]));
+        bodyTextV.setText(String.format(Locale.getDefault(),"Body: %s$",Converter.intArrayToString(devParams[1])));
 
         setResult(RESULT_OK,new Intent().putExtra(MainActivity.TASK_OF_RECYCLER_VIEW,MainActivity.DISPLAY_DEVICES_REQUEST_CODE));
 

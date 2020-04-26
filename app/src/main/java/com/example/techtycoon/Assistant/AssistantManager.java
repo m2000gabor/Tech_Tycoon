@@ -16,7 +16,8 @@ public class AssistantManager {
             new XiaomiBot(),
             new AppleBot(),
             new AppleBot2(),
-            new Bot1()
+            new Bot1(),
+            new AppleBotPrinciple()
     );
 
     public static List<String> getInputLabels(int assistantId){

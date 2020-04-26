@@ -24,8 +24,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.techtycoon.Assistant.AppleBot;
-import com.example.techtycoon.Assistant.ToolsForAssistants;
+import com.example.techtycoon.ui.activities.ChooseBodyActivity;
+import com.example.techtycoon.ui.activities.ChooseMemoryActivity;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -39,7 +39,7 @@ public class FragmentDeviceCreator extends Fragment {
     private static final int NUMBER_OF_CHOOSER_ACTIVITIES=2;
     private static final int CHOOSE_MEMORY_REQUEST = 1;
     private static final int CHOOSE_BODY_REQUEST = 2;
-    static final String BODY_RESULTS="bodyRes";
+    public static final String BODY_RESULTS="bodyRes";
     private int ram;
     private int ramMaxLevel;
     private int memory;
@@ -166,7 +166,7 @@ public class FragmentDeviceCreator extends Fragment {
             @Override
             public void onClick(View v) {
                 if(isCompanySet){
-                    Intent chooseMemory = new Intent(getContext(),ChooseMemoryActivity.class);
+                    Intent chooseMemory = new Intent(getContext(), ChooseMemoryActivity.class);
                     chooseMemory.putExtra(MainActivity.RAM_LVL,ramMaxLevel);
                     chooseMemory.putExtra(MainActivity.MEMORY_LVL,memoryMaxLevel);
                     startActivityForResult(chooseMemory,CHOOSE_MEMORY_REQUEST);
@@ -182,7 +182,7 @@ public class FragmentDeviceCreator extends Fragment {
             @Override
             public void onClick(View v) {
                 if(isCompanySet){
-                    Intent chooseBody = new Intent(getContext(),ChooseBodyActivity.class);
+                    Intent chooseBody = new Intent(getContext(), ChooseBodyActivity.class);
                     chooseBody.putExtra(MainActivity.LEVELS,levels);
                     startActivityForResult(chooseBody,CHOOSE_BODY_REQUEST);
                 }else {
@@ -208,8 +208,8 @@ public class FragmentDeviceCreator extends Fragment {
             Company maker=companies.get(spin.getSelectedItemPosition()-1);
             maker.usedSlots++;
             Device device=new Device(deviceName,profit,0,maker.companyId,null);
-            device.setFieldByNum(0,ram);
-            device.setFieldByNum(1,memory);
+            device.setFieldByAttribute(Device.DeviceAttribute.STORAGE_RAM,ram);
+            device.setFieldByAttribute(Device.DeviceAttribute.STORAGE_MEMORY,memory);
             device.setBodyParams(bodyResults[0],bodyResults[1],bodyResults[2],bodyResults[3],bodyResults[4]);
             device.cost=DeviceValidator.getOverallCost(device);
             deviceViewModel.insertDevice(device);
@@ -268,7 +268,7 @@ public class FragmentDeviceCreator extends Fragment {
                 isCompanySet=false;
                 try{
                     reset(false);
-                }catch (NullPointerException ignored){};
+                }catch (NullPointerException ignored){}
                 //Toast.makeText(getContext(),"Choose a manufacturer",Toast.LENGTH_SHORT).show();
             }else{
                 Company selectedCompany=companies.get(position-1);
@@ -336,13 +336,13 @@ public class FragmentDeviceCreator extends Fragment {
         dialog.show(getChildFragmentManager(),"cloneDevice");
     }
 
-    public void loadInADevice(int deviceID){
+    void loadInADevice(int deviceID){
         Device device=deviceViewModel.getDevice_byID(deviceID);
-        int storageCost=(int) Math.round(DeviceValidator.getCostOfMemory(0,device.memory))+
-                (int) Math.round(DeviceValidator.getCostOfMemory(1,device.ram));
+        int storageCost=(int) Math.round(DeviceValidator.getCostOfMemory(Device.DeviceAttribute.STORAGE_MEMORY,device.memory))+
+                (int) Math.round(DeviceValidator.getCostOfMemory(Device.DeviceAttribute.STORAGE_RAM,device.ram));
         int bodyCost=0;
-        for(int i=0;i<Device.CHILDREN_OF_BUDGETS[1];i++){
-            bodyCost+=DeviceValidator.getCostOfBody(i,device.getFieldByNum(i+Device.CHILDREN_OF_BUDGETS[0]));
+        for(Device.DeviceAttribute attribute : Device.getBodyAttributes()){
+            bodyCost+=DeviceValidator.getCostOfBody(attribute,device.getFieldByAttribute(attribute));
         }
         setupStorage(device.ram,device.memory,storageCost);
         setupBody(bodyCost,device.getParams()[1]);

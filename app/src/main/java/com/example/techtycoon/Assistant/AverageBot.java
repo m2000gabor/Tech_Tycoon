@@ -91,7 +91,8 @@ public class AverageBot implements AbstractAssistant {
 
         //dev attributes
         for (int i = 0; i < Device.NUMBER_OF_ATTRIBUTES; i++) {
-            if(myCompany.getLevels_USE_THIS()[i]<avg(deviceList,i)){
+            Device.DeviceAttribute attribute=Device.getAllAttribute().get(i);
+            if(myCompany.getLevels_USE_THIS()[i]<avg(deviceList,attribute)){
                 toDoList.add(new Pair<>(i,getImportance(i)));
             }
         }
@@ -123,7 +124,7 @@ public class AverageBot implements AbstractAssistant {
                     //device manager
                     Device newDev = new Device(
                             nameBuilder.buildName(myDevices.get(0).name,1),
-                            (int) Math.round(avg(deviceList,-1)),0,
+                            (int) Math.round(avg(deviceList, Device.DeviceAttribute.PROFIT)),0,
                             myCompany.companyId,
                             myCompany.getLevels_USE_THIS()
                     );
@@ -144,9 +145,9 @@ public class AverageBot implements AbstractAssistant {
             }else{
                 //try to upgrade a device attribute
                 myCompany.logs = myCompany.logs + "Try to upgrade the "+i+". attribute...\n";
-                if (myCompany.money >= DevelopmentValidator.getOneDevelopmentCost(i, myCompany.getLevels_USE_THIS()[i]) &&
-                        DevelopmentValidator.getOneDevelopmentCost(i, myCompany.getLevels_USE_THIS()[i]) != -1) {
-                    myCompany.money -= DevelopmentValidator.getOneDevelopmentCost(i, myCompany.getLevels_USE_THIS()[i]);
+                if (myCompany.money >= DevelopmentValidator.getOneDevelopmentCost(Device.getAllAttribute().get(i), myCompany.getLevels_USE_THIS()[i]) &&
+                        DevelopmentValidator.getOneDevelopmentCost(Device.getAllAttribute().get(i), myCompany.getLevels_USE_THIS()[i]) != -1) {
+                    myCompany.money -= DevelopmentValidator.getOneDevelopmentCost(Device.getAllAttribute().get(i), myCompany.getLevels_USE_THIS()[i]);
                     int[] levels = myCompany.getLevels_USE_THIS();
                     levels[i]++;
                     myCompany.setLevels_USE_THIS(levels);
@@ -155,7 +156,7 @@ public class AverageBot implements AbstractAssistant {
                     //device manager
                     Device newDev = new Device(
                             nameBuilder.buildName(myDevices.get(0).name,1),
-                            (int) Math.round(avg(deviceList,-1)),0,
+                            (int) Math.round(avg(deviceList, Device.DeviceAttribute.PROFIT)),0,
                             myCompany.companyId,
                             myCompany.getLevels_USE_THIS()
                     );

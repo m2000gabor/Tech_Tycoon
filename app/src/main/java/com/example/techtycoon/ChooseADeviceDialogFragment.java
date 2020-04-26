@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,15 +24,15 @@ public class ChooseADeviceDialogFragment extends DialogFragment {
         /*
         public void onDialogPositiveClick(DialogFragment dialog);
         public void onDialogNegativeClick(DialogFragment dialog);*/
-        public void selectedDeviceID(int id);
+        void selectedDeviceID(int id);
     }
 
     // Use this instance of the interface to deliver action events
-    NoticeDialogListener listener;
+    private NoticeDialogListener listener;
 
     // Override the Fragment.onAttach() method to instantiate the NoticeDialogListener
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NotNull Context context) {
         super.onAttach(context);
         // Verify that the host activity implements the callback interface
         try {

@@ -8,7 +8,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 public class DeviceViewModel extends AndroidViewModel {
-    //todo revise the usage of the viewModel
+    //todo rethink the usage of the viewModel
     //todo use some validation
 
     private DeviceRepository mRepository;
@@ -31,10 +31,10 @@ public class DeviceViewModel extends AndroidViewModel {
     Device getDevice_byID(int ID){return mRepository.getDevice_byID(ID);}
     public List<Device> getAllDevicesList(){return mRepository.getAllDevicesList();}
 
-    void orderDevices_ByCode2 (int code,boolean desc) { mRepository.setSortBy(code,desc);}
+    void orderDevices_ByCode2 (Device.DeviceAttribute code,boolean desc) { mRepository.setSortBy(code,desc);}
     void setOrder(boolean isDescending){mRepository.setDesc(isDescending);}
 
-    void filter_byCompanyID(int ownerId){mRepository.setFilter(ownerId);}
+    void filterBy(Device.DeviceAttribute attribute,List<Integer> values){mRepository.setAdvancedFilter(attribute,values);}
 
 
     void insertDevice(Device device) { mRepository.insertDevice(device); }

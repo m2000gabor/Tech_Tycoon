@@ -6,14 +6,14 @@ import java.util.LinkedList;
 import java.util.List;
 
 
-public class Simulator {
+class Simulator {
     //todo There's no place for low profit companies
     //todo write unit tests
     ///Simulator 2.8 - new value and price ratio handling
 
-    List<Device> deviceList;
-    List<Company> companyList;
-    private static final double AVG_CHANGING_SPEED =0.15;//isnt it too slow?
+    private List<Device> deviceList;
+    private List<Company> companyList;
+    private static final double AVG_CHANGING_SPEED =0.4;//isnt it too slow?
     public double[] attrAverages;
     public double lastAvgPrice;
     private double customerNum;
@@ -22,6 +22,9 @@ public class Simulator {
         this.deviceList = deviceList;
         this.companyList =companyList;
         this.lastAvgPrice=lastAvgPrice;
+        if(attributeAvgs.length!=Device.getAllAttribute().size()){
+            throw new ArrayIndexOutOfBoundsException("Not enough averages");
+        }
         this.attrAverages=attributeAvgs.clone();
     }
 
@@ -33,8 +36,9 @@ public class Simulator {
         for (int i=0;i<deviceList.size();i++){
             customerNum+=deviceList.get(i).getSoldPieces();
             sumPrice+=deviceList.get(i).getSoldPieces()*deviceList.get(i).getPrice();
-            for (int j = 0; j< Device.NUMBER_OF_ATTRIBUTES; j++){
-                sumAttributes[j]+=deviceList.get(i).getSoldPieces()*deviceList.get(i).getFieldByNum(j);
+            int j=0;
+            for (Device.DeviceAttribute a : Device.getAllAttribute()){
+                sumAttributes[j++]+=deviceList.get(i).getSoldPieces()*deviceList.get(i).getFieldByAttribute(a);
             }
         }
 
@@ -48,9 +52,9 @@ public class Simulator {
 
     public Wrapped_DeviceAndCompanyList simulate(){
         if(Double.isNaN(lastAvgPrice) || lastAvgPrice<=0){lastAvgPrice=deviceList.get(0).getPrice();}
-        for(int i = 0; i< Device.NUMBER_OF_ATTRIBUTES; i++) {
+        for(int i = 0; i < Device.NUMBER_OF_ATTRIBUTES; i++) {
             if (Double.isNaN(attrAverages[i]) || attrAverages[i] <= 0) {
-                attrAverages[i] =(double) deviceList.get(0).getFieldByNum(i);
+                attrAverages[i] =(double) deviceList.get(0).getFieldByAttribute(Device.getAllAttribute().get(i));
             }
         }
 
@@ -76,7 +80,7 @@ public class Simulator {
         for (int i=0;i<deviceList.size();i++){
             sumPrice+=sold[i]*deviceList.get(i).getPrice();
             for (int j = 0; j< Device.NUMBER_OF_ATTRIBUTES; j++){
-                sumAttributes[j]+=sold[i]*deviceList.get(i).getFieldByNum(j);
+                sumAttributes[j]+=sold[i]*deviceList.get(i).getFieldByAttribute(Device.getAllAttribute().get(j));
             }
         }
 
@@ -146,7 +150,7 @@ public class Simulator {
             //calc value
             value=0;
             for(int j = 0; j< Device.NUMBER_OF_ATTRIBUTES; j++){
-                value+= (double) Math.pow(fx(deviceList.get(i).getFieldByNum(j), attrAverages[j]),attrWeights[j]*0.2);
+                value+= (double) Math.pow(fx(deviceList.get(i).getFieldByAttribute(Device.getAllAttribute().get(j)), attrAverages[j]),attrWeights[j]*0.2);
             }
 
             //value/price ration correction

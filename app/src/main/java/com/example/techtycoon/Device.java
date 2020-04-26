@@ -1,5 +1,8 @@
 package com.example.techtycoon;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -10,9 +13,12 @@ import androidx.room.PrimaryKey;
 
 @Entity
 public class Device {
+    public enum DeviceAttribute {NAME,DEVICE_ID,OWNER_ID,PERFORMANCE_OVERALL,SCORE_STORAGE,SCORE_BODY,PRICE,INCOME,SOLD_PIECES,PROFIT,
+        STORAGE_RAM,STORAGE_MEMORY,BODY_DESIGN,BODY_MATERIAL,BODY_COLOR,BODY_IP,BODY_BEZEL};
+
     public static final int NUMBER_OF_BUDGETS=2; //rammemory,body
     public static final int[] CHILDREN_OF_BUDGETS={2,5}; //rammemory,body
-    public final static int NUMBER_OF_ATTRIBUTES =7;
+    public final static int NUMBER_OF_ATTRIBUTES = getAllAttribute().size();
 
     @PrimaryKey(autoGenerate = true)
     public int id;
@@ -24,7 +30,7 @@ public class Device {
     public int profit;
 
     @ColumnInfo(name = "cost")
-    public int cost;
+    public int cost;//todo shouldnt be updated manually
 
     @ColumnInfo(name="ownerCompanyId")
     public int ownerCompanyId;
@@ -88,8 +94,9 @@ public class Device {
         this.profit = profit;
         this.cost=cost;
         this.ownerCompanyId=ownerCompanyId;
-        for(int i=0;i<Device.NUMBER_OF_ATTRIBUTES;i++){
-            setFieldByNum(i,attributes[i]);
+        int i=0;
+        for(DeviceAttribute a : getAllAttribute()){
+            setFieldByAttribute(a,attributes[i++]);
         }
         this.soldPieces=0;
     }
@@ -111,8 +118,8 @@ public class Device {
         this.soldPieces=0;
         this.trend=d.trend;
 
-        for(int i=0;i<NUMBER_OF_ATTRIBUTES;i++){
-            setFieldByNum(i,d.getFieldByNum(i));
+        for(DeviceAttribute a : getAllAttribute()){
+            setFieldByAttribute(a,d.getFieldByAttribute(a));
         }
     }
 
@@ -157,7 +164,7 @@ public class Device {
         this.trend=trend;
     }
     public int getPrice(){return cost+profit;}
-    public int getOverallIncome(){ return soldPieces*profit; }
+    public int getIncome(){ return soldPieces*profit; }
 
     //converters
     public static int[] mtxToArray(int[][] mtx){
@@ -197,44 +204,40 @@ public class Device {
         return mtx;
     }
 
-    /**
-     *
-     * @param attrID
-     * -1: profit
-     * -2:
-     * @return
-     */
-    public int getFieldByNum(int attrID){
+
+    public int getFieldByAttribute(DeviceAttribute attribute){
         int i=-1;
-        switch (attrID){
-            case -8:i=this.id;break;
-            case -7:i=this.getScore_OverallPerformance();break;
-            case -6:i=this.getScore_Storage();break;
-            case -5:i=this.getScore_Body();break;
-            case -4:i=this.getPrice();break;
-            case -3:i=this.getOverallIncome();break;
-            case -2:i=this.soldPieces;break;
-            case -1:i=this.profit;break;
-            case 0:i=this.ram; break;
-            case 1:i=this.memory; break;
-            case 2:i=this.design; break;
-            case 3:i=this.material; break;
-            case 4: i=this.color;break;
-            case 5: i=this.ip;break;
-            case 6: i=this.bezel;break;
+        switch (attribute){
+            case OWNER_ID:i=this.ownerCompanyId;break;
+            case DEVICE_ID:i=this.id;break;
+            case PERFORMANCE_OVERALL:i=this.getScore_OverallPerformance();break;
+            case SCORE_STORAGE:i=this.getScore_Storage();break;
+            case SCORE_BODY:i=this.getScore_Body();break;
+            case PRICE:i=this.getPrice();break;
+            case INCOME:i=this.getIncome();break;
+            case SOLD_PIECES:i=this.soldPieces;break;
+            case PROFIT:i=this.profit;break;
+            case STORAGE_RAM:i=this.ram; break;
+            case STORAGE_MEMORY:i=this.memory; break;
+            case BODY_DESIGN:i=this.design; break;
+            case BODY_MATERIAL:i=this.material; break;
+            case BODY_COLOR: i=this.color;break;
+            case BODY_IP: i=this.ip;break;
+            case BODY_BEZEL: i=this.bezel;break;
         }
         return i;
     }
-    public void setFieldByNum(int attrID,int value){
-        switch (attrID){
-            case -1:this.profit=value;break;
-            case 0:this.ram=value; break;
-            case 1:this.memory=value; break;
-            case 2:this.design=value; break;
-            case 3:this.material=value; break;
-            case 4:this.color=value;break;
-            case 5:this.ip=value;break;
-            case 6:this.bezel=value;break;
+
+    public void setFieldByAttribute(DeviceAttribute attr, int value){
+        switch (attr){
+            case PROFIT:this.profit=value;break;
+            case STORAGE_RAM:this.ram=value; break;
+            case STORAGE_MEMORY:this.memory=value; break;
+            case BODY_DESIGN:this.design=value; break;
+            case BODY_MATERIAL:this.material=value; break;
+            case BODY_COLOR:this.color=value;break;
+            case BODY_IP:this.ip=value;break;
+            case BODY_BEZEL:this.bezel=value;break;
         }
     }
 
@@ -244,7 +247,7 @@ public class Device {
     public int equalAttributes(Device d){
         int diff=0;
         for (int i=0;i<NUMBER_OF_ATTRIBUTES;i++){
-            if(this.getFieldByNum(i)!=d.getFieldByNum(i)){diff++;}
+            if(this.getFieldByAttribute(DeviceAttribute.values()[i])!=d.getFieldByAttribute(DeviceAttribute.values()[i])){diff++;}
         }
         return diff;
     }
@@ -257,6 +260,30 @@ public class Device {
     }
     public final int getScore_OverallPerformance(){
         return getScore_Body()+getScore_Storage();
+    }
+
+    public static List<DeviceAttribute> getBodyAttributes(){
+        List<DeviceAttribute> list=new LinkedList<>();
+        list.add(DeviceAttribute.BODY_DESIGN);
+        list.add(DeviceAttribute.BODY_MATERIAL);
+        list.add(DeviceAttribute.BODY_COLOR);
+        list.add(DeviceAttribute.BODY_IP);
+        list.add(DeviceAttribute.BODY_BEZEL);
+        return list;
+    }
+
+    public static List<DeviceAttribute> getStorageAttributes(){
+        List<DeviceAttribute> list=new LinkedList<>();
+        list.add(DeviceAttribute.STORAGE_RAM);
+        list.add(DeviceAttribute.STORAGE_MEMORY);
+        return list;
+    }
+
+    public static List<DeviceAttribute> getAllAttribute(){
+        List<DeviceAttribute> list=new LinkedList<>();
+        list.addAll(getStorageAttributes());
+        list.addAll(getBodyAttributes());
+        return list;
     }
 
 }

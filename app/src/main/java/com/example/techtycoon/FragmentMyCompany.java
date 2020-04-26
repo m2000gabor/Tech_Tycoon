@@ -28,6 +28,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -70,7 +71,7 @@ public class FragmentMyCompany extends Fragment {
         super.onCreate(savedInstanceState);
         // Get a new or existing ViewModel from the ViewModelProvider.
         deviceViewModel =new ViewModelProvider(this).get(DeviceViewModel.class);
-        deviceViewModel.orderDevices_ByCode2(-3,true);
+        deviceViewModel.orderDevices_ByCode2(Device.DeviceAttribute.INCOME,true);
         deviceList = deviceViewModel.mutable_getAllDevices();
     }
 
@@ -219,7 +220,7 @@ public class FragmentMyCompany extends Fragment {
             int companyID;
             if(position>=0){companyID=companies[position].companyId;
             }else{companyID=-1;}
-            deviceViewModel.filter_byCompanyID(companyID);
+            deviceViewModel.filterBy(Device.DeviceAttribute.OWNER_ID, Collections.singletonList(companyID));
             try {
                 myCompanyLiveData.hasObservers();
                 myCompanyLiveData.removeObservers(getViewLifecycleOwner());

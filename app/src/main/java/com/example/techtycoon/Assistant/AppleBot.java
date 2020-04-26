@@ -109,17 +109,19 @@ public class AppleBot implements AbstractAssistant{
                         }
                     }
                     int i = 0;
-                    while (getRegion(marketings, myCompany.marketing) < 4 && myCompany.money >=
+                    int actualRegion=getRegion(marketings, myCompany.marketing);
+                    while ( getRegion(marketings, myCompany.marketing)<=actualRegion && myCompany.money >=
                             DevelopmentValidator.calculateMarketingCost(myCompany.marketing)) {
                         myCompany.money -= DevelopmentValidator.calculateMarketingCost(myCompany.marketing);
                         myCompany.marketing += 10;
                         i++;
                         accomplished=true;
+                        if(getRegion(marketings, myCompany.marketing)==5){break;}
                     }
                     myCompany.logs = myCompany.logs + "The assistant bougth " + i * 10 + " marketing!\n";
-                } else if (myCompany.money >= DevelopmentValidator.getOneDevelopmentCost(longTermGoal, myCompany.getLevels_USE_THIS()[longTermGoal]) &&
-                        DevelopmentValidator.getOneDevelopmentCost(longTermGoal, myCompany.getLevels_USE_THIS()[longTermGoal]) != -1) {
-                    myCompany.money -= DevelopmentValidator.getOneDevelopmentCost(longTermGoal, myCompany.getLevels_USE_THIS()[longTermGoal]);
+                } else if (myCompany.money >= DevelopmentValidator.getOneDevelopmentCost(Device.getAllAttribute().get(longTermGoal), myCompany.getLevels_USE_THIS()[longTermGoal]) &&
+                        DevelopmentValidator.getOneDevelopmentCost(Device.getAllAttribute().get(longTermGoal), myCompany.getLevels_USE_THIS()[longTermGoal]) != -1) {
+                    myCompany.money -= DevelopmentValidator.getOneDevelopmentCost(Device.getAllAttribute().get(longTermGoal), myCompany.getLevels_USE_THIS()[longTermGoal]);
                     int[] levels = myCompany.getLevels_USE_THIS();
                     levels[longTermGoal]++;
                     myCompany.setLevels_USE_THIS(levels);
@@ -136,7 +138,7 @@ public class AppleBot implements AbstractAssistant{
         if(flag_newAttribute){
             myCompany.logs = myCompany.logs + "An attribute is freshly developed.\nA new device with that attribute is made!\n";
             Device newDev= new Device(nameBuilder.buildName(worstDev.name,1)
-                    ,(int) Math.round(max(myDevices,-1)*1.2),0
+                    ,(int) Math.round(max(myDevices, Device.DeviceAttribute.PROFIT)*1.2),0
                     ,myCompany.companyId,myCompany.getLevels_USE_THIS());
             newDev.cost=DeviceValidator.getOverallCost(newDev);
             if (myCompany.hasFreeSlot()) {
@@ -151,7 +153,7 @@ public class AppleBot implements AbstractAssistant{
         }else if(flag_newSlot){
             Device newD = new Device(myDevices.get(max_Overall(myDevices)));
             myCompany.logs = myCompany.logs +"A new slot is available!\n Our most profitable device("+newD.name+") is cloned and realesed with higher profit.";
-            newD.name= nameBuilder.buildName(newD.name,0);
+            newD.name= nameBuilder.buildName(newD.name,1);
             newD.profit*=1.1;
             myCompany.usedSlots++;
             ret.insert.add(newD);
@@ -212,10 +214,10 @@ public class AppleBot implements AbstractAssistant{
                             myCompany.logs = myCompany.logs+"The company's position is bad so the profit of copied device is cut\n";}
                         //set our big feature(s)
                         //whats that?
-                        newD.setFieldByNum(bestAttrIds.get(0).first,myCompany.getLevels_USE_THIS()[bestAttrIds.get(0).first]);
+                        newD.setFieldByAttribute(Device.getAllAttribute().get(bestAttrIds.get(0).first),myCompany.getLevels_USE_THIS()[bestAttrIds.get(0).first]);
                         myCompany.logs = myCompany.logs+bestAttrIds.get(0)+". attribute is set to the new device\n";
                         for (int j = 0; bestAttrIds.get(j).second > 100; j++) {
-                            newD.setFieldByNum(bestAttrIds.get(j).first,myCompany.getLevels_USE_THIS()[bestAttrIds.get(j).first]);
+                            newD.setFieldByAttribute(Device.getAllAttribute().get(bestAttrIds.get(j).first),myCompany.getLevels_USE_THIS()[bestAttrIds.get(j).first]);
                             myCompany.logs = myCompany.logs+bestAttrIds.get(0)+". attribute is set to the new device\n";
                         }
                         //release
@@ -332,19 +334,19 @@ public class AppleBot implements AbstractAssistant{
             int minAttrId=-1;
             int i=uniqueStrengths;
             while(i<goodPoints &&
-                    DevelopmentValidator.getOneDevelopmentCost(interestingAttrs.get(i),myCompany.getLevels_USE_THIS()[interestingAttrs.get(i)]) ==-1){
+                    DevelopmentValidator.getOneDevelopmentCost(Device.getAllAttribute().get(interestingAttrs.get(i)),myCompany.getLevels_USE_THIS()[interestingAttrs.get(i)]) ==-1){
                 i++;}
             if(i!=goodPoints){minAttrId=interestingAttrs.get(i);}
             for(i++;i<goodPoints;i++){
-                if(DevelopmentValidator.getOneDevelopmentCost(minAttrId,myCompany.getLevels_USE_THIS()[minAttrId])>
-                        DevelopmentValidator.getOneDevelopmentCost(interestingAttrs.get(i),myCompany.getLevels_USE_THIS()[interestingAttrs.get(i)]) &&
-                        DevelopmentValidator.getOneDevelopmentCost(interestingAttrs.get(i),myCompany.getLevels_USE_THIS()[interestingAttrs.get(i)]) !=-1){
+                if(DevelopmentValidator.getOneDevelopmentCost((Device.getAllAttribute().get(minAttrId)),myCompany.getLevels_USE_THIS()[minAttrId])>
+                        DevelopmentValidator.getOneDevelopmentCost((Device.getAllAttribute().get(interestingAttrs.get(i))),myCompany.getLevels_USE_THIS()[interestingAttrs.get(i)]) &&
+                        DevelopmentValidator.getOneDevelopmentCost((Device.getAllAttribute().get(interestingAttrs.get(i))),myCompany.getLevels_USE_THIS()[interestingAttrs.get(i)]) !=-1){
                     minAttrId=interestingAttrs.get(i);
                 }
             }
             if(minAttrId!=-1){
                 goal=minAttrId;
-                costOfTheGoal=DevelopmentValidator.getOneDevelopmentCost(goal,myCompany.getLevels_USE_THIS()[minAttrId]);
+                costOfTheGoal=DevelopmentValidator.getOneDevelopmentCost((Device.getAllAttribute().get(goal)),myCompany.getLevels_USE_THIS()[minAttrId]);
                 importance=goodPointImportance;
             }
         }
@@ -355,13 +357,13 @@ public class AppleBot implements AbstractAssistant{
             int i=uniqueStrengths+goodPoints;
             int minAttrId=interestingAttrs.get(i);
             for(i++;i<badThings;i++){
-                if(DevelopmentValidator.getOneDevelopmentCost(minAttrId,myCompany.getLevels_USE_THIS()[minAttrId])>
-                        DevelopmentValidator.getOneDevelopmentCost(interestingAttrs.get(i),myCompany.getLevels_USE_THIS()[interestingAttrs.get(i)])){
+                if(DevelopmentValidator.getOneDevelopmentCost((Device.getAllAttribute().get(minAttrId)),myCompany.getLevels_USE_THIS()[minAttrId])>
+                        DevelopmentValidator.getOneDevelopmentCost((Device.getAllAttribute().get(interestingAttrs.get(i))),myCompany.getLevels_USE_THIS()[interestingAttrs.get(i)])){
                     minAttrId=interestingAttrs.get(i);
                 }
             }
             goal=minAttrId;
-            costOfTheGoal=DevelopmentValidator.getOneDevelopmentCost(goal,myCompany.getLevels_USE_THIS()[minAttrId]);
+            costOfTheGoal=DevelopmentValidator.getOneDevelopmentCost((Device.getAllAttribute().get(goal)),myCompany.getLevels_USE_THIS()[minAttrId]);
             importance=badThingImportance;
         }
 
@@ -382,10 +384,7 @@ public class AppleBot implements AbstractAssistant{
             importance=2*(5-getRegion(marketings,myCompany.marketing));
         }
 
-
-
-        ///TODO Functional way: List<Integer> maxSlotFieldOfCompanies = companyList.stream().map( company -> company.maxSlots).collect(Collectors.toList());
-        //newSlot
+         //newSlot
         if(DevelopmentValidator.nextSlotCost(myCompany.maxSlots) !=-1){
             double timeToBuyANewSlot=DevelopmentValidator.nextSlotCost(myCompany.maxSlots)/(double)myCompany.lastProfit;
             double timeToReachTheGoal=costOfTheGoal/(double) myCompany.lastProfit;
@@ -402,8 +401,8 @@ public class AppleBot implements AbstractAssistant{
 
     private int getSumOfLevels(Device d){
         int sumOfLevels=0;
-        for (int j = 0; j < Device.NUMBER_OF_ATTRIBUTES; j++) {
-            sumOfLevels+=d.getFieldByNum(j);
+        for (Device.DeviceAttribute a : Device.getAllAttribute()) {
+            sumOfLevels+=d.getFieldByAttribute(a);
         }
         return sumOfLevels;
     }

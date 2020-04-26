@@ -56,7 +56,7 @@ public class Company {
     @ColumnInfo
     public int popularity;*/
 
-    public Company(){};
+    public Company(){}
 
     public Company(String name,int money,int[] levels) {
         this.name = name;
@@ -79,12 +79,12 @@ public class Company {
     public void setLevels(String levels) {this.levels = levels;}
     public void setLevels_USE_THIS(int[] arr){this.levels=Converter.intArrayToString(arr);}
     public int[] getLevels_USE_THIS(){return Converter.stringToIntArray(this.levels);}
-    public boolean incrementLevel(int attributeId){
-        if(DevelopmentValidator.getOneDevelopmentCost(attributeId,getLevels_USE_THIS()[attributeId])<= money &&
-                DevelopmentValidator.getOneDevelopmentCost(attributeId,getLevels_USE_THIS()[attributeId])!=-1 ){
-            this.money-=DevelopmentValidator.getOneDevelopmentCost(attributeId,getLevels_USE_THIS()[attributeId]);
+    public boolean incrementLevel(Device.DeviceAttribute attribute){
+        if(DevelopmentValidator.getOneDevelopmentCost(attribute,getLevelByAttribute(attribute))<= money &&
+                DevelopmentValidator.getOneDevelopmentCost(attribute,getLevelByAttribute(attribute))!=-1 ){
+            this.money-=DevelopmentValidator.getOneDevelopmentCost(attribute,getLevelByAttribute(attribute));
             int[] levels=getLevels_USE_THIS();
-            levels[attributeId]++;
+            levels[getLevelIdFromDeviceAttribute(attribute)]++;
             setLevels_USE_THIS(levels);
             return true;
         }else{return false;}
@@ -92,9 +92,9 @@ public class Company {
     public boolean hasFreeSlot(){ return maxSlots>usedSlots; }
     public int getMarketValue(){
         int r=0;
-        for(int i=0;i<getLevels_USE_THIS().length;i++){
-            for (int j = 2; j <= getLevels_USE_THIS()[i]; j++) {
-                r+=DevelopmentValidator.getOneDevelopmentCost(i,j);
+        for(Device.DeviceAttribute a : Device.getAllAttribute()){
+            for (int j = 2; j <= getLevelByAttribute(a); j++) {
+                r+=DevelopmentValidator.getOneDevelopmentCost(a,j);
             }
         }
         for (int i = 2; i <= this.maxSlots; i++) {
@@ -108,8 +108,48 @@ public class Company {
     public boolean producibleByTheCompany(Device d){
         int[] cLevels=this.getLevels_USE_THIS();
         for (int i=0;i<cLevels.length;i++){
-            if(cLevels[i]<d.getFieldByNum(i)){return false;}
+            if(cLevels[i]<d.getFieldByAttribute(getDeviceAttributeFromCompanyLevel(i))){return false;}
         }
         return true;
+    }
+
+    public static Device.DeviceAttribute getDeviceAttributeFromCompanyLevel(int levelId){
+        switch (levelId){
+            case 0:return Device.DeviceAttribute.STORAGE_RAM;
+            case 1:return Device.DeviceAttribute.STORAGE_MEMORY;
+            case 2:return Device.DeviceAttribute.BODY_DESIGN;
+            case 3:return Device.DeviceAttribute.BODY_MATERIAL;
+            case 4:return Device.DeviceAttribute.BODY_COLOR;
+            case 5:return Device.DeviceAttribute.BODY_IP;
+            case 6:return Device.DeviceAttribute.BODY_BEZEL;
+            default:return null;
+        }
+    }
+
+    private static int getLevelIdFromDeviceAttribute(Device.DeviceAttribute a){
+        switch (a){
+            case STORAGE_RAM: return 0;
+            case STORAGE_MEMORY: return 1;
+            case BODY_DESIGN: return 2;
+            case BODY_MATERIAL:return 3;
+            case BODY_COLOR:return 4;
+            case BODY_IP:return 5;
+            case BODY_BEZEL:return 6;
+            default:return -1;
+        }
+    }
+
+
+    public int getLevelByAttribute(Device.DeviceAttribute attribute){
+        switch (attribute){
+            case STORAGE_RAM: return getLevels_USE_THIS()[0];
+            case STORAGE_MEMORY:return getLevels_USE_THIS()[1];
+            case BODY_DESIGN:return getLevels_USE_THIS()[2];
+            case BODY_MATERIAL:return getLevels_USE_THIS()[3];
+            case BODY_COLOR:return getLevels_USE_THIS()[4];
+            case BODY_IP:return getLevels_USE_THIS()[5];
+            case BODY_BEZEL:return getLevels_USE_THIS()[6];
+            default:return -1;
+        }
     }
 }

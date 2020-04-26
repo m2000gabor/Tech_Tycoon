@@ -10,16 +10,11 @@ import androidx.annotation.Nullable;
 
 interface Principle {
     /**
-     *
-     * @param myCompany
-     * @param myDevices
-     * @param allCompanies
-     * @param allDevices
      * @return a value between 1 and 5; 0 if not needed
      */
     int getScore(Company myCompany, List<Device> myDevices,List<Company> allCompanies,List<Device> allDevices);
     String name();
-    int defaultWeight();
+    int defaultWeight();//default importance is 100
     boolean needsCleanInput();//no updated and inserted devices before this repair
 
     @Nullable

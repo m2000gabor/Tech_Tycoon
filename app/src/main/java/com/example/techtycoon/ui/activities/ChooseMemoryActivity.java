@@ -1,8 +1,12 @@
-package com.example.techtycoon;
+package com.example.techtycoon.ui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.example.techtycoon.Device;
+import com.example.techtycoon.DeviceValidator;
+import com.example.techtycoon.MainActivity;
+import com.example.techtycoon.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,8 +37,8 @@ public class ChooseMemoryActivity extends AppCompatActivity {
                 replyIntent.putExtra("amountOfRam",mRam);
                 replyIntent.putExtra("amountOfMemory",mMemory);
                 replyIntent.putExtra("cost",
-                        (int) Math.round(DeviceValidator.getCostOfMemory(0,mMemory)+
-                        DeviceValidator.getCostOfMemory(1,mRam)));
+                        (int) Math.round(DeviceValidator.getCostOfMemory(Device.DeviceAttribute.STORAGE_MEMORY,mMemory)+
+                        DeviceValidator.getCostOfMemory(Device.DeviceAttribute.STORAGE_RAM,mRam)));
                 setResult(RESULT_OK,replyIntent);
                 finish();
             }
@@ -51,16 +55,15 @@ public class ChooseMemoryActivity extends AppCompatActivity {
 
         //ramSeekbar
         ramSeekbar.setMax(ramMaxLvl-1);
-        //update ui
         ramCounter.setText(String.format(Locale.getDefault(),"%d GB",2) );
-        ramCost.setText(String.format(Locale.getDefault(),"%.2f$",DeviceValidator.getCostOfMemory(1,1)));
+        ramCost.setText(String.format(Locale.getDefault(),"%.2f$",DeviceValidator.getCostOfMemory(Device.DeviceAttribute.STORAGE_RAM,1)));
 
         ramSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 mRam=progress+1;
                 ramCounter.setText(String.format(Locale.getDefault(),"%d GB",(int) Math.round(Math.pow(2,mRam)) ));
-                ramCost.setText(String.format(Locale.getDefault(),"%.2f$",DeviceValidator.getCostOfMemory(1,mRam)));
+                ramCost.setText(String.format(Locale.getDefault(),"%.2f$",DeviceValidator.getCostOfMemory(Device.DeviceAttribute.STORAGE_RAM,mRam)));
             }
 
             @Override
@@ -77,14 +80,14 @@ public class ChooseMemoryActivity extends AppCompatActivity {
         memorySeekbar.setMax(memoryMaxLvl-1);
         //update ui
         memoryCounter.setText(String.format(Locale.getDefault(),"%d GB",2) );
-        memoryCost.setText(String.format(Locale.getDefault(),"%.2f$",DeviceValidator.getCostOfMemory(0,1)));
+        memoryCost.setText(String.format(Locale.getDefault(),"%.2f$",DeviceValidator.getCostOfMemory(Device.DeviceAttribute.STORAGE_MEMORY,1)));
 
         memorySeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 mMemory=progress+1;
                 memoryCounter.setText(String.format(Locale.getDefault(),"%d GB",(int) Math.round(Math.pow(2,mMemory))) );
-                memoryCost.setText(String.format(Locale.getDefault(),"%.2f$",DeviceValidator.getCostOfMemory(0,mMemory)));
+                memoryCost.setText(String.format(Locale.getDefault(),"%.2f$",DeviceValidator.getCostOfMemory(Device.DeviceAttribute.STORAGE_MEMORY,mMemory)));
             }
 
             @Override

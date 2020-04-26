@@ -6,9 +6,11 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.example.techtycoon.Assistant.AssistantManager;
+import com.example.techtycoon.dialogs.SortByDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
@@ -21,9 +23,10 @@ import com.example.techtycoon.ui.main.SectionsPagerAdapter;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-public class TabbedActivity extends AppCompatActivity  implements ChooseADeviceDialogFragment.NoticeDialogListener {
+public class TabbedActivity extends AppCompatActivity  implements ChooseADeviceDialogFragment.NoticeDialogListener, SortByDialog.SortByDialogListener {
     public static HashMap<String,Integer> NAME_newestPartOfTheSeries=new HashMap<>();
 
     DeviceViewModel deviceViewModel;
@@ -108,7 +111,7 @@ public class TabbedActivity extends AppCompatActivity  implements ChooseADeviceD
             }else{
                     //get nameTable for bots naming convention
                     Set<String> keys=sharedPref.getStringSet("nameTableKeys",new HashSet<String>());
-                    for (String key : keys) {NAME_newestPartOfTheSeries.put(key,sharedPref.getInt(key, -1));}
+                    for (String key : keys) {NAME_newestPartOfTheSeries.put(key,sharedPref.getInt(key, 1));}
 
                     Wrapped_DeviceAndCompanyList afterAssistants=assistantManager.trigger(deviceViewModel.getAllCompaniesList(),deviceViewModel.getAllDevicesList());
                     deviceViewModel.assistantToDatabase(afterAssistants);
@@ -180,6 +183,19 @@ public class TabbedActivity extends AppCompatActivity  implements ChooseADeviceD
             fragmentDeviceCreator= (FragmentDeviceCreator)
                     getSupportFragmentManager().findFragmentById(R.id.fragment_my_company);
             fragmentDeviceCreator.loadInADevice(id);
+        }
+    }
+
+    @Override
+    public void selectedAttributeId(Device.DeviceAttribute code) {
+        List<Fragment> f=getSupportFragmentManager().getFragments();
+        boolean found=false;
+        for (int i=0;i<f.size() && !found;i++) {
+            try {
+                FragmentAllDevices fragmentAllDevices = (FragmentAllDevices) f.get(i);
+                fragmentAllDevices.sortBy(code);
+                found=true;
+            }catch (ClassCastException ignored){}
         }
     }
 }

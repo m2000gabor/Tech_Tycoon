@@ -21,6 +21,7 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
         private final TextView deviceStorageTextView;
         private final TextView deviceBodyTextView;
         private final TextView soldPiecesTextView;
+        private final TextView performanceTextView;
 
         private DeviceViewHolder(View itemView) {
             super(itemView);
@@ -29,6 +30,7 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
             deviceStorageTextView = itemView.findViewById(R.id.deviceStorageTextView);
             deviceBodyTextView = itemView.findViewById(R.id.deviceBodyTextView);
             soldPiecesTextView = itemView.findViewById(R.id.soldPiecesTextView);
+            performanceTextView = itemView.findViewById(R.id.performanceTextView);
         }
     }
 
@@ -58,9 +60,23 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
             Device current = devices.get(position);
             holder.deviceNameItemView.setText(current.name);
             holder.deviceIncomeTextView.setText(String.format(Locale.getDefault(),"%d$",current.getSoldPieces()*current.profit));
-            holder.deviceStorageTextView.setText(String.format(Locale.getDefault(),"Storage: %d",current.getScore_Storage()));
-            holder.deviceBodyTextView.setText(String.format(Locale.getDefault(),"Body: %d",current.getScore_Body()));
+            holder.deviceStorageTextView.setText(String.format(Locale.getDefault(),
+                    "Storage: %d (%d,%d)",
+                    current.getScore_Storage(),
+                    current.getFieldByAttribute(Device.DeviceAttribute.STORAGE_MEMORY),
+                    current.getFieldByAttribute(Device.DeviceAttribute.STORAGE_RAM)));
+            holder.deviceBodyTextView.setText(String.format(Locale.getDefault(),
+                    "Body: %d (%d %d %d %d %d)",
+                    current.getScore_Body(),
+                    current.getFieldByAttribute(Device.DeviceAttribute.BODY_DESIGN),
+                    current.getFieldByAttribute(Device.DeviceAttribute.BODY_MATERIAL),
+                    current.getFieldByAttribute(Device.DeviceAttribute.BODY_COLOR),
+                    current.getFieldByAttribute(Device.DeviceAttribute.BODY_IP),
+                    current.getFieldByAttribute(Device.DeviceAttribute.BODY_BEZEL)
+                    ));
             holder.soldPiecesTextView.setText(String.format(Locale.getDefault(),"Sold: %d",current.getSoldPieces()));
+            holder.performanceTextView.setText(String.format(Locale.getDefault(),"Performance: %d",current.getScore_OverallPerformance()));
+
         } else {
             // Covers the case of data not being ready yet.
             holder.deviceNameItemView.setText("No device name");

@@ -3,6 +3,7 @@ package com.example.techtycoon.Assistant;
 import com.example.techtycoon.Company;
 import com.example.techtycoon.DevelopmentValidator;
 import com.example.techtycoon.Device;
+import com.example.techtycoon.DeviceValidator;
 import com.example.techtycoon.Wrapped_DeviceAndCompanyList;
 
 import java.util.LinkedList;
@@ -45,7 +46,7 @@ class XiaomiBot implements AbstractAssistant{
 
             @Override
             public int defaultWeight() {
-                return 120;
+                return 110;
             }
 
             @Override
@@ -53,14 +54,14 @@ class XiaomiBot implements AbstractAssistant{
 
             @Override
             public int getScore(Company myCompany, List<Device> myDevices, List<Company> allCompanies, List<Device> allDevices) {
+                if(DevelopmentValidator.nextSlotCost(myCompany.maxSlots)==-1){return 0;}
                 int counter=0;
                 for (Company c : allCompanies) {
                     if(c.companyId!=myCompany.companyId && c.maxSlots>myCompany.maxSlots){counter++;}
                 }
                 double percent=100*( ((double)counter) / (allCompanies.size()-1) );
                 if(Double.isNaN(percent)){return 1;}
-                if(percent==100){return 5;
-                }else if(percent>75){return 4;
+                if(percent>75){return 4;
                 }else if(percent>51){return 3;
                 }else if(percent>30){return 2;
                 }else {return 1;}
@@ -158,7 +159,7 @@ class XiaomiBot implements AbstractAssistant{
             @Override
             public Wrapped_DeviceAndCompanyList repair(Company myCompany, List<Device> myDevices, List<Company> allCompanies, List<Device> allDevices) {
                 List<Device> sortedAllDevices=allDevices.stream()
-                        .sorted((a,b)->b.getOverallIncome()-a.getOverallIncome())
+                        .sorted((a,b)->b.getIncome()-a.getIncome())
                         .filter(myCompany::producibleByTheCompany)
                         .collect(Collectors.toList());
                 if(sortedAllDevices.get(0)!=null){
@@ -173,60 +174,6 @@ class XiaomiBot implements AbstractAssistant{
                 return null;
             }
         });
-
-        //Max of our devices' profit compared to others
-        /*
-        principles.add(new Principle() {
-            @Override
-            public String name() {
-                return "Profit to others";
-            }
-
-            @Override
-            public int defaultWeight() {
-                return 100;
-            }
-
-            @Override
-            public boolean needsCleanInput() {
-                return false;
-            }
-
-            @Override
-            public int getScore(Company myCompany, List<Device> myDevices, List<Company> allCompanies, List<Device> allDevices) {
-                int maxInd=maxIndex(myDevices,-1);
-
-                List<Integer> notMyDevicesProfit=new LinkedList<>();
-                for (Device d :allDevices) {if(!myDevices.contains(d)){notMyDevicesProfit.add(d.profit);}}
-
-                int region=getRegion(notMyDevicesProfit,myDevices.get(maxInd).profit);
-                if(Double.isNaN(region)){return 1;}
-
-                switch (region){
-                    case 1:
-                    case 2:
-                        return 1;
-                    case 3:
-                        return 2;
-                    case 4:
-                        return 4;
-                    default:
-                        return 5;
-                }
-            }
-
-            @Override
-            public Wrapped_DeviceAndCompanyList repair(Company myCompany, List<Device> myDevices, List<Company> allCompanies, List<Device> allDevices) {
-                int maxInd=maxIndex(myDevices,-1);
-                Device d=myDevices.get(maxInd);
-                d.profit*=0.95;
-                myCompany.logs=myCompany.logs+"\n"+d.name+"'s had too high profit -> lowered by 5%.";
-                Wrapped_DeviceAndCompanyList r=new Wrapped_DeviceAndCompanyList(myDevices,myCompany);
-                r.update.add(d);
-                return r;
-            }
-        });
-        */
 
         //producible is before us
         principles.add(new Principle() {
@@ -249,7 +196,7 @@ class XiaomiBot implements AbstractAssistant{
             public int getScore(Company myCompany, List<Device> myDevices, List<Company> allCompanies, List<Device> allDevices) {
                 Device minDev=myDevices.get(0);
                 for (Device dev : myDevices) {
-                    if(minDev.getOverallIncome()>dev.getOverallIncome()){
+                    if(minDev.getIncome()>dev.getIncome()){
                         minDev=dev;
                     }
                 }
@@ -257,21 +204,21 @@ class XiaomiBot implements AbstractAssistant{
                 Device betterDev=null;
                 for (Device d : allDevices) {
                     if(d.ownerCompanyId!=myCompany.companyId &&
-                            minDev.getOverallIncome()<d.getOverallIncome() &&
+                            minDev.getIncome()<d.getIncome() &&
                             myCompany.producibleByTheCompany(d)){
                         if(betterDev==null){betterDev=d;
-                        }else if(d.getOverallIncome()>betterDev.getOverallIncome()){betterDev=d;}
+                        }else if(d.getIncome()>betterDev.getIncome()){betterDev=d;}
                     }
                 }
                 if(betterDev==null){return 0;}
 
-                if(betterDev.getOverallIncome()>minDev.getOverallIncome()*3){
+                if(betterDev.getIncome()>minDev.getIncome()*3){
                     return 4;
-                }else if(betterDev.getOverallIncome()>minDev.getOverallIncome()*2){
+                }else if(betterDev.getIncome()>minDev.getIncome()*2){
                     return 3;
-                }else if(betterDev.getOverallIncome()>minDev.getOverallIncome()*1.5){
+                }else if(betterDev.getIncome()>minDev.getIncome()*1.5){
                     return 2;
-                }else if(betterDev.getOverallIncome()>minDev.getOverallIncome()*1.2){
+                }else if(betterDev.getIncome()>minDev.getIncome()*1.2){
                     return 1;
                 }
                 return 0;
@@ -281,7 +228,7 @@ class XiaomiBot implements AbstractAssistant{
             public Wrapped_DeviceAndCompanyList repair(Company myCompany, List<Device> myDevices, List<Company> allCompanies, List<Device> allDevices) {
                 Device minDev=myDevices.get(0);
                 for (Device dev : myDevices) {
-                    if(minDev.getOverallIncome()>dev.getOverallIncome()){
+                    if(minDev.getIncome()>dev.getIncome()){
                         minDev=dev;
                     }
                 }
@@ -289,10 +236,10 @@ class XiaomiBot implements AbstractAssistant{
                 Device betterDev=null;
                 for (Device d : allDevices) {
                     if(d.ownerCompanyId!=myCompany.companyId &&
-                            minDev.getOverallIncome()<d.getOverallIncome() &&
+                            minDev.getIncome()<d.getIncome() &&
                             myCompany.producibleByTheCompany(d)){
                         if(betterDev==null){betterDev=d;
-                        }else if(d.getOverallIncome()>betterDev.getOverallIncome()){betterDev=d;}
+                        }else if(d.getIncome()>betterDev.getIncome()){betterDev=d;}
                     }
                 }
 
@@ -333,24 +280,24 @@ class XiaomiBot implements AbstractAssistant{
                 Device minDev=myDevices.get(0);
                 Device maxDev=myDevices.get(0);
                 for (Device dev : myDevices) {
-                    if(minDev.getOverallIncome()>dev.getOverallIncome()*1.1){
+                    if(minDev.getIncome()>dev.getIncome()*1.1){
                         minDev=dev;
-                    }else if(maxDev.getOverallIncome()*1.1<dev.getOverallIncome()){
+                    }else if(maxDev.getIncome()*1.1<dev.getIncome()){
                         maxDev=dev;
                     }
                 }
 
                 if(minDev.id==maxDev.id){return 0;}
 
-                if(maxDev.getOverallIncome()>minDev.getOverallIncome()*5){
+                if(maxDev.getIncome()>minDev.getIncome()*5){
                     return 5;
-                }else if(maxDev.getOverallIncome()>minDev.getOverallIncome()*3){
+                }else if(maxDev.getIncome()>minDev.getIncome()*3){
                     return 4;
-                }else if(maxDev.getOverallIncome()>minDev.getOverallIncome()*2){
+                }else if(maxDev.getIncome()>minDev.getIncome()*2){
                     return 3;
-                }else if(maxDev.getOverallIncome()>minDev.getOverallIncome()*1.5){
+                }else if(maxDev.getIncome()>minDev.getIncome()*1.5){
                     return 2;
-                }else if(maxDev.getOverallIncome()>minDev.getOverallIncome()*1.2){
+                }else if(maxDev.getIncome()>minDev.getIncome()*1.2){
                     return 1;
                 }
                 return 0;
@@ -361,9 +308,9 @@ class XiaomiBot implements AbstractAssistant{
                 Device minDev=myDevices.get(0);
                 Device maxDev=myDevices.get(0);
                 for (Device dev : myDevices) {
-                    if(minDev.getOverallIncome()>dev.getOverallIncome()){
+                    if(minDev.getIncome()>dev.getIncome()){
                         minDev=dev;
-                    }else if(maxDev.getOverallIncome()<dev.getOverallIncome()){
+                    }else if(maxDev.getIncome()<dev.getIncome()){
                         maxDev=dev;
                     }
                 }
@@ -372,7 +319,7 @@ class XiaomiBot implements AbstractAssistant{
                     throw new IllegalStateException("There's no device like that! Why was this method called?");
                 }else{
                     Device newDev=new Device(maxDev);
-                    if(maxDev.getOverallIncome()>1.5*minDev.getOverallIncome()){
+                    if(maxDev.getIncome()>1.5*minDev.getIncome()){
                         newDev.name=nameBuilder.buildName(myDevices.get(0).name,0);
                         newDev.profit+=5;
                     }else{
@@ -390,12 +337,12 @@ class XiaomiBot implements AbstractAssistant{
         });
 
         //attributes
-        for (int i = 0; i < Device.NUMBER_OF_ATTRIBUTES; i++) {
-            final int finalI = i;
+        for (Device.DeviceAttribute attribute : Device.getAllAttribute()) {
+            //final int finalI = i;
             principles.add(new Principle() {
                 @Override
                 public String name() {
-                    return "Devices' attribute"+finalI;
+                    return "Devices' attribute"+attribute;
                 }
 
                 @Override
@@ -410,12 +357,13 @@ class XiaomiBot implements AbstractAssistant{
 
                 @Override
                 public int getScore(Company myCompany, List<Device> myDevices, List<Company> allCompanies, List<Device> allDevices) {
+                    if(DevelopmentValidator.getOneDevelopmentCost(attribute,myCompany.getLevelByAttribute(attribute))==-1){return 0;}
                     //needs clean input
                     int minLevels=10000;
                     int minInd=0;
                     for (int i = 0; i < myDevices.size(); i++) {
-                        if(myDevices.get(i).getFieldByNum(finalI)<minLevels){
-                            minLevels=myDevices.get(i).getFieldByNum(finalI);minInd=i;}
+                        if(myDevices.get(i).getFieldByAttribute(attribute)<minLevels){
+                            minLevels=myDevices.get(i).getFieldByAttribute(attribute);minInd=i;}
                     }
                     Device minDevice=myDevices.get(minInd);
 
@@ -424,12 +372,12 @@ class XiaomiBot implements AbstractAssistant{
                     int sameAttributeLevel=0;
                         for(int i=0;i<allDevices.size();i++){
                             if(allDevices.get(i).ownerCompanyId==myCompany.companyId){continue;}
-                            if(minDevice.getOverallIncome()<allDevices.get(i).getOverallIncome()
+                            if(minDevice.getIncome()<allDevices.get(i).getIncome()
                             ){
                                 betterIncome++;
-                                if(minDevice.getFieldByNum(finalI)<allDevices.get(i).getFieldByNum(finalI)){
+                                if(minDevice.getFieldByAttribute(attribute)<allDevices.get(i).getFieldByAttribute(attribute)){
                                     betterAttributeLevel++;
-                                }else if(minDevice.getFieldByNum(finalI)==allDevices.get(i).getFieldByNum(finalI)){
+                                }else if(minDevice.getFieldByAttribute(attribute)==allDevices.get(i).getFieldByAttribute(attribute)){
                                     sameAttributeLevel++;
                                 }
                             }
@@ -450,20 +398,21 @@ class XiaomiBot implements AbstractAssistant{
 
                 @Override
                 public Wrapped_DeviceAndCompanyList repair(Company myCompany, List<Device> myDevices, List<Company> allCompanies, List<Device> allDevices) {
-                    if(myCompany.incrementLevel(finalI)){
-                        myCompany.logs=myCompany.logs+"\n"+finalI+". level is updated";
+                    if(myCompany.incrementLevel(attribute)){
+                        myCompany.logs=myCompany.logs+"\n"+attribute+" level is updated";
                     }else{return null;}
 
                     int minLevels=10000;
                     int minInd=0;
                     for (int i = 0; i < myDevices.size(); i++) {
-                        if(myDevices.get(i).getFieldByNum(finalI)<minLevels){
-                            minLevels=myDevices.get(i).getFieldByNum(finalI);minInd=i;}
+                        if(myDevices.get(i).getFieldByAttribute(attribute)<minLevels){
+                            minLevels=myDevices.get(i).getFieldByAttribute(attribute);minInd=i;}
                     }
                     Device minDevice=myDevices.get(minInd);
                     Device newDev=new Device(minDevice);
                     newDev.name=nameBuilder.buildName(minDevice.name,1);
-                    newDev.setFieldByNum(finalI,minDevice.getFieldByNum(finalI)+1);
+                    newDev.setFieldByAttribute(attribute,minDevice.getFieldByAttribute(attribute)+1);
+                    newDev.cost= DeviceValidator.getOverallCost(newDev);
                     Wrapped_DeviceAndCompanyList r=new Wrapped_DeviceAndCompanyList(myDevices,myCompany);
                     r.delete.add(minDevice);
                     r.insert.add(newDev);

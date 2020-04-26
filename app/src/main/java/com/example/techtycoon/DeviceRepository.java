@@ -1,9 +1,12 @@
 package com.example.techtycoon;
 
 import android.app.Application;
+import android.util.Log;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
@@ -12,16 +15,14 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
-//todo ?remove unattached observers since they cause delays and lag?
 
 class DeviceRepository {
-    private int orderBy=0;
-    private int filter=-1;
+    private Device.DeviceAttribute orderBy= Device.DeviceAttribute.DEVICE_ID;
+    private HashMap<Device.DeviceAttribute,List<Integer>> advancedFilter;
     private boolean desc=true;
 
     private DeviceDao mDao;
     private TransactionDao mTransactionDao;
-    private LiveData<List<Device>> mAllDevs;
     private List<Device> cachedAllDevices;
     private LiveData<List<Company>> mAllComps;
 
@@ -34,7 +35,7 @@ class DeviceRepository {
         mTransactionDao = db.transactionDao();
 
         mAllComps=mDao.getAllCompany();
-        mAllDevs=mDao.getAllDevices();
+        LiveData<List<Device>> mAllDevs = mDao.getAllDevices();
 
         mAllDevs.observeForever(new Observer<List<Device>>() {
             @Override
@@ -46,19 +47,29 @@ class DeviceRepository {
 
         mutableAllDevices=new MutableLiveData<List<Device>>();
         setSortBy(orderBy,true);
+        advancedFilter=new HashMap<>();
     }
 
     //get the mutable
     LiveData<List<Device>> mutable_getAllDevices() { return mutableAllDevices; }
 
-    void setSortBy(int sortId,boolean desc){
-        orderBy=sortId;
+    void setSortBy(Device.DeviceAttribute attribute, boolean desc){
+        orderBy=attribute;
         this.desc=desc;
         mutableAllDevices.setValue(orderDevices(cachedAllDevices));
     }
-
+    /*
     void setFilter(int filterById){
         filter=filterById;
+        mutableAllDevices.setValue(orderDevices(cachedAllDevices));
+    }*/
+
+    void setAdvancedFilter(Device.DeviceAttribute attribute,List<Integer> values){
+        if(advancedFilter.containsKey(attribute)){
+            advancedFilter.replace(attribute,values);
+        }else{
+            advancedFilter.put(attribute,values);
+        }
         mutableAllDevices.setValue(orderDevices(cachedAllDevices));
     }
 
@@ -151,7 +162,6 @@ class DeviceRepository {
         mDao.updateLevel(id,Converter.intArrayToString(lvls),money);
     });};
 
-
     void deleteOneDeviceById(int id){
         List<Device> deviceList=mutableAllDevices.getValue();
         List<Company> companyList=getAllCompaniesList();
@@ -175,7 +185,6 @@ class DeviceRepository {
             mDao.deleteDevicesFromCompany(id);
         });
     }
-
     void deleteAll(){
 
         AppDatabase.databaseWriteExecutor.execute(() -> {
@@ -191,7 +200,6 @@ class DeviceRepository {
             mTransactionDao.insertAndDeleteInTransaction(companies);
         });
     }
-
     void assistantToDatabase(Company[] companies,Device[] insert,Device[] update,Device[] delete){
         for (Device d : insert) { d.id = 0; d.setSoldPieces(0); }
         AppDatabase.databaseWriteExecutor.execute(() -> {
@@ -247,15 +255,23 @@ class DeviceRepository {
 
     private List<Device> orderDevices(List<Device> devices){
         try {
-            if (filter != -1) {
-                devices = devices.stream().filter(device -> device.ownerCompanyId == filter).collect(Collectors.toList());
+            if (advancedFilter!=null && !advancedFilter.isEmpty()) {
+                for (Map.Entry<Device.DeviceAttribute,List<Integer>> entry : advancedFilter.entrySet()) {
+                    if(entry.getValue()==null || entry.getValue().isEmpty()){continue;}
+                    List<Integer> values=entry.getValue();
+                    devices = devices.stream()
+                            .filter(device -> values.contains(device.getFieldByAttribute(entry.getKey())) )
+                            .collect(Collectors.toList());
+                    Log.d("Devices length", "after "+entry.getKey().toString()+" "+String.valueOf(devices.size()));
+                }
+                Log.d("Devices length: ", String.valueOf(devices.size()));
             }
-            if (orderBy == -100) {
+            if (orderBy == Device.DeviceAttribute.NAME) {
                 devices.sort((a, b) -> a.name.compareTo(b.name));
             } else if (desc) {
-                devices.sort((a, b) -> b.getFieldByNum(orderBy) - a.getFieldByNum(orderBy));
+                devices.sort((a, b) -> b.getFieldByAttribute(orderBy) - a.getFieldByAttribute(orderBy));
             } else {
-                devices.sort((a, b) -> a.getFieldByNum(orderBy) - b.getFieldByNum(orderBy));
+                devices.sort((a, b) -> a.getFieldByAttribute(orderBy) - b.getFieldByAttribute(orderBy));
             }
         }catch (NullPointerException ignored){}
         return devices;

@@ -99,23 +99,24 @@ public class DevelopmentActivity extends AppCompatActivity {
     void refresh(){
         moneyTextView.setText(String.format(Locale.getDefault(),"Money: %d$",money));
         for(int i = 0; i< NUMBER_OF_ATTRIBUTES; i++){
-            costsTextViews[i].setText(String.format(Locale.getDefault(),"%d$", DevelopmentValidator.getOneDevelopmentCost(i,levels[i])));
+            Device.DeviceAttribute attribute= Device.getAllAttribute().get(i);
+            costsTextViews[i].setText(String.format(Locale.getDefault(),"%d$", DevelopmentValidator.getOneDevelopmentCost(attribute,levels[i])));
             actualLevelsTextViews[i].setText(String.format(Locale.getDefault(),"lvl %d", levels[i]));
 
             //if maximum level is reached
-            if (-1== DevelopmentValidator.getOneDevelopmentCost(i,levels[i])){
+            if (-1== DevelopmentValidator.getOneDevelopmentCost(attribute,levels[i])){
                 imageButtons.get(i).setVisibility(View.INVISIBLE);
                 costsTextViews[i].setText("Reached max level");
                 continue;
             }
-            if(money>= DevelopmentValidator.getOneDevelopmentCost(i,levels[i])){
+            if(money>= DevelopmentValidator.getOneDevelopmentCost(attribute,levels[i])){
                 imageButtons.get(i).setImageDrawable(getDrawable(R.drawable.ic_upgrade_green_24dp));
                 imageButtons.get(i).setClickable(true);
                 imageButtons.get(i).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         int i=imageButtons.indexOf((ImageButton) v);
-                        money-= DevelopmentValidator.getOneDevelopmentCost(i,levels[i]);
+                        money-= DevelopmentValidator.getOneDevelopmentCost(attribute,levels[i]);
                         levels[i]++;
                         isUpgrade=true;
                         refresh();

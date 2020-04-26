@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
@@ -20,7 +21,17 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 
+import com.example.techtycoon.dialogs.SortByDialog;
+import com.example.techtycoon.ui.activities.FilterActivity;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+
+import static android.app.Activity.RESULT_OK;
 
 public class FragmentAllDevices extends Fragment {
 
@@ -29,6 +40,9 @@ public class FragmentAllDevices extends Fragment {
     private LiveData<List<Device>> deviceList;
     private Spinner companySpinner;
     private boolean isDesc=true;
+    private static int START_FILTER_ACTIVITY=123;
+    public static String COMPANY_ID="companyId";
+    public static String ATTRIBUTES="attr";
 
     public static FragmentAllDevices newInstance() {
         FragmentAllDevices fragment = new FragmentAllDevices();
@@ -57,7 +71,9 @@ public class FragmentAllDevices extends Fragment {
         ImageButton imageButton=root.findViewById(R.id.ascOrDescImageView);
         imageButton.setOnClickListener(v->{deviceViewModel.setOrder(!isDesc); isDesc=!isDesc;});
 
-        Spinner spin = root.findViewById(R.id.sortbySpinner);
+        //Spinner spin = root.findViewById(R.id.sortbySpinner);
+        root.findViewById(R.id.sortByImageView).setOnClickListener(v->showSortByDialog());
+
         //onclick
         View.OnClickListener mOnClickListener = new View.OnClickListener() {
             @Override
@@ -109,9 +125,13 @@ public class FragmentAllDevices extends Fragment {
         };
         deviceList.observe(getViewLifecycleOwner(), observer);
 
-        companySpinner=root.findViewById(R.id.companySpinner);
-        new SortBySpinnerAdapter(spin);
-        new CompanySpinnerAdapter();
+        //companySpinner=root.findViewById(R.id.companySpinner);
+        //new SortBySpinnerAdapter(spin);
+        //new CompanySpinnerAdapter();
+        root.findViewById(R.id.filterByButton).setOnClickListener(v -> {
+            Intent intent=new Intent(getContext(),FilterActivity.class);
+            startActivityForResult(intent,START_FILTER_ACTIVITY);
+        });
 
 
         return root;
@@ -119,7 +139,33 @@ public class FragmentAllDevices extends Fragment {
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==START_FILTER_ACTIVITY && resultCode==RESULT_OK){
+            ArrayList<Integer> companyIds=data.getIntegerArrayListExtra(COMPANY_ID);
+            deviceViewModel.filterBy(Device.DeviceAttribute.OWNER_ID, companyIds);
+
+            ArrayList<String> attributesAsString=data.getStringArrayListExtra(ATTRIBUTES);
+            for(int i=0;i<attributesAsString.size();i++){
+                ArrayList<String> attributeValuesAsString=data.getStringArrayListExtra(attributesAsString.get(i));
+                ArrayList<Integer> attributeValues=new ArrayList<>();
+                for (String str :
+                        attributeValuesAsString) {
+                    attributeValues.add(Integer.parseInt(str));
+                }
+                deviceViewModel.filterBy(Device.DeviceAttribute.valueOf(attributesAsString.get(i)),
+                        attributeValues);
+            }
+        }
     }
+
+    //set up sort by button
+    private void showSortByDialog(){
+        DialogFragment dialog=new SortByDialog();
+        dialog.show(getChildFragmentManager(),"cloneDevice");
+    }
+
+    void sortBy(Device.DeviceAttribute code)
+    {deviceViewModel.orderDevices_ByCode2(code,isDesc);}
+
 
     //set up the sortby spinner
     public class SortBySpinnerAdapter implements
@@ -144,9 +190,9 @@ public class FragmentAllDevices extends Fragment {
         @Override
         public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id) {
             if(position==0 || position==1){
-                deviceViewModel.orderDevices_ByCode2(-100,isDesc);
+                deviceViewModel.orderDevices_ByCode2(Device.DeviceAttribute.NAME,isDesc);
             }else{
-                deviceViewModel.orderDevices_ByCode2(position-10,isDesc);}
+                deviceViewModel.orderDevices_ByCode2(Device.getAllAttribute().get(position-10),isDesc);}
         }
         @Override
         public void onNothingSelected(AdapterView<?> arg0) {
@@ -185,8 +231,8 @@ public class FragmentAllDevices extends Fragment {
             int companyID;
             if(position>=0){companyID=companies[position].companyId;
             }else{companyID=-1;}
-            deviceViewModel.filter_byCompanyID(companyID);
-            //deviceList=deviceViewModel.filter_byCompanyIDs(companyIDs);
+            deviceViewModel.filterBy(Device.DeviceAttribute.OWNER_ID,Collections.singletonList(companyID));
+            //deviceList=deviceViewModel.filter_byCompanyID(companyID);
         }
         @Override
         public void onNothingSelected(AdapterView<?> arg0) {
