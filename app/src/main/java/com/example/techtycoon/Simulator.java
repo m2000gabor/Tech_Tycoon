@@ -9,11 +9,11 @@ import java.util.List;
 class Simulator {
     //todo There's no place for low profit companies
     //todo write unit tests
-    ///Simulator 2.8 - new value and price ratio handling
+    ///Simulator 2.8.1 - fixed customerNum
 
     private List<Device> deviceList;
     private List<Company> companyList;
-    private static final double AVG_CHANGING_SPEED =0.4;//isnt it too slow?
+    private static final double AVG_CHANGING_SPEED =0.3;
     public double[] attrAverages;
     public double lastAvgPrice;
     private double customerNum;
@@ -118,10 +118,10 @@ class Simulator {
         customerNum+=topCust;
         sellingToOneProfile2(sold,deviceList,compsToDevList,new double[]{topCust,1.7,4},top);
 
-        int[] cheep={5,5,2,2,2,3,2};
+        int[] cheap={5,5,2,2,2,3,2};
         int cheapCust=500;
-        customerNum+=cheep[0];
-        sellingToOneProfile2(sold,deviceList,compsToDevList,new double[]{cheapCust,3,2.5},cheep);
+        customerNum+=cheapCust;
+        sellingToOneProfile2(sold,deviceList,compsToDevList,new double[]{cheapCust,3,2.5},cheap);
 
         int[] beauty={2,2,10,7,8,2,5};
         int beautyCust=50;

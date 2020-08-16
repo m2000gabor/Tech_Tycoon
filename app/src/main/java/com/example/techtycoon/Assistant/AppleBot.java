@@ -1,6 +1,6 @@
 package com.example.techtycoon.Assistant;
 
-import android.util.Pair;
+import androidx.core.util.Pair;
 
 import com.example.techtycoon.Company;
 import com.example.techtycoon.DevelopmentValidator;
@@ -208,7 +208,7 @@ public class AppleBot implements AbstractAssistant{
                     while(i<deviceList.size() && !myCompany.producibleByTheCompany(deviceList.get(i)) ){i++;}
                     if(i<deviceList.size()){
                         Device newD=new Device(deviceList.get(i));
-                        myCompany.logs = myCompany.logs+"A popular device named"+deviceList.get(i).name+" is copied\n";
+                        myCompany.logs = myCompany.logs+"A popular device named: "+deviceList.get(i).name+" is copied\n";
                         //cut price if company context is 1
                         if(companyContext==1){newD.profit*=0.8;
                             myCompany.logs = myCompany.logs+"The company's position is bad so the profit of copied device is cut\n";}
@@ -232,7 +232,7 @@ public class AppleBot implements AbstractAssistant{
                 case 3:
                 case 4:
                     //our highend device is really good! Do nothing with it!
-                    myCompany.logs = myCompany.logs+"Our high-end device goes well!\n";
+                    myCompany.logs = myCompany.logs+"Our highend device goes well!\n";
                     //search for underperformer
                     for (int j = 0; j<myDevices.size(); j++) {
                         if(getRegion(deviceList.stream().map( (Device::getSoldPieces)).collect(Collectors.toList()), myDevices.get(j).getSoldPieces())<=2 &&

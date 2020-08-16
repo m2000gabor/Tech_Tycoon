@@ -1,14 +1,14 @@
 package com.example.techtycoon.Assistant;
 
-import android.util.Pair;
 
 import com.example.techtycoon.Company;
 import com.example.techtycoon.Device;
 import com.example.techtycoon.Wrapped_DeviceAndCompanyList;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+
+import androidx.core.util.Pair;
 
 class PrincipleBot{
     private List<Integer> PRINCIPLE_WEIGHTS;
@@ -25,16 +25,20 @@ class PrincipleBot{
     }
 
     Wrapped_DeviceAndCompanyList work(List<Company> companyList, List<Device> deviceList, List<Device> myDevices, Company myCompany, Wrapped_DeviceAndCompanyList ret) {
-        boolean resume=false;
+        boolean resume;
         do {
+            boolean clean=ret.insert.isEmpty() && ret.update.isEmpty() && ret.delete.isEmpty() ;
             //getScore*weight and do the most important
             //index in principles,score
             LinkedList<Pair<Integer, Integer>> principleImportance = new LinkedList<>();
             //get scores from the principles
             for (int i = 0; i < principles.size(); i++) {
+                if(principles.get(i).needsCleanInput() && !clean){continue;}
                 int score=principles.get(i).getScore(myCompany, myDevices, companyList, deviceList) * PRINCIPLE_WEIGHTS.get(i);
                 if(Double.isNaN(score)){continue;}
-                principleImportance.add(new Pair<>(i, score));
+                //Pair<Integer,Integer> p=new Pair<Integer, Integer>(i, score);
+                Pair<Integer,Integer> p= Pair.create(i, score);
+                principleImportance.add(p);
             }
             principleImportance.sort((o1, o2) -> Double.compare(o2.second, o1.second));
 
@@ -43,8 +47,7 @@ class PrincipleBot{
                 myCompany.logs = myCompany.logs + "\n" + principles.get(principleImportance.get(0).first).name() + " is not important enough. Score: "+principleImportance.get(0).second;
                 break;
                 //if the repair would need a clean input
-            }else if(principles.get(principleImportance.get(0).first).needsCleanInput() &&
-                    !(ret.insert.isEmpty() && ret.update.isEmpty() && ret.delete.isEmpty()) ){
+            }else if(principles.get(principleImportance.get(0).first).needsCleanInput() && !clean){
                 myCompany.logs = myCompany.logs + "\n" + principles.get(principleImportance.get(0).first).name() + " needs clean input.";
                 break;
             }

@@ -41,11 +41,11 @@ public class DeviceSmallListAdapter extends RecyclerView.Adapter<DeviceSmallList
             Device current = devices.get(position);
             holder.deviceNameItemView.setText(current.name);
             holder.deviceLastIncomeTextView.setText(String.format(Locale.getDefault(), "%d$", current.getSoldPieces() * current.profit));
-            switch (current.getTrend()){
-                case 1:holder.trendInIncomeImage.setImageResource(R.drawable.ic_trending_up_green_24dp);break;
-                case 0:holder.trendInIncomeImage.setImageResource(R.drawable.ic_trending_flat_yellow_24dp);break;
-                case -1:holder.trendInIncomeImage.setImageResource(R.drawable.ic_trending_down_red_24dp);break;
-            }
+
+            if(current.getTrend()>0){holder.trendInIncomeImage.setImageResource(R.drawable.ic_trending_up_green_24dp);
+            }else if(current.getTrend()<0){holder.trendInIncomeImage.setImageResource(R.drawable.ic_trending_down_red_24dp);
+            }else{holder.trendInIncomeImage.setImageResource(R.drawable.ic_trending_flat_yellow_24dp);}
+
         } else {
             // Covers the case of data not being ready yet.
             holder.deviceNameItemView.setText("No device name");

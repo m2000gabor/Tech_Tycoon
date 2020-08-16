@@ -214,7 +214,7 @@ public class FragmentDeviceCreator extends Fragment {
             device.cost=DeviceValidator.getOverallCost(device);
             deviceViewModel.insertDevice(device);
             deviceViewModel.updateCompanies(maker);
-            Toast.makeText(getContext(), "Saved", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), "Saved", Toast.LENGTH_SHORT).show();
             reset(true);
         }
     }

@@ -323,6 +323,7 @@ class AppleBotPrinciple implements AbstractAssistant {
                             found=true;
                         }
                     }
+                    if(!found){return null;}
                 }
                 return r;
             }
@@ -377,17 +378,17 @@ class AppleBotPrinciple implements AbstractAssistant {
                             Device minDev=myDevices.get(minInd(myDevices, Device.DeviceAttribute.INCOME));
                             r.delete.add(minDev);
                             Device newDev=new Device(d);
-                            newDev.profit*=0.7;
+                            if(newDev.profit>=10){newDev.profit*=0.8;}
                             newDev.ownerCompanyId=myCompany.companyId;
                             r.insert.add(newDev);
                             return r;
                         }
                     }
                 }else if(region<20){
-                    for (Device d :myDevices) {d.profit *= 0.6;}
+                    for (Device d :myDevices) {if(d.profit>=10){d.profit*=0.7;} }
                     r.update.addAll(myDevices);
                 }else if(region<30){
-                    for (Device d :myDevices) {d.profit *= 0.7;}
+                    for (Device d :myDevices) {if(d.profit>=10){d.profit*=0.8;}}
                     r.update.addAll(myDevices);
                 }
                 return r;

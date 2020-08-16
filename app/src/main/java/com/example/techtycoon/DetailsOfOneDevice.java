@@ -1,6 +1,5 @@
 package com.example.techtycoon;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -12,13 +11,12 @@ import java.util.Objects;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProvider;
 
 public class DetailsOfOneDevice extends AppCompatActivity {
+    DeviceViewModel deviceViewModel;
     int id;
-    int companyId;
-    int profit;
-    String name;
-    Intent replyIntent;
+    Device device;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,41 +36,29 @@ public class DetailsOfOneDevice extends AppCompatActivity {
         TextView memoryTextV =findViewById(R.id.memory);
         TextView costTextV =findViewById(R.id.cost);
         TextView bodyTextV =findViewById(R.id.bodyInfos);
+        TextView historySoldPiecesTextView =findViewById(R.id.historySoldPiecesTextView);
 
-
-        //get data from previous activity
-        Intent intent = getIntent();
-        name = intent.getStringExtra(MainActivity.NAME_FIELD);
-        profit=intent.getIntExtra(MainActivity.MAIN_MONETARILY_INFO,0);
-        companyId=intent.getIntExtra(MainActivity.DEVICE_COMPANY_ID,0);
-        int price=intent.getIntExtra(MainActivity.DEVICE_PRICE,0);
-        int cost=intent.getIntExtra(MainActivity.DEVICE_COST,0);
-        int[][] devParams=Device.intArrayToMtx(intent.getIntArrayExtra(MainActivity.DEVICE_PARAMS));
-
-        id=intent.getIntExtra("ID",-1);
+        id=getIntent().getIntExtra("ID",-1);
+        deviceViewModel=new ViewModelProvider(this).get(DeviceViewModel.class);
+        device=deviceViewModel.getDevice_byID(id);
 
         //display data
-        nevTextV.setText("Name: "+name);
-        priceTextV.setText(String.format(Locale.getDefault(),"Price: %d$",price));
-        profitTextV.setText(String.format(Locale.getDefault(),"Profit: %d$",profit));
-        deviceIDTextV.setText(String.format(Locale.getDefault(),"Device ID: %d",id));
-        ownerIDTextV.setText(String.format(Locale.getDefault(),"Owner id: %d",companyId));
-        ramTextV.setText(String.format(Locale.getDefault(),"RAM: %d GB",(int) Math.pow(2,devParams[0][0])));
-        memoryTextV.setText(String.format(Locale.getDefault(),"Memory: %d GB",(int) Math.pow(2,devParams[0][1])));
-        costTextV.setText(String.format(Locale.getDefault(),"Cost: %d$",cost));
-        bodyTextV.setText(String.format(Locale.getDefault(),"Body: %s$",Converter.intArrayToString(devParams[1])));
+        nevTextV.setText("Name: "+device.name);
+        priceTextV.setText(String.format(Locale.getDefault(),"Price: %d$",device.getPrice()));
+        profitTextV.setText(String.format(Locale.getDefault(),"Profit: %d$",device.profit));
+        deviceIDTextV.setText(String.format(Locale.getDefault(),"Device ID: %d",device.id));
+        ownerIDTextV.setText(String.format(Locale.getDefault(),"Owner id: %d",device.ownerCompanyId));
+        historySoldPiecesTextView.setText(String.format(Locale.getDefault(),"History - sold pieces: %d",device.history_SoldPieces));
 
-        setResult(RESULT_OK,new Intent().putExtra(MainActivity.TASK_OF_RECYCLER_VIEW,MainActivity.DISPLAY_DEVICES_REQUEST_CODE));
+        ramTextV.setText(String.format(Locale.getDefault(),"RAM: %d GB",(int) Math.pow(2,device.getFieldByAttribute(Device.DeviceAttribute.STORAGE_RAM))));
+        memoryTextV.setText(String.format(Locale.getDefault(),"Memory: %d GB",(int) Math.pow(2,device.getFieldByAttribute(Device.DeviceAttribute.STORAGE_MEMORY))));
+        costTextV.setText(String.format(Locale.getDefault(),"Cost: %d$",device.cost));
+        bodyTextV.setText(String.format(Locale.getDefault(),"Body: %s$",Converter.intArrayToString(device.getParams()[1])));
 
-        //init intent
-        replyIntent=new Intent();
     }
 
     public void delThisOne(View view) {
-        Intent replyIntent=new Intent();
-        replyIntent.putExtra("IS_DELETE", true);
-        replyIntent.putExtra("ID", id);
-        setResult(RESULT_OK, replyIntent);
+        deviceViewModel.delOneDeviceById(id);
         finish();
     }
 
@@ -81,22 +67,20 @@ public class DetailsOfOneDevice extends AppCompatActivity {
         if(textView.getVisibility()==View.VISIBLE) {
             EditText editText = findViewById(R.id.profitEditable);
             textView.setVisibility(View.GONE);
-            editText.setText(String.valueOf(profit));
+            editText.setText(String.valueOf(device.profit));
             editText.setVisibility(View.VISIBLE);
             ((Button) v).setText("Save");
         }else{
             EditText editText = findViewById(R.id.profitEditable);
-            profit = Integer.parseInt(editText.getText().toString());
+            int newProfit = Integer.parseInt(editText.getText().toString());
             editText.setVisibility(View.GONE);
-            textView.setText(String.format(Locale.getDefault(),"Profit: %d$",profit));
+            textView.setText(String.format(Locale.getDefault(),"Profit: %d$",newProfit));
             textView.setVisibility(View.VISIBLE);
             ((Button) v).setText("Edit");
 
-            //make a replyIntent
-            replyIntent.putExtra("isProfitChanged", true);
-            replyIntent.putExtra("ID", id);
-            replyIntent.putExtra("profit", profit);
-            setResult(RESULT_OK, replyIntent);
+            //save
+            device.profit=newProfit;
+            deviceViewModel.updateDevices(device);
         }
     }
 
@@ -105,22 +89,19 @@ public class DetailsOfOneDevice extends AppCompatActivity {
         if(textView.getVisibility()==View.VISIBLE) {
             EditText editText = findViewById(R.id.nameEditable);
             textView.setVisibility(View.GONE);
-            editText.setText(name);
+            editText.setText(device.name);
             editText.setVisibility(View.VISIBLE);
             ((Button) v).setText("Save");
         }else{
             EditText editText = findViewById(R.id.nameEditable);
-            name = editText.getText().toString();
+            String newName = editText.getText().toString();
             editText.setVisibility(View.GONE);
-            textView.setText(String.format(Locale.getDefault(),"Name: %s",name));
+            textView.setText(String.format(Locale.getDefault(),"Name: %s",newName));
             textView.setVisibility(View.VISIBLE);
             ((Button) v).setText("Edit");
 
-            //make a replyIntent
-            replyIntent.putExtra("isNameChanged", true);
-            replyIntent.putExtra("ID", id);
-            replyIntent.putExtra("name", name);
-            setResult(RESULT_OK, replyIntent);
+            device.name=newName;
+            deviceViewModel.updateDevices(device);
         }
     }
 }

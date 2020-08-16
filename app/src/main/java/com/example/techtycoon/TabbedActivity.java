@@ -187,7 +187,7 @@ public class TabbedActivity extends AppCompatActivity  implements ChooseADeviceD
     }
 
     @Override
-    public void selectedAttributeId(Device.DeviceAttribute code) {
+    public void selectedAttribute(Device.DeviceAttribute code) {
         List<Fragment> f=getSupportFragmentManager().getFragments();
         boolean found=false;
         for (int i=0;i<f.size() && !found;i++) {

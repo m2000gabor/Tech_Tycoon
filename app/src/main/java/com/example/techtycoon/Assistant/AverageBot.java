@@ -1,6 +1,6 @@
 package com.example.techtycoon.Assistant;
 
-import android.util.Pair;
+import androidx.core.util.Pair;
 
 import com.example.techtycoon.Company;
 import static com.example.techtycoon.Assistant.ToolsForAssistants.*;
@@ -108,7 +108,7 @@ public class AverageBot implements AbstractAssistant {
                 //company's profit is low
                 //decrease the profits on all devices
                 for (Device d : myDevices) {
-                    d.profit=(int) Math.floor(d.profit*0.9);
+                    d.profit=(int) Math.ceil(d.profit*0.9);
                     ret.update.add(d);
                 }
 

@@ -190,7 +190,14 @@ public class ToolsForAssistants {
         return r;
     }
 
+    /**
+     *
+     * @param list
+     * @param value
+     * @return num from 1 to 5
+     */
     static int getRegion(List<Integer> list, int value) {
+        if(list.size()==0){return 5;}
         int avg = 0;
         for (Integer n : list) {
             avg += n;
@@ -208,6 +215,15 @@ public class ToolsForAssistants {
         }
 
         return r;
+    }
+    static int getRegionWithout(List<Integer> list, int value,int without) {
+        List<Integer> l = new LinkedList<>();
+        boolean removeHappenned=false;
+        for(Integer i : list){
+            if(!removeHappenned||i ==without){removeHappenned=true;continue;
+            }else{l.add(i);}
+        }
+        return getRegion(l,value);
     }
 
     static int getRegion100(List<Integer> list, int value) {
@@ -239,7 +255,7 @@ public class ToolsForAssistants {
             listOfLists.add(new LinkedList<>());
         }
         for (Device d : allDevices) {
-            int diff = newDevice.equalAttributes(d);
+            int diff = newDevice.compareAttributes(d);
             listOfLists.get(diff).add(d);
         }
 

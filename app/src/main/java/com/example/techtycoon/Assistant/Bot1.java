@@ -1,6 +1,6 @@
 package com.example.techtycoon.Assistant;
 
-import android.util.Pair;
+import androidx.core.util.Pair;
 
 import com.example.techtycoon.Company;
 import com.example.techtycoon.DevelopmentValidator;

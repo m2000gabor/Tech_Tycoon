@@ -1,8 +1,16 @@
 package com.example.techtycoon;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
+import androidx.core.util.Pair;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -14,6 +22,7 @@ import androidx.room.PrimaryKey;
 @Entity
 public class Device {
     public enum DeviceAttribute {NAME,DEVICE_ID,OWNER_ID,PERFORMANCE_OVERALL,SCORE_STORAGE,SCORE_BODY,PRICE,INCOME,SOLD_PIECES,PROFIT,
+        HISTORY_SOLD_PIECES,
         STORAGE_RAM,STORAGE_MEMORY,BODY_DESIGN,BODY_MATERIAL,BODY_COLOR,BODY_IP,BODY_BEZEL};
 
     public static final int NUMBER_OF_BUDGETS=2; //rammemory,body
@@ -37,6 +46,9 @@ public class Device {
 
     @ColumnInfo(name="soldPieces")
     private int soldPieces;
+
+    @ColumnInfo
+    public int history_SoldPieces;
 
     @ColumnInfo(name="trend")
     private int trend;
@@ -99,6 +111,7 @@ public class Device {
             setFieldByAttribute(a,attributes[i++]);
         }
         this.soldPieces=0;
+        this.history_SoldPieces=0;
     }
 
     public Device(String name,int profit,int cost,int ownerCompanyId) {
@@ -107,6 +120,7 @@ public class Device {
         this.cost=cost;
         this.ownerCompanyId=ownerCompanyId;
         this.soldPieces=0;
+        this.history_SoldPieces=0;
     }
 
     public Device(Device d) {
@@ -116,6 +130,7 @@ public class Device {
         this.cost=d.cost;
         this.ownerCompanyId=d.ownerCompanyId;
         this.soldPieces=0;
+        this.history_SoldPieces=0;
         this.trend=d.trend;
 
         for(DeviceAttribute a : getAllAttribute()){
@@ -152,10 +167,9 @@ public class Device {
         return soldPieces;
     }
     public void setSoldPieces(int soldPieces) {
-        if(soldPieces>this.soldPieces){trend=1;
-        }else if(soldPieces<this.soldPieces){trend=-1;
-        }else{trend=0;}
+        trend=soldPieces-this.soldPieces;
         this.soldPieces = soldPieces;
+        history_SoldPieces+=soldPieces;
     }
     public int getTrend() {
         return trend;
@@ -216,6 +230,7 @@ public class Device {
             case PRICE:i=this.getPrice();break;
             case INCOME:i=this.getIncome();break;
             case SOLD_PIECES:i=this.soldPieces;break;
+            case HISTORY_SOLD_PIECES:i=this.history_SoldPieces;break;
             case PROFIT:i=this.profit;break;
             case STORAGE_RAM:i=this.ram; break;
             case STORAGE_MEMORY:i=this.memory; break;
@@ -244,7 +259,7 @@ public class Device {
     /*
      * returns the difference between the attributes of 2 device
      */
-    public int equalAttributes(Device d){
+    public int compareAttributes(Device d){
         int diff=0;
         for (int i=0;i<NUMBER_OF_ATTRIBUTES;i++){
             if(this.getFieldByAttribute(DeviceAttribute.values()[i])!=d.getFieldByAttribute(DeviceAttribute.values()[i])){diff++;}
@@ -286,4 +301,34 @@ public class Device {
         return list;
     }
 
+    final static private List<Pair<DeviceAttribute,String>> ATTRIBUTES_WITH_NAME=Arrays.asList(
+            new Pair<>(DeviceAttribute.NAME,"Name"),
+            new Pair<>(DeviceAttribute.OWNER_ID,"Owner ID"),
+            new Pair<>(DeviceAttribute.DEVICE_ID,"Device ID"),
+            new Pair<>(DeviceAttribute.PERFORMANCE_OVERALL,"Performance"),
+            new Pair<>(DeviceAttribute.SCORE_STORAGE,"Storage"),
+            new Pair<>(DeviceAttribute.SCORE_BODY,"Body"),
+            new Pair<>(DeviceAttribute.PRICE,"Price"),
+            new Pair<>(DeviceAttribute.INCOME,"Income"),
+            new Pair<>(DeviceAttribute.SOLD_PIECES,"Sold pieces"),
+            new Pair<>(DeviceAttribute.HISTORY_SOLD_PIECES,"History - sold pieces"),
+            new Pair<>(DeviceAttribute.PROFIT,"Profit"),
+            new Pair<>(DeviceAttribute.STORAGE_RAM,"RAM"),
+            new Pair<>(DeviceAttribute.STORAGE_MEMORY,"Memory"),
+            new Pair<>(DeviceAttribute.BODY_DESIGN,"Design"),
+            new Pair<>(DeviceAttribute.BODY_MATERIAL,"Material"),
+            new Pair<>(DeviceAttribute.BODY_COLOR,"Color"),
+            new Pair<>(DeviceAttribute.BODY_IP,"IP"),
+            new Pair<>(DeviceAttribute.BODY_BEZEL,"Bezel")
+    );
+
+    public static DeviceAttribute attributeFromString(String s){
+        return ATTRIBUTES_WITH_NAME.stream().filter(p-> Objects.equals(p.second, s)).collect(Collectors.toList()).get(0).first;
+    }
+
+    public static String attributeToString(DeviceAttribute attribute){
+        try {
+            return ATTRIBUTES_WITH_NAME.stream().filter(p -> p.first == attribute).collect(Collectors.toList()).get(0).second;
+        }catch (IndexOutOfBoundsException e){return "error";}
+    }
 }

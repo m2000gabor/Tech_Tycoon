@@ -33,6 +33,9 @@ public class AssistantManager {
         ASSISTANTS.forEach( a -> names.add(a.getAssistantName()));
         return names;
     }
+    public static String getAssistantName(int assistantType){
+        return ASSISTANTS.get(assistantType).getAssistantName();
+    }
 
     public AssistantManager(){
     };

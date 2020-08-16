@@ -171,8 +171,8 @@ public class AssistantActivity extends AppCompatActivity {
             while (labels != null && i < labels.size()) {
                 if(inputs==null || originalAssistantType!=currentAssistantType) {
                     inputFields.get(i).first.setText(String.format("%s:", labels.get(i)));
-                    inputFields.get(i).second.setText("");
-                    inputFields.get(i).second.setHint(defaultValues.get(i));
+                    //inputFields.get(i).second.setText("");
+                    inputFields.get(i).second.setText(defaultValues.get(i));
                 }else{
                     inputFields.get(i).first.setText(String.format("%s:", labels.get(i)));
                     inputFields.get(i).second.setText(inputs.get(i));

@@ -90,26 +90,12 @@ public class FragmentMyCompany extends Fragment {
 
                 //get device fileds with mutable
                 Device currentDev=adapter.getDeviceFromCache(itemPosition);
-                String nev = currentDev.name;
                 int id = currentDev.id;
-                int price =currentDev.getPrice();
-                int profit = currentDev.profit;
-                int companyId = currentDev.ownerCompanyId;
-                int cost = currentDev.cost;
-                int[][] devParams = currentDev.getParams();
-
 
                 //make intent
                 Intent intent = new Intent();
-                intent.putExtra(MainActivity.NAME_FIELD, nev);
-                intent.putExtra(MainActivity.DEVICE_PRICE, price);
-                intent.putExtra(MainActivity.MAIN_MONETARILY_INFO, profit);
-                intent.putExtra(MainActivity.DEVICE_COMPANY_ID, companyId);
-                intent.putExtra(MainActivity.DEVICE_COST, cost);
-                intent.putExtra(MainActivity.DEVICE_PARAMS, Device.mtxToArray(devParams));
                 intent.putExtra("ID", id);
                 intent.setClass(getContext(), DetailsOfOneDevice.class);
-
                 //start new activity
                 startActivityForResult(intent, MainActivity.DISPLAY_DEVICES_REQUEST_CODE);
             }

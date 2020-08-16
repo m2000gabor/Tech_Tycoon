@@ -54,6 +54,7 @@ class XiaomiBot implements AbstractAssistant{
 
             @Override
             public int getScore(Company myCompany, List<Device> myDevices, List<Company> allCompanies, List<Device> allDevices) {
+                //Based on: how many companies have more slots then us
                 if(DevelopmentValidator.nextSlotCost(myCompany.maxSlots)==-1){return 0;}
                 int counter=0;
                 for (Company c : allCompanies) {
@@ -99,6 +100,7 @@ class XiaomiBot implements AbstractAssistant{
 
             @Override
             public int getScore(Company myCompany, List<Device> myDevices, List<Company> allCompanies, List<Device> allDevices) {
+                //based on: in which region our marketing score lies. Preferred: region2,3 out of 5
                 List<Integer> marketingOfOthers=new LinkedList<>();
                 for (Company c :
                         allCompanies) {
@@ -158,6 +160,7 @@ class XiaomiBot implements AbstractAssistant{
 
             @Override
             public Wrapped_DeviceAndCompanyList repair(Company myCompany, List<Device> myDevices, List<Company> allCompanies, List<Device> allDevices) {
+                if(myCompany.usedSlots>=myCompany.maxSlots){throw new IllegalStateException("There is no unused slot. Why is this method called?");}
                 List<Device> sortedAllDevices=allDevices.stream()
                         .sorted((a,b)->b.getIncome()-a.getIncome())
                         .filter(myCompany::producibleByTheCompany)
@@ -175,7 +178,7 @@ class XiaomiBot implements AbstractAssistant{
             }
         });
 
-        //producible is before us
+        //producible is before us - price run
         principles.add(new Principle() {
             @Override
             public String name() {
@@ -194,13 +197,14 @@ class XiaomiBot implements AbstractAssistant{
 
             @Override
             public int getScore(Company myCompany, List<Device> myDevices, List<Company> allCompanies, List<Device> allDevices) {
+                //producible is before us
                 Device minDev=myDevices.get(0);
                 for (Device dev : myDevices) {
                     if(minDev.getIncome()>dev.getIncome()){
                         minDev=dev;
                     }
                 }
-
+                //search for a better and producible device
                 Device betterDev=null;
                 for (Device d : allDevices) {
                     if(d.ownerCompanyId!=myCompany.companyId &&
@@ -210,8 +214,7 @@ class XiaomiBot implements AbstractAssistant{
                         }else if(d.getIncome()>betterDev.getIncome()){betterDev=d;}
                     }
                 }
-                if(betterDev==null){return 0;}
-
+                if(betterDev==null){return 0;} //none is found
                 if(betterDev.getIncome()>minDev.getIncome()*3){
                     return 4;
                 }else if(betterDev.getIncome()>minDev.getIncome()*2){
@@ -249,7 +252,9 @@ class XiaomiBot implements AbstractAssistant{
                     Device newDev=new Device(betterDev);
                     newDev.name=nameBuilder.buildName(myDevices.get(0).name,1);
                     newDev.ownerCompanyId=myCompany.getCompanyId();
-                    newDev.profit*=0.95;
+                    if(newDev.profit<3){
+                        newDev.profit=10;
+                    }else{newDev.profit*=0.95;}
                     Wrapped_DeviceAndCompanyList w=new Wrapped_DeviceAndCompanyList(myDevices,myCompany);
                     w.delete.add(minDev);
                     w.insert.add(newDev);
@@ -258,7 +263,7 @@ class XiaomiBot implements AbstractAssistant{
             }
         });
 
-        //make the best with higher profit
+        //clone the best with higher profit
         principles.add(new Principle() {
             @Override
             public String name() {
@@ -277,6 +282,7 @@ class XiaomiBot implements AbstractAssistant{
 
             @Override
             public int getScore(Company myCompany, List<Device> myDevices, List<Company> allCompanies, List<Device> allDevices) {
+                //activation: minDev compared to maxDev
                 Device minDev=myDevices.get(0);
                 Device maxDev=myDevices.get(0);
                 for (Device dev : myDevices) {
@@ -338,7 +344,6 @@ class XiaomiBot implements AbstractAssistant{
 
         //attributes
         for (Device.DeviceAttribute attribute : Device.getAllAttribute()) {
-            //final int finalI = i;
             principles.add(new Principle() {
                 @Override
                 public String name() {
@@ -357,6 +362,7 @@ class XiaomiBot implements AbstractAssistant{
 
                 @Override
                 public int getScore(Company myCompany, List<Device> myDevices, List<Company> allCompanies, List<Device> allDevices) {
+                    //based on: how many devices have better income and same or higher attribute (same and higher are handled differently)
                     if(DevelopmentValidator.getOneDevelopmentCost(attribute,myCompany.getLevelByAttribute(attribute))==-1){return 0;}
                     //needs clean input
                     int minLevels=10000;
@@ -372,8 +378,8 @@ class XiaomiBot implements AbstractAssistant{
                     int sameAttributeLevel=0;
                         for(int i=0;i<allDevices.size();i++){
                             if(allDevices.get(i).ownerCompanyId==myCompany.companyId){continue;}
-                            if(minDevice.getIncome()<allDevices.get(i).getIncome()
-                            ){
+                            if(minDevice.getIncome()<allDevices.get(i).getIncome() )
+                            {
                                 betterIncome++;
                                 if(minDevice.getFieldByAttribute(attribute)<allDevices.get(i).getFieldByAttribute(attribute)){
                                     betterAttributeLevel++;
@@ -420,6 +426,86 @@ class XiaomiBot implements AbstractAssistant{
                 }
             });
         }
+
+        //extremely low profit
+        principles.add(new Principle() {
+            @Override
+            public String name() {
+                return "Low profit";
+            }
+
+            @Override
+            public int defaultWeight() {
+                return 120;
+            }
+
+            @Override
+            public boolean needsCleanInput() {
+                return true;
+            }
+
+            @Override
+            public int getScore(Company myCompany, List<Device> myDevices, List<Company> allCompanies, List<Device> allDevices) {
+                //profit region is really low compared to others
+                int region=getRegionWithout(allCompanies.stream().map(c -> c.lastProfit).collect(Collectors.toList()), myCompany.lastProfit,myCompany.lastProfit);
+                if(region==1){
+                    return 5;
+                }else if(region==2){
+                    return 2;
+                }else{return 0;}
+            }
+
+            @Override
+            public Wrapped_DeviceAndCompanyList repair(Company myCompany, List<Device> myDevices, List<Company> allCompanies, List<Device> allDevices) {
+                //profit region is really low compared to others
+                //try to clone a device with higher profit from another company
+                //try to
+                Device minDev=myDevices.get(0);
+                for (Device dev : myDevices) {
+                    if(minDev.getIncome()>dev.getIncome()){
+                        minDev=dev;
+                    }
+                }
+
+                Device betterDev=null;
+                for (Device d : allDevices) {
+                    if(d.ownerCompanyId!=myCompany.companyId &&
+                            minDev.getIncome()<d.getIncome() &&
+                            myCompany.producibleByTheCompany(d)){
+
+                        //if the minDev has been made based on this d then skip
+                        if(minDev.compareAttributes(d)==0 && minDev.profit==d.profit*1.1){ continue;}
+
+                        if(betterDev==null){betterDev=d;
+                        }else if(d.getIncome()>betterDev.getIncome()){betterDev=d;}
+                    }
+                }
+
+                if(betterDev==null){
+                    //make a minimal device
+                    Device newDev=new Device("minimalDevice",10,0,myCompany.companyId);
+                    for(Device.DeviceAttribute attribute : Device.getAllAttribute()){
+                    newDev.setFieldByAttribute(attribute,1);}
+                    newDev.name=nameBuilder.buildName(myDevices.get(0).name,1);
+                    newDev.cost=DeviceValidator.getOverallCost(newDev);
+                    Wrapped_DeviceAndCompanyList w=new Wrapped_DeviceAndCompanyList(myDevices,myCompany);
+                    w.delete.add(minDev);
+                    w.insert.add(newDev);
+                    return w;
+                }else{
+                    Device newDev=new Device(betterDev);
+                    newDev.name=nameBuilder.buildName(myDevices.get(0).name,1);
+                    newDev.ownerCompanyId=myCompany.getCompanyId();
+                    if(newDev.profit<3){
+                        newDev.profit=10;
+                    }else{newDev.profit*=1.1;}
+                    Wrapped_DeviceAndCompanyList w=new Wrapped_DeviceAndCompanyList(myDevices,myCompany);
+                    w.delete.add(minDev);
+                    w.insert.add(newDev);
+                    return w;
+                }
+            }
+        });
 
     }
 

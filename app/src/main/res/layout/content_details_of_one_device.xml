@@ -136,6 +136,14 @@
             android:layout_margin="10sp"
             android:text="Body:" />
 
+        <TextView
+            android:id="@+id/historySoldPiecesTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="22sp"
+            android:layout_margin="10sp"
+            android:text="History - sold pieces:" />
+
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
