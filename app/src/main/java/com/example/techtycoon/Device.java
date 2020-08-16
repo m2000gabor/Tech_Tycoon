@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import androidx.annotation.Nullable;
 import androidx.core.util.Pair;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -330,5 +331,17 @@ public class Device {
         try {
             return ATTRIBUTES_WITH_NAME.stream().filter(p -> p.first == attribute).collect(Collectors.toList()).get(0).second;
         }catch (IndexOutOfBoundsException e){return "error";}
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if(obj == null){return false;}
+        if(!(obj instanceof Device)){return false;}
+        return ( ((Device) obj).id==this.id && this.compareAttributes((Device) obj)==0) ;
+    }
+
+    @Override
+    public int hashCode() {
+        return this.id *31+ Arrays.deepHashCode(this.getParams());
     }
 }

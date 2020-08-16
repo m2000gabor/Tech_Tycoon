@@ -278,14 +278,18 @@ class AppleBotPrinciple implements AbstractAssistant {
                 }
 
                 Wrapped_DeviceAndCompanyList r=new Wrapped_DeviceAndCompanyList(myDevices,myCompany);
-                if(highestPerf.id==minInc.id){
-                    if(highestInc.getIncome()>minInc.getIncome()*3){highestPerf.profit*=0.7;
+                if(highestPerf.id==minInc.id ){
+                    if(highestPerf.profit<=10){
+                        r.update.add(highestPerf);
                     }else{
-                        highestPerf.profit*=0.8;
+                        if(highestInc.getIncome()>minInc.getIncome()*3){highestPerf.profit*=0.7;
+                        }else{
+                            highestPerf.profit*=0.8;
+                        }
+                        r.update.add(highestPerf);
+                        myCompany.logs=myCompany.logs+"Our highest performance device ("+highestPerf.name+") has the worst income\n"+
+                        "Profit is reduced dramatically.";
                     }
-                    r.update.add(highestPerf);
-                    myCompany.logs=myCompany.logs+"Our highest performance device ("+highestPerf.name+") has the worst income\n"+
-                    "Profit is reduced dramatically.";
                 }else{
                     List<Integer> soldItems=allDevices.stream().map(Device::getSoldPieces).collect(Collectors.toList());
                     Device finalHighestPerf = highestPerf;
@@ -311,11 +315,11 @@ class AppleBotPrinciple implements AbstractAssistant {
                     boolean found=false;
                     for (int i=0;i<mostPopular.size() && !found;++i){
                         if(mostPopular.get(i).getFieldByAttribute(bestAttr)<highestPerf.getFieldByAttribute(bestAttr)){
-                            Device newDev=mostPopular.get(i);
+                            Device newDev=new Device(mostPopular.get(i));
                             newDev.ownerCompanyId=myCompany.companyId;
                             newDev.setFieldByAttribute(bestAttr,myCompany.getLevelByAttribute(bestAttr));
                             newDev.cost=DeviceValidator.getOverallCost(newDev);
-                            newDev.profit*=0.9;
+                            if(newDev.profit>=10){newDev.profit*=0.9;}
                             myCompany.logs=myCompany.logs+"Our least profitable device("+minInc.name+") is replaced with the copy of a popular device ("+mostPopular.get(i).name+
                             ").\nOur best attribute ("+bestAttr+") is added.";
                             r.delete.add(minInc);
@@ -376,10 +380,11 @@ class AppleBotPrinciple implements AbstractAssistant {
                     for (Device d :allDevices) {
                         if(myCompany.producibleByTheCompany(d)){
                             Device minDev=myDevices.get(minInd(myDevices, Device.DeviceAttribute.INCOME));
-                            r.delete.add(minDev);
                             Device newDev=new Device(d);
                             if(newDev.profit>=10){newDev.profit*=0.8;}
                             newDev.ownerCompanyId=myCompany.companyId;
+                            newDev.name= ToolsForAssistants.nameBuilder.buildName(myDevices.get(0).name,1);
+                            r.delete.add(minDev);
                             r.insert.add(newDev);
                             return r;
                         }

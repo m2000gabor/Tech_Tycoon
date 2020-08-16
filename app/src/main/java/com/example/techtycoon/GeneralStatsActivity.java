@@ -19,6 +19,7 @@ public class GeneralStatsActivity extends AppCompatActivity {
             R.id.lastAvgColors,
             R.id.lastAvgIp,
             R.id.lastAvgBezels,
+            R.id.numOfTurnsTextView
                             };
 
     @Override

@@ -80,6 +80,14 @@
             android:text="lastAvgBezels"
             android:textSize="@dimen/text_size" />
 
+        <TextView
+            android:id="@+id/numOfTurnsTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/text_margin"
+            android:text="numOfTurnsTextView"
+            android:textSize="@dimen/text_size" />
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

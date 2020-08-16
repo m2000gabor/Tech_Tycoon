@@ -262,9 +262,9 @@ class DeviceRepository {
                     devices = devices.stream()
                             .filter(device -> values.contains(device.getFieldByAttribute(entry.getKey())) )
                             .collect(Collectors.toList());
-                    Log.d("Devices length", "after "+entry.getKey().toString()+" "+String.valueOf(devices.size()));
+                    //Log.d("Devices length", "after "+entry.getKey().toString()+" "+String.valueOf(devices.size()));
                 }
-                Log.d("Devices length: ", String.valueOf(devices.size()));
+                //Log.d("Devices length: ", String.valueOf(devices.size()));
             }
             if (orderBy == Device.DeviceAttribute.NAME) {
                 devices.sort((a, b) -> a.name.compareTo(b.name));

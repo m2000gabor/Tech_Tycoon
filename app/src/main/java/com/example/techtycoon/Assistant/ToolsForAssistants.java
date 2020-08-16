@@ -330,7 +330,7 @@ public class ToolsForAssistants {
             }
             profit /= div;
         }
-
+        if(profit<10){profit=10;}
         return profit;
     }
 

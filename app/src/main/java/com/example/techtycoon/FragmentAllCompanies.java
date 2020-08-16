@@ -25,7 +25,7 @@ import java.util.Locale;
 public class FragmentAllCompanies extends Fragment {
     final static int[] sharedPrefKeyIds={R.string.simulator_lastAvgPrice,R.string.simulator_lastAvgRam,
             R.string.simulator_lastAvgMemory,R.string.simulator_lastAvgDesign,R.string.simulator_lastAvgMaterial,
-            R.string.simulator_lastAvgColors,R.string.simulator_lastAvgIp,R.string.simulator_lastAvgBezels};
+            R.string.simulator_lastAvgColors,R.string.simulator_lastAvgIp,R.string.simulator_lastAvgBezels,R.string.turn_counter};
     static final String GENERAL_STATS="generalStats";
     private DeviceViewModel deviceViewModel;
     private CompanyListAdapter adapter;

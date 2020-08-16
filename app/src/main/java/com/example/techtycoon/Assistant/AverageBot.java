@@ -111,7 +111,7 @@ public class AverageBot implements AbstractAssistant {
                     d.profit=(int) Math.ceil(d.profit*0.9);
                     ret.update.add(d);
                 }
-
+                break;
             }else if (i == -2) {
                 //try to buy a new slot
                 myCompany.logs = myCompany.logs + "Try to buy a new slot...\n";
@@ -141,7 +141,6 @@ public class AverageBot implements AbstractAssistant {
                     myCompany.logs = myCompany.logs + "The assistant bougth " + 10 + " marketing!\n";
                     marketingCost = DevelopmentValidator.calculateMarketingCost(myCompany.marketing);
                 }
-
             }else{
                 //try to upgrade a device attribute
                 myCompany.logs = myCompany.logs + "Try to upgrade the "+i+". attribute...\n";
@@ -168,6 +167,7 @@ public class AverageBot implements AbstractAssistant {
                     } else {
                         ret.delete.add(myDevices.get(min_Overall(myDevices)));
                         ret.insert.add(newDev);
+                        break;
                     }
 
                 }

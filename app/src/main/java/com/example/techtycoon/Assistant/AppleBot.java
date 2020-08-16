@@ -138,7 +138,7 @@ public class AppleBot implements AbstractAssistant{
         if(flag_newAttribute){
             myCompany.logs = myCompany.logs + "An attribute is freshly developed.\nA new device with that attribute is made!\n";
             Device newDev= new Device(nameBuilder.buildName(worstDev.name,1)
-                    ,(int) Math.round(max(myDevices, Device.DeviceAttribute.PROFIT)*1.2),0
+                    ,(int) Math.ceil(max(myDevices, Device.DeviceAttribute.PROFIT)*1.2),0
                     ,myCompany.companyId,myCompany.getLevels_USE_THIS());
             newDev.cost=DeviceValidator.getOverallCost(newDev);
             if (myCompany.hasFreeSlot()) {
@@ -210,7 +210,7 @@ public class AppleBot implements AbstractAssistant{
                         Device newD=new Device(deviceList.get(i));
                         myCompany.logs = myCompany.logs+"A popular device named: "+deviceList.get(i).name+" is copied\n";
                         //cut price if company context is 1
-                        if(companyContext==1){newD.profit*=0.8;
+                        if(companyContext==1 && newD.profit>=10){newD.profit*=0.8;
                             myCompany.logs = myCompany.logs+"The company's position is bad so the profit of copied device is cut\n";}
                         //set our big feature(s)
                         //whats that?
@@ -237,7 +237,7 @@ public class AppleBot implements AbstractAssistant{
                     for (int j = 0; j<myDevices.size(); j++) {
                         if(getRegion(deviceList.stream().map( (Device::getSoldPieces)).collect(Collectors.toList()), myDevices.get(j).getSoldPieces())<=2 &&
                                 getRegion(deviceList.stream().map( (d -> d.getSoldPieces() * d.profit)).collect(Collectors.toList()),
-                                        myDevices.get(j).getSoldPieces()*myDevices.get(j).profit) <=2 ){
+                                        myDevices.get(j).getSoldPieces()*myDevices.get(j).profit) <=2 && myDevices.get(j).profit>=10 ){
                             myDevices.get(j).profit*=0.9;
                             ret.update.add(myDevices.get(j));
                             myCompany.logs = myCompany.logs+myDevices.get(j).name+" is underperforming. Little discount is made. \n";
@@ -272,7 +272,7 @@ public class AppleBot implements AbstractAssistant{
                     break;
             }
         }else{
-            if(companyContext<=2){
+            if(companyContext<=2 && myDevices.get(0).profit>=10){
                 Device d=myDevices.get(0);
                 d.profit*=0.9;
                 ret.update.add(d);

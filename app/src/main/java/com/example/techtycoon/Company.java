@@ -102,6 +102,7 @@ public class Company {
         }
         r*=0.8;
         r+=lastProfit*10;
+        r+=money;
         return r;
     }
 

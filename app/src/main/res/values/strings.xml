@@ -19,6 +19,7 @@
     <string name="simulator_lastAvgColors">Last Average Colors</string>
     <string name="simulator_lastAvgIp">Last Average Ip</string>
     <string name="simulator_lastAvgBezels">Last Average Bezels</string>
+    <string name="turn_counter">Turns</string>
 
     <string name="title_activity_all_companies">allCompanies</string>
     <string name="title_activity_tabbed">TabbedActivity</string>

@@ -63,6 +63,7 @@ public class TabbedActivity extends AppCompatActivity  implements ChooseADeviceD
             editor.putFloat(getString(R.string.simulator_lastAvgColors),1);
             editor.putFloat(getString(R.string.simulator_lastAvgIp),1);
             editor.putFloat(getString(R.string.simulator_lastAvgBezels),1);
+            editor.putFloat(getString(R.string.turn_counter),0);
 
             Set<String> nameTableKeysSet=NAME_newestPartOfTheSeries.keySet();
             editor.putStringSet("nameTableKeys",nameTableKeysSet);
@@ -90,6 +91,7 @@ public class TabbedActivity extends AppCompatActivity  implements ChooseADeviceD
                 float lastAvgColors = sharedPref.getFloat(getString(R.string.simulator_lastAvgColors), 1);
                 float lastAvgIp = sharedPref.getFloat(getString(R.string.simulator_lastAvgIp), 1);
                 float lastAvgBezels = sharedPref.getFloat(getString(R.string.simulator_lastAvgBezels), 1);
+                float turn = sharedPref.getFloat(getString(R.string.turn_counter), 0);
                 double[] arr={(double) lastAvgRam,(double) lastAvgMemory,(double) lastAvgDesign,(double)lastAvgMaterial,(double)lastAvgColors,(double) lastAvgIp,(double)lastAvgBezels};
 
                 simulator=new Simulator(deviceViewModel.getAllDevicesList(),deviceViewModel.getAllCompaniesList(),lastAvgPrice,arr);
@@ -104,6 +106,7 @@ public class TabbedActivity extends AppCompatActivity  implements ChooseADeviceD
                 editor.putFloat(getString(R.string.simulator_lastAvgColors),(float) simulator.attrAverages[4]);
                 editor.putFloat(getString(R.string.simulator_lastAvgIp),(float) simulator.attrAverages[5]);
                 editor.putFloat(getString(R.string.simulator_lastAvgBezels),(float) simulator.attrAverages[6]);
+                editor.putFloat(getString(R.string.turn_counter),++turn);
                 editor.apply();
                 fab.setImageResource(R.drawable.ic_account_circle_white_24dp);
                 //Toast.makeText(getApplicationContext(), "1 month simulated", Toast.LENGTH_SHORT).show();

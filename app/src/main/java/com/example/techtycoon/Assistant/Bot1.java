@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.example.techtycoon.Assistant.ToolsForAssistants.*;
 
@@ -36,7 +37,6 @@ class Bot1 implements AbstractAssistant {
     }
 
     public Wrapped_DeviceAndCompanyList work(List<Company> companyList, List<Device> deviceList, List<Device> myDevices, Company myCompany, Wrapped_DeviceAndCompanyList ret){
-        int marketingCost= DevelopmentValidator.calculateMarketingCost(myCompany.marketing);
         //profile of the assistant
         final double marketingImp=0.2;
         final int newSlotImp=10;
@@ -74,7 +74,7 @@ class Bot1 implements AbstractAssistant {
         if(marketingContext==8 || marketingContext==2){marketingContext=2;}
 
         //get the importanceScore of the marketing
-        double marketingScore=marketingImp * marketingContext / marketingCost ;
+        double marketingScore=marketingImp * marketingContext / (DevelopmentValidator.calculateMarketingCost(myCompany.marketing)) ;
         pairs.add(new Pair<>(-1,marketingScore));
 
         int k=0;
@@ -103,8 +103,9 @@ class Bot1 implements AbstractAssistant {
             if (key == -1) {
                 myCompany.logs=myCompany.logs+"Trying to improve marketing...\n";
                 //marketing is the most imp priority
-                if (myCompany.money >= marketingCost) {
-                    myCompany.money -= marketingCost;
+                if ( (myCompany.money >= DevelopmentValidator.calculateMarketingCost(myCompany.marketing) &&
+                        myCompany.lastProfit>DevelopmentValidator.calculateMarketingCost(myCompany.marketing))  ) {
+                    myCompany.money -= DevelopmentValidator.calculateMarketingCost(myCompany.marketing);
                     myCompany.marketing += 10;
                     myCompany.logs=myCompany.logs+"Assistant bought 10 marketing!\n";
                     status=status+";"+key;

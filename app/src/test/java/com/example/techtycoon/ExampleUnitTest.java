@@ -1,13 +1,11 @@
 package com.example.techtycoon;
 
-import android.util.Log;
 
 import com.example.techtycoon.Assistant.AssistantManager;
 
 import org.junit.Test;
 
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -54,7 +52,9 @@ public class ExampleUnitTest {
 
     @Test
     public void turns_100(){
-        final int NUM_OF_TURNS=100;
+        final int NUM_OF_TURNS=400;
+        /*final int NUMBER_OF_COMPANIES=5;
+        final List<Integer> assistantList= Arrays.asList(2,3,5,6,7);*/
         final int NUMBER_OF_COMPANIES=5;
         final List<Integer> assistantList= Arrays.asList(2,3,5,6,7);
 
@@ -89,33 +89,51 @@ public class ExampleUnitTest {
             deviceList.add(d);
         }
 
+        //starting params for the simulator
+        Simulator simulator=Simulator.getInstance(deviceList,companyList);
+
         for (int i = 0; i < NUM_OF_TURNS; i++) {
-            Simulator simulator=Simulator.getInstance(deviceList,companyList);
+            int beforeSimulation=deviceList.size();
             //simulate
             Wrapped_DeviceAndCompanyList results=simulator.simulate();
+            assertEquals(beforeSimulation,deviceList.size());
+
             //update the database
             results.UpdateCompanies.addAll(results.companies);
             updateTheDatabase(deviceList,companyList,results);
+            assertEquals(beforeSimulation,deviceList.size());
             //check simulation results
             int[] numOfDev =new int[NUMBER_OF_COMPANIES];
             for (Device d :deviceList) {
                 numOfDev[d.ownerCompanyId]++;
-                assertTrue("Failed at turn "+i,d.profit>0);
+                assertTrue("Device "+d.name+" failed at turn "+i+" made by "+d.ownerCompanyId,d.profit>0);
                 assertEquals(d.cost, DeviceValidator.getOverallCost(d));
             }
+
+            StringBuilder stringBuilder = new StringBuilder("name\tusedSlots\treally used\n");
             for (Company c :companyList) {
-                assertTrue(c.money >= 0);
-                assertTrue(c.marketing >= 0);
-                assertTrue(c.usedSlots<=c.maxSlots);
-                assertEquals(c.name+" failed at turn "+i,c.usedSlots,numOfDev[c.companyId]);
+                stringBuilder.append("\n").append(c.name).append("\t").append(c.usedSlots).append("\t").append(numOfDev[c.companyId]);
+            }
+
+            for (Company c :companyList) {
+                assertTrue(c.name+" failed at turn "+i+" With money: "+c.money+" With log:\n"+c.logs
+                        ,c.money >= 0);
+                assertTrue(c.name+" failed at turn "+i,c.marketing >= 0);
+                assertTrue(c.name+" failed at turn "+i,c.usedSlots<=c.maxSlots);
+
+                assertEquals(c.name+" failed at turn "+i+"\n"+stringBuilder.toString(),c.usedSlots,numOfDev[c.companyId]);
             }
 
 
-
+            int beforeAssistants=deviceList.size();
             //assistants act
             Wrapped_DeviceAndCompanyList resultOfAssistants=assistantManager.trigger(results.companies,results.devices);
             // update the database
+            assertEquals("Failed in turn: "+i,beforeAssistants,resultOfAssistants.devices.size());
+            int afterAssistantsWillBe=resultOfAssistants.insert.size()+resultOfAssistants.devices.size()-resultOfAssistants.delete.size();
             updateTheDatabase(deviceList,companyList,resultOfAssistants);
+            assertEquals("Failed in turn: "+i,afterAssistantsWillBe,deviceList.size());
+
             //check assistants
 
             //check general things
