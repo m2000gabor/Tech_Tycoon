@@ -33,12 +33,12 @@ public class CompanyListAdapter extends RecyclerView.Adapter<CompanyListAdapter.
     private List<Company> companies; // Cached copy of nameOfCompanies
     private View.OnClickListener mOnClickListener;
 
-    CompanyListAdapter(Context c,View.OnClickListener onClickListener) {
+    public CompanyListAdapter(Context c, View.OnClickListener onClickListener) {
         mInflater = LayoutInflater.from(c);
         mOnClickListener=onClickListener;
     }
 
-    Company getCompanyFromCache(int i){return companies.get(i);}
+    public Company getCompanyFromCache(int i){return companies.get(i);}
 
 
 
@@ -63,7 +63,7 @@ public class CompanyListAdapter extends RecyclerView.Adapter<CompanyListAdapter.
         }
     }
 
-    void setCompanies(List<Company> companyList) {
+    public void setCompanies(List<Company> companyList) {
         companies = companyList;
         notifyDataSetChanged();
     }

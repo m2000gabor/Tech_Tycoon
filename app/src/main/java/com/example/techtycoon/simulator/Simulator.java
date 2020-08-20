@@ -1,15 +1,20 @@
-package com.example.techtycoon;
+package com.example.techtycoon.simulator;
+
+import com.example.techtycoon.Company;
+import com.example.techtycoon.Device;
+import com.example.techtycoon.Wrapped_DeviceAndCompanyList;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 
-class Simulator {
-    //todo There's no place for low profit companies
+public class Simulator {
+    //todo profit is fallen after some turns
     //todo write unit tests
-    ///Simulator 2.8.1 - fixed customerNum
+    ///Simulator 3.0.0 - profiles introduced
 
     private List<Device> deviceList;
     private List<Company> companyList;
@@ -99,47 +104,26 @@ class Simulator {
             while (companyList.get(j).companyId != deviceList.get(i).ownerCompanyId){j++;}
             compsToDevList.add(companyList.get(j));
         }
-        ///priceValueWeights: [0] is the number of customers per month, [1] is price, [2] is value
-        ///ram,mem,design,material,color,ip,bezel
-
 
         //Profiles:
         customerNum=0;
-        //todo profile class
-
-
-        int[] midRange={6,6,5,3,3,3,3};
-        int midCust=1200;
-        customerNum+=midCust;
-        sellingToOneProfile2(sold,deviceList,compsToDevList, new double[]{midCust,1.5,2},midRange);
-
-        int[] top={10,10,4,6,3,4,4};
-        int topCust=300;
-        customerNum+=topCust;
-        sellingToOneProfile2(sold,deviceList,compsToDevList,new double[]{topCust,1.7,4},top);
-
-        int[] cheap={5,5,2,2,2,3,2};
-        int cheapCust=500;
-        customerNum+=cheapCust;
-        sellingToOneProfile2(sold,deviceList,compsToDevList,new double[]{cheapCust,3,2.5},cheap);
-
-        int[] beauty={2,2,10,7,8,2,5};
-        int beautyCust=50;
-        customerNum+=beautyCust;
-        sellingToOneProfile2(sold,deviceList,compsToDevList, new double[]{beautyCust,1.5,2},beauty);
+        List<Profile> profiles= Arrays.asList(new Profile_midRange(),new Profile_top(),new Profile_cheap(),new Profil_beauty());
+        for (Profile p :profiles) {
+            customerNum+=p.getNumberOfCustomers();
+            sellingToOneProfile_v3(sold,deviceList,compsToDevList,p);
+        }
 
     }
 
-    private void sellingToOneProfile2(int[] sold,List<Device> deviceList,List<Company> companiesToDevList,double[] otherWeights,int[] attrWeights){
-        int customerNum=(int) otherWeights[0];
-        int length=deviceList.size();
-        double[] point=new double[length];
+    private void sellingToOneProfile_v3(int[] sold,List<Device> deviceList,List<Company> companiesToDevList,Profile profile){
+        int customerNum=profile.getNumberOfCustomers();
+        double[] point=new double[deviceList.size()];
 
         //calculate points
         double price;
         double value;
         double sumPoints=0;
-        for (int i=0;i<length;i++){
+        for (int i=0;i<deviceList.size();i++){
             //calc price
             if(deviceList.get(i).getPrice()>2*lastAvgPrice){
                 price=(double) fx(Math.pow(deviceList.get(i).getPrice(),(deviceList.get(i).getPrice()/lastAvgPrice)-1), lastAvgPrice);
@@ -148,29 +132,25 @@ class Simulator {
             }
 
             //calc value
-            value=0;
-            for(int j = 0; j< Device.NUMBER_OF_ATTRIBUTES; j++){
-                value+= (double) Math.pow(fx(deviceList.get(i).getFieldByAttribute(Device.getAllAttribute().get(j)), attrAverages[j]),attrWeights[j]*0.2);
-            }
+            value=profile.getScore(deviceList.get(i),attrAverages);
 
             //value/price ration correction
-            price=Math.pow(price,otherWeights[1]);//how much the price differs
-            value=Math.pow(value,otherWeights[2]);//how much the tech quality differs
+            price=Math.pow(price,profile.getPriceBias());//how much the price differs
+            value=Math.pow(value,profile.getValueBias());//how much the tech quality differs
 
-            point[i]=(value/price)*(1+(companiesToDevList.get(i).marketing*0.001) );
+            point[i]=(value/price)*(1+(companiesToDevList.get(i).marketing*0.005) );
             sumPoints+=point[i];
         }
-        double avgPoints=sumPoints/length;
+        double avgPoints=sumPoints/deviceList.size();
         sumPoints=0;
-        for (int i=0;i<length;i++){
+        for (int i=0;i<deviceList.size();i++){
             //point[i]*=1+gauss(point[i],1,avgPoints);
             point[i]*=fx(point[i],avgPoints);
             sumPoints+=point[i];
         }
 
-
         //calculate sold numbers
-        for (int i=0;i<length;i++){
+        for (int i=0;i<deviceList.size();i++){
             sold[i]+=(int) Math.round(customerNum*point[i]/sumPoints);
         }
 
@@ -187,9 +167,9 @@ class Simulator {
     }
 
     static int log2(int x) { return (int) Math.round(Math.log(x) / Math.log(2) + 1e-10); }
-    private static double log2 (double x) { return (Math.log(x) / Math.log(2) + 1e-10); }
+    static double log2 (double x) { return (Math.log(x) / Math.log(2) + 1e-10); }
 
-    private static double fx(double value,double average) {
+    static double fx(double value,double average) {
         double norm=value/average;
         if(norm<=1.0) {
             return Math.pow(norm, 2);
@@ -198,7 +178,7 @@ class Simulator {
     }
 
     //x =ertek, szigma=meredekseg, mu kozeppont
-    private static double gauss(double x, double szigma, double mu){
+    static double gauss(double x, double szigma, double mu){
         return (1/(szigma*Math.sqrt(2*Math.PI)))*(Math.exp((-1*Math.pow(x-mu,2))/(2*Math.pow(szigma,2))));
     }
 

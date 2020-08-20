@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-    private static final String[] TAB_TITLES = new String[]{"Devices","My Company","Companies"};
+    private static final String[] TAB_TITLES = new String[]{"Devices","My Company","Companies","Stats"};
 
     public SectionsPagerAdapter(@NonNull FragmentManager fm, int behavior) {
         super(fm, behavior);
@@ -36,6 +36,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
             case 0:fr= FragmentAllDevices.newInstance();break;
             case 1:fr= FragmentMyCompany.newInstance();break;
+            case 3:fr= FragmentStats.newInstance();break;
             default:fr= FragmentAllCompanies.newInstance();break;
 
         }

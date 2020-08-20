@@ -7,7 +7,6 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
@@ -71,7 +70,7 @@ public class FragmentMyCompany extends Fragment {
         super.onCreate(savedInstanceState);
         // Get a new or existing ViewModel from the ViewModelProvider.
         deviceViewModel =new ViewModelProvider(this).get(DeviceViewModel.class);
-        deviceViewModel.orderDevices_ByCode2(Device.DeviceAttribute.INCOME,true);
+        deviceViewModel.orderDevices_ByCode2(Device.DeviceAttribute.OVERALL_PROFIT,true);
         deviceList = deviceViewModel.mutable_getAllDevices();
     }
 

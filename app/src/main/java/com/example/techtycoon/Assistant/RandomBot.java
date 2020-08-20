@@ -35,11 +35,11 @@ class RandomBot implements AbstractAssistant {
                 if (avg_lastProfit(companyList) > myCompany.lastProfit) {
                     Random randomGenerator = new Random(deviceList.hashCode());
 
-                    int minOverallIncome = myDevices.get(0).getIncome();
+                    int minOverallIncome = myDevices.get(0).getOverallProfit();
                     int minIndex = 0;
                     for (int i = 1; i < myDevices.size(); i++) {
-                        if (myDevices.get(i).getIncome() < minOverallIncome) {
-                            minOverallIncome = myDevices.get(i).getIncome();
+                        if (myDevices.get(i).getOverallProfit() < minOverallIncome) {
+                            minOverallIncome = myDevices.get(i).getOverallProfit();
                             minIndex = i;
                         }
                     }

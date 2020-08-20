@@ -20,9 +20,9 @@ public class ExpandableListDataPump {
         List<DeviceAttribute> attributeList=Arrays.asList(DeviceAttribute.values());
         attributeList.sort(Comparator.naturalOrder());
         for (DeviceAttribute a : attributeList) {
-            if(a==DeviceAttribute.NAME || a==DeviceAttribute.PROFIT
+            if(a==DeviceAttribute.NAME || a==DeviceAttribute.PROFIT_PER_ITEM
                     ||a==DeviceAttribute.DEVICE_ID||a==DeviceAttribute.PRICE||
-                    a==DeviceAttribute.INCOME || a==DeviceAttribute.OWNER_ID){continue;}
+                    a==DeviceAttribute.OVERALL_PROFIT || a==DeviceAttribute.OWNER_ID){continue;}
             Set<String> s = new HashSet<>();
             for (Device d : deviceList) {
                 s.add(String.valueOf(d.getFieldByAttribute(a)));

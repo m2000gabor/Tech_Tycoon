@@ -124,7 +124,7 @@ public class AverageBot implements AbstractAssistant {
                     //device manager
                     Device newDev = new Device(
                             nameBuilder.buildName(myDevices.get(0).name,1),
-                            (int) Math.round(avg(deviceList, Device.DeviceAttribute.PROFIT)),0,
+                            (int) Math.round(avg(deviceList, Device.DeviceAttribute.PROFIT_PER_ITEM)),0,
                             myCompany.companyId,
                             myCompany.getLevels_USE_THIS()
                     );
@@ -155,7 +155,7 @@ public class AverageBot implements AbstractAssistant {
                     //device manager
                     Device newDev = new Device(
                             nameBuilder.buildName(myDevices.get(0).name,1),
-                            (int) Math.round(avg(deviceList, Device.DeviceAttribute.PROFIT)),0,
+                            (int) Math.round(avg(deviceList, Device.DeviceAttribute.PROFIT_PER_ITEM)),0,
                             myCompany.companyId,
                             myCompany.getLevels_USE_THIS()
                     );

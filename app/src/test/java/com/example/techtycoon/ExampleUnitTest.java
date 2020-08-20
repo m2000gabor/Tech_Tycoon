@@ -2,6 +2,7 @@ package com.example.techtycoon;
 
 
 import com.example.techtycoon.Assistant.AssistantManager;
+import com.example.techtycoon.simulator.Simulator;
 
 import org.junit.Test;
 
@@ -52,9 +53,7 @@ public class ExampleUnitTest {
 
     @Test
     public void turns_100(){
-        final int NUM_OF_TURNS=400;
-        /*final int NUMBER_OF_COMPANIES=5;
-        final List<Integer> assistantList= Arrays.asList(2,3,5,6,7);*/
+        final int NUM_OF_TURNS=500;
         final int NUMBER_OF_COMPANIES=5;
         final List<Integer> assistantList= Arrays.asList(2,3,5,6,7);
 
@@ -141,7 +140,7 @@ public class ExampleUnitTest {
 
         //results
         companyList.sort((o1, o2) -> o2.getMarketValue()-o1.getMarketValue());
-        System.out.println("Results of the test");
+        System.out.println("Results of the test after "+NUM_OF_TURNS+" turns:");
         for(Company c: companyList){
             System.out.println(c.name+"("+AssistantManager.getAssistantName(c.assistantType)+")"+"\tvalue: "+c.getMarketValue());
         }

@@ -1,12 +1,8 @@
 package com.example.techtycoon;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -22,8 +18,8 @@ import androidx.room.PrimaryKey;
 
 @Entity
 public class Device {
-    public enum DeviceAttribute {NAME,DEVICE_ID,OWNER_ID,PERFORMANCE_OVERALL,SCORE_STORAGE,SCORE_BODY,PRICE,INCOME,SOLD_PIECES,PROFIT,
-        HISTORY_SOLD_PIECES,
+    public enum DeviceAttribute {NAME,DEVICE_ID,OWNER_ID,PERFORMANCE_OVERALL,SCORE_STORAGE,SCORE_BODY,
+        PRICE, OVERALL_PROFIT,SOLD_PIECES, PROFIT_PER_ITEM, HISTORY_SOLD_PIECES,
         STORAGE_RAM,STORAGE_MEMORY,BODY_DESIGN,BODY_MATERIAL,BODY_COLOR,BODY_IP,BODY_BEZEL};
 
     public static final int NUMBER_OF_BUDGETS=2; //rammemory,body
@@ -80,16 +76,17 @@ public class Device {
     @ColumnInfo
     public int bezel;
 
-    /*
 
+/*
     //Display
     @ColumnInfo
-    public int displaySize;
+    public int displaySize;//3inch +
 
     @ColumnInfo
     public int resolution;
 
     //todo get density
+    public int getPixelDensity(){return 0;}
 
     @ColumnInfo
     public int displayTechnology;
@@ -139,6 +136,14 @@ public class Device {
         }
     }
 
+    public static Device getMinimalDevice(String name,int profit,int ownerId){
+        int[] attributes=new int[ATTRIBUTES_WITH_NAME.size()];
+        for(int i=0;i<attributes.length;i++){
+            attributes[i]=1;
+        }
+        return new Device(name,profit,DeviceValidator.getOverallCost(attributes),ownerId,attributes);
+    }
+
     public void setBodyParams(int design,int materials,int colors,int ip,int bezels){
         this.design=design;
         this.material=materials;
@@ -146,9 +151,7 @@ public class Device {
         this.ip=ip;
         this.bezel=bezels;
     }
-    public void setBodyParams(int[] bodyParams){
-        this.setBodyParams(bodyParams[0],bodyParams[1],bodyParams[2],bodyParams[3],bodyParams[4]);
-    }
+
 
     public int[][] getParams(){
         return new int[][]{
@@ -179,7 +182,7 @@ public class Device {
         this.trend=trend;
     }
     public int getPrice(){return cost+profit;}
-    public int getIncome(){ return soldPieces*profit; }
+    public int getOverallProfit(){ return soldPieces*profit; }
 
     //converters
     public static int[] mtxToArray(int[][] mtx){
@@ -229,10 +232,10 @@ public class Device {
             case SCORE_STORAGE:i=this.getScore_Storage();break;
             case SCORE_BODY:i=this.getScore_Body();break;
             case PRICE:i=this.getPrice();break;
-            case INCOME:i=this.getIncome();break;
+            case OVERALL_PROFIT:i=this.getOverallProfit();break;
             case SOLD_PIECES:i=this.soldPieces;break;
             case HISTORY_SOLD_PIECES:i=this.history_SoldPieces;break;
-            case PROFIT:i=this.profit;break;
+            case PROFIT_PER_ITEM:i=this.profit;break;
             case STORAGE_RAM:i=this.ram; break;
             case STORAGE_MEMORY:i=this.memory; break;
             case BODY_DESIGN:i=this.design; break;
@@ -246,7 +249,7 @@ public class Device {
 
     public void setFieldByAttribute(DeviceAttribute attr, int value){
         switch (attr){
-            case PROFIT:this.profit=value;break;
+            case PROFIT_PER_ITEM:this.profit=value;break;
             case STORAGE_RAM:this.ram=value; break;
             case STORAGE_MEMORY:this.memory=value; break;
             case BODY_DESIGN:this.design=value; break;
@@ -310,10 +313,10 @@ public class Device {
             new Pair<>(DeviceAttribute.SCORE_STORAGE,"Storage"),
             new Pair<>(DeviceAttribute.SCORE_BODY,"Body"),
             new Pair<>(DeviceAttribute.PRICE,"Price"),
-            new Pair<>(DeviceAttribute.INCOME,"Income"),
+            new Pair<>(DeviceAttribute.OVERALL_PROFIT,"Overall profit"),
             new Pair<>(DeviceAttribute.SOLD_PIECES,"Sold pieces"),
             new Pair<>(DeviceAttribute.HISTORY_SOLD_PIECES,"History - sold pieces"),
-            new Pair<>(DeviceAttribute.PROFIT,"Profit"),
+            new Pair<>(DeviceAttribute.PROFIT_PER_ITEM,"Profit/item"),
             new Pair<>(DeviceAttribute.STORAGE_RAM,"RAM"),
             new Pair<>(DeviceAttribute.STORAGE_MEMORY,"Memory"),
             new Pair<>(DeviceAttribute.BODY_DESIGN,"Design"),

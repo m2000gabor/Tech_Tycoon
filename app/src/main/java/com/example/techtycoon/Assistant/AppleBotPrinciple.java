@@ -135,7 +135,7 @@ class AppleBotPrinciple implements AbstractAssistant {
             @Override
             public Wrapped_DeviceAndCompanyList repair(Company myCompany, List<Device> myDevices, List<Company> allCompanies, List<Device> allDevices) {
                 //fill with our best, increase profit by 2$
-                Device ourBest=myDevices.get(maxIndex(myDevices, Device.DeviceAttribute.INCOME));
+                Device ourBest=myDevices.get(maxIndex(myDevices, Device.DeviceAttribute.OVERALL_PROFIT));
                 Device newDev=new Device(ourBest);
                 newDev.name= ToolsForAssistants.nameBuilder.buildName(myDevices.get(0).name,1);
                 newDev.profit+=2;
@@ -237,8 +237,8 @@ class AppleBotPrinciple implements AbstractAssistant {
                     if(d.getScore_OverallPerformance()>highestPerf.getScore_OverallPerformance()){
                         highestPerf=d;
                     }
-                    if(d.getIncome()>highestInc.getIncome()){highestInc=d;
-                    }else if(d.getIncome()<minInc.getIncome()){minInc=d;}
+                    if(d.getOverallProfit()>highestInc.getOverallProfit()){highestInc=d;
+                    }else if(d.getOverallProfit()<minInc.getOverallProfit()){minInc=d;}
                 }
                 if(highestInc.id==highestPerf.id){return 0;
                 }else if(highestPerf.id==minInc.id){
@@ -273,8 +273,8 @@ class AppleBotPrinciple implements AbstractAssistant {
                     if(d.getScore_OverallPerformance()>highestPerf.getScore_OverallPerformance()){
                         highestPerf=d;
                     }
-                    if(d.getIncome()>highestInc.getIncome()){highestInc=d;
-                    }else if(d.getIncome()<minInc.getIncome()){minInc=d;}
+                    if(d.getOverallProfit()>highestInc.getOverallProfit()){highestInc=d;
+                    }else if(d.getOverallProfit()<minInc.getOverallProfit()){minInc=d;}
                 }
 
                 Wrapped_DeviceAndCompanyList r=new Wrapped_DeviceAndCompanyList(myDevices,myCompany);
@@ -282,7 +282,7 @@ class AppleBotPrinciple implements AbstractAssistant {
                     if(highestPerf.profit<=10){
                         r.update.add(highestPerf);
                     }else{
-                        if(highestInc.getIncome()>minInc.getIncome()*3){highestPerf.profit*=0.7;
+                        if(highestInc.getOverallProfit()>minInc.getOverallProfit()*3){highestPerf.profit*=0.7;
                         }else{
                             highestPerf.profit*=0.8;
                         }
@@ -376,10 +376,10 @@ class AppleBotPrinciple implements AbstractAssistant {
                 }
                 int region=getRegion100(profits,myCompany.lastProfit);
                 if(region<10){
-                    allDevices.sort((x,y)->y.getIncome()-x.getIncome());
+                    allDevices.sort((x,y)->y.getOverallProfit()-x.getOverallProfit());
                     for (Device d :allDevices) {
                         if(myCompany.producibleByTheCompany(d)){
-                            Device minDev=myDevices.get(minInd(myDevices, Device.DeviceAttribute.INCOME));
+                            Device minDev=myDevices.get(minInd(myDevices, Device.DeviceAttribute.OVERALL_PROFIT));
                             Device newDev=new Device(d);
                             if(newDev.profit>=10){newDev.profit*=0.8;}
                             newDev.ownerCompanyId=myCompany.companyId;

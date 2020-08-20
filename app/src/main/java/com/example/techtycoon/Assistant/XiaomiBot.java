@@ -162,7 +162,7 @@ class XiaomiBot implements AbstractAssistant{
             public Wrapped_DeviceAndCompanyList repair(Company myCompany, List<Device> myDevices, List<Company> allCompanies, List<Device> allDevices) {
                 if(myCompany.usedSlots>=myCompany.maxSlots){throw new IllegalStateException("There is no unused slot. Why is this method called?");}
                 List<Device> sortedAllDevices=allDevices.stream()
-                        .sorted((a,b)->b.getIncome()-a.getIncome())
+                        .sorted((a,b)->b.getOverallProfit()-a.getOverallProfit())
                         .filter(myCompany::producibleByTheCompany)
                         .collect(Collectors.toList());
                 if(sortedAllDevices.get(0)!=null){
@@ -200,7 +200,7 @@ class XiaomiBot implements AbstractAssistant{
                 //producible is before us
                 Device minDev=myDevices.get(0);
                 for (Device dev : myDevices) {
-                    if(minDev.getIncome()>dev.getIncome()){
+                    if(minDev.getOverallProfit()>dev.getOverallProfit()){
                         minDev=dev;
                     }
                 }
@@ -208,20 +208,20 @@ class XiaomiBot implements AbstractAssistant{
                 Device betterDev=null;
                 for (Device d : allDevices) {
                     if(d.ownerCompanyId!=myCompany.companyId &&
-                            minDev.getIncome()<d.getIncome() &&
+                            minDev.getOverallProfit()<d.getOverallProfit() &&
                             myCompany.producibleByTheCompany(d)){
                         if(betterDev==null){betterDev=d;
-                        }else if(d.getIncome()>betterDev.getIncome()){betterDev=d;}
+                        }else if(d.getOverallProfit()>betterDev.getOverallProfit()){betterDev=d;}
                     }
                 }
                 if(betterDev==null){return 0;} //none is found
-                if(betterDev.getIncome()>minDev.getIncome()*3){
+                if(betterDev.getOverallProfit()>minDev.getOverallProfit()*3){
                     return 4;
-                }else if(betterDev.getIncome()>minDev.getIncome()*2){
+                }else if(betterDev.getOverallProfit()>minDev.getOverallProfit()*2){
                     return 3;
-                }else if(betterDev.getIncome()>minDev.getIncome()*1.5){
+                }else if(betterDev.getOverallProfit()>minDev.getOverallProfit()*1.5){
                     return 2;
-                }else if(betterDev.getIncome()>minDev.getIncome()*1.2){
+                }else if(betterDev.getOverallProfit()>minDev.getOverallProfit()*1.2){
                     return 1;
                 }
                 return 0;
@@ -231,7 +231,7 @@ class XiaomiBot implements AbstractAssistant{
             public Wrapped_DeviceAndCompanyList repair(Company myCompany, List<Device> myDevices, List<Company> allCompanies, List<Device> allDevices) {
                 Device minDev=myDevices.get(0);
                 for (Device dev : myDevices) {
-                    if(minDev.getIncome()>dev.getIncome()){
+                    if(minDev.getOverallProfit()>dev.getOverallProfit()){
                         minDev=dev;
                     }
                 }
@@ -239,10 +239,10 @@ class XiaomiBot implements AbstractAssistant{
                 Device betterDev=null;
                 for (Device d : allDevices) {
                     if(d.ownerCompanyId!=myCompany.companyId &&
-                            minDev.getIncome()<d.getIncome() &&
+                            minDev.getOverallProfit()<d.getOverallProfit() &&
                             myCompany.producibleByTheCompany(d)){
                         if(betterDev==null){betterDev=d;
-                        }else if(d.getIncome()>betterDev.getIncome()){betterDev=d;}
+                        }else if(d.getOverallProfit()>betterDev.getOverallProfit()){betterDev=d;}
                     }
                 }
 
@@ -286,24 +286,24 @@ class XiaomiBot implements AbstractAssistant{
                 Device minDev=myDevices.get(0);
                 Device maxDev=myDevices.get(0);
                 for (Device dev : myDevices) {
-                    if(minDev.getIncome()>dev.getIncome()*1.1){
+                    if(minDev.getOverallProfit()>dev.getOverallProfit()*1.1){
                         minDev=dev;
-                    }else if(maxDev.getIncome()*1.1<dev.getIncome()){
+                    }else if(maxDev.getOverallProfit()*1.1<dev.getOverallProfit()){
                         maxDev=dev;
                     }
                 }
 
                 if(minDev.id==maxDev.id){return 0;}
 
-                if(maxDev.getIncome()>minDev.getIncome()*5){
+                if(maxDev.getOverallProfit()>minDev.getOverallProfit()*5){
                     return 5;
-                }else if(maxDev.getIncome()>minDev.getIncome()*3){
+                }else if(maxDev.getOverallProfit()>minDev.getOverallProfit()*3){
                     return 4;
-                }else if(maxDev.getIncome()>minDev.getIncome()*2){
+                }else if(maxDev.getOverallProfit()>minDev.getOverallProfit()*2){
                     return 3;
-                }else if(maxDev.getIncome()>minDev.getIncome()*1.5){
+                }else if(maxDev.getOverallProfit()>minDev.getOverallProfit()*1.5){
                     return 2;
-                }else if(maxDev.getIncome()>minDev.getIncome()*1.2){
+                }else if(maxDev.getOverallProfit()>minDev.getOverallProfit()*1.2){
                     return 1;
                 }
                 return 0;
@@ -314,9 +314,9 @@ class XiaomiBot implements AbstractAssistant{
                 Device minDev=myDevices.get(0);
                 Device maxDev=myDevices.get(0);
                 for (Device dev : myDevices) {
-                    if(minDev.getIncome()>dev.getIncome()){
+                    if(minDev.getOverallProfit()>dev.getOverallProfit()){
                         minDev=dev;
-                    }else if(maxDev.getIncome()<dev.getIncome()){
+                    }else if(maxDev.getOverallProfit()<dev.getOverallProfit()){
                         maxDev=dev;
                     }
                 }
@@ -325,7 +325,7 @@ class XiaomiBot implements AbstractAssistant{
                     throw new IllegalStateException("There's no device like that! Why was this method called?");
                 }else{
                     Device newDev=new Device(maxDev);
-                    if(maxDev.getIncome()>1.5*minDev.getIncome()){
+                    if(maxDev.getOverallProfit()>1.5*minDev.getOverallProfit()){
                         newDev.name=nameBuilder.buildName(myDevices.get(0).name,0);
                         newDev.profit+=5;
                     }else{
@@ -378,7 +378,7 @@ class XiaomiBot implements AbstractAssistant{
                     int sameAttributeLevel=0;
                         for(int i=0;i<allDevices.size();i++){
                             if(allDevices.get(i).ownerCompanyId==myCompany.companyId){continue;}
-                            if(minDevice.getIncome()<allDevices.get(i).getIncome() )
+                            if(minDevice.getOverallProfit()<allDevices.get(i).getOverallProfit() )
                             {
                                 betterIncome++;
                                 if(minDevice.getFieldByAttribute(attribute)<allDevices.get(i).getFieldByAttribute(attribute)){
@@ -462,7 +462,7 @@ class XiaomiBot implements AbstractAssistant{
                 //try to
                 Device minDev=myDevices.get(0);
                 for (Device dev : myDevices) {
-                    if(minDev.getIncome()>dev.getIncome()){
+                    if(minDev.getOverallProfit()>dev.getOverallProfit()){
                         minDev=dev;
                     }
                 }
@@ -470,14 +470,14 @@ class XiaomiBot implements AbstractAssistant{
                 Device betterDev=null;
                 for (Device d : allDevices) {
                     if(d.ownerCompanyId!=myCompany.companyId &&
-                            minDev.getIncome()<d.getIncome() &&
+                            minDev.getOverallProfit()<d.getOverallProfit() &&
                             myCompany.producibleByTheCompany(d)){
 
                         //if the minDev has been made based on this d then skip
                         if(minDev.compareAttributes(d)==0 && minDev.profit==d.profit*1.1){ continue;}
 
                         if(betterDev==null){betterDev=d;
-                        }else if(d.getIncome()>betterDev.getIncome()){betterDev=d;}
+                        }else if(d.getOverallProfit()>betterDev.getOverallProfit()){betterDev=d;}
                     }
                 }
 

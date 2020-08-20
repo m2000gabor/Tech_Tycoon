@@ -24,7 +24,7 @@ public class DeviceViewModel extends AndroidViewModel {
     //return mutableAlldevice
     LiveData<List<Device>> mutable_getAllDevices() { return mAllDevices; }
 
-    LiveData<List<Company>> getAllCompanies() { return mAllCompanies; }
+    public LiveData<List<Company>> getAllCompanies() { return mAllCompanies; }
     public List<Company> getAllCompaniesList(){return mRepository.getAllCompaniesList();}
     Company getCompany_byID(int ID){return mRepository.getCompany_byID(ID);}
     LiveData<Company> getLiveCompany_byID(int ID){return mRepository.getLiveCompany_byID(ID);}

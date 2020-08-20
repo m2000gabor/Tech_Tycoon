@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import com.example.techtycoon.Assistant.AssistantManager;
 import com.example.techtycoon.dialogs.SortByDialog;
+import com.example.techtycoon.simulator.Simulator;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 

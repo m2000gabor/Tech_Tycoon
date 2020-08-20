@@ -7,10 +7,7 @@ import androidx.lifecycle.ViewModelProvider;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.CheckBox;
-import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
-import android.widget.LinearLayout;
 
 import com.example.techtycoon.Company;
 
@@ -21,12 +18,10 @@ import com.example.techtycoon.DeviceViewModel;
 import com.example.techtycoon.FragmentAllDevices;
 import com.example.techtycoon.R;
 import com.example.techtycoon.ui.activities.expandableList.CustomExpandableListAdapter;
-import com.example.techtycoon.ui.activities.expandableList.ExpandableListDataPump;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -59,9 +54,9 @@ public class FilterActivity extends AppCompatActivity {
         LinkedList<Pair<DeviceAttribute, List<String>>> listData = new LinkedList<>();
         LinkedList<DeviceAttribute> attributeList = new LinkedList<>();
         for (DeviceAttribute a : DeviceAttribute.values()) {
-            if (a == DeviceAttribute.NAME || a == DeviceAttribute.PROFIT
+            if (a == DeviceAttribute.NAME || a == DeviceAttribute.PROFIT_PER_ITEM
                     || a == DeviceAttribute.DEVICE_ID || a == DeviceAttribute.PRICE ||
-                    a == DeviceAttribute.INCOME || a == DeviceAttribute.OWNER_ID ||
+                    a == DeviceAttribute.OVERALL_PROFIT || a == DeviceAttribute.OWNER_ID ||
                     a==DeviceAttribute.SOLD_PIECES) {
                 continue;
             }

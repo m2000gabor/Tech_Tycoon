@@ -1,5 +1,7 @@
 package com.example.techtycoon;
 
+import java.util.Arrays;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -23,7 +25,7 @@ public class Company {
     @ColumnInfo
     public int marketPosition; //The company with the biggest profit is the 1st ...
 
-    //todo use levels as a matrix
+    //levels length==Device attributes length
     @ColumnInfo(name = "levels")
     private String levels;
 
@@ -65,9 +67,16 @@ public class Company {
         this.marketing=0;
         this.maxSlots=1;
         this.usedSlots=0;
+        if(levels.length!=Device.getAllAttribute().size()){throw new IllegalArgumentException("input array length differs from the device attribute length");}
         this.levels=Converter.intArrayToString(levels);
         assistantType=-1;
         this.marketPosition=0;
+    }
+
+    public static Company getMinimalCompany(String name,int money){
+        int[] levels=new int[Device.getAllAttribute().size()];
+        Arrays.fill(levels,1);
+        return new Company(name,money,levels);
     }
 
     //getters setters

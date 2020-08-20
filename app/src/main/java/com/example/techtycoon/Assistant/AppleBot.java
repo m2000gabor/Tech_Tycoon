@@ -138,7 +138,7 @@ public class AppleBot implements AbstractAssistant{
         if(flag_newAttribute){
             myCompany.logs = myCompany.logs + "An attribute is freshly developed.\nA new device with that attribute is made!\n";
             Device newDev= new Device(nameBuilder.buildName(worstDev.name,1)
-                    ,(int) Math.ceil(max(myDevices, Device.DeviceAttribute.PROFIT)*1.2),0
+                    ,(int) Math.ceil(max(myDevices, Device.DeviceAttribute.PROFIT_PER_ITEM)*1.2),0
                     ,myCompany.companyId,myCompany.getLevels_USE_THIS());
             newDev.cost=DeviceValidator.getOverallCost(newDev);
             if (myCompany.hasFreeSlot()) {

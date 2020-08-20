@@ -32,4 +32,5 @@
     <string name="title_activity_assistant">AssistantActivity</string>
     <string name="title_activity_designed">DesignedActivity</string>
     <string name="buyMarketingLabel">"Do you want to buy \n 10 marketing for 0$?"</string>
+
 </resources>

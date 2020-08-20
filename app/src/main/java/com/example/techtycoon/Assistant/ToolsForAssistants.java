@@ -33,11 +33,11 @@ public class ToolsForAssistants {
      * @return the minIndex of the device with the lowest income
      */
     static int min_Overall(List<Device> deviceList) {
-        int minOverallIncome = deviceList.get(0).getIncome();
+        int minOverallIncome = deviceList.get(0).getOverallProfit();
         int minIndex = 0;
         for (int i = 1; i < deviceList.size(); i++) {
-            if (deviceList.get(i).getIncome() < minOverallIncome) {
-                minOverallIncome = deviceList.get(i).getIncome();
+            if (deviceList.get(i).getOverallProfit() < minOverallIncome) {
+                minOverallIncome = deviceList.get(i).getOverallProfit();
                 minIndex = i;
             }
         }
@@ -45,11 +45,11 @@ public class ToolsForAssistants {
     }
 
     static int max_Overall(List<Device> deviceList) {
-        int maxOverallIncome = deviceList.get(0).getIncome();
+        int maxOverallIncome = deviceList.get(0).getOverallProfit();
         int maxIndex = 0;
         for (int i = 1; i < deviceList.size(); i++) {
-            if (deviceList.get(i).getIncome() > maxOverallIncome) {
-                maxOverallIncome = deviceList.get(i).getIncome();
+            if (deviceList.get(i).getOverallProfit() > maxOverallIncome) {
+                maxOverallIncome = deviceList.get(i).getOverallProfit();
                 maxIndex = i;
             }
         }
@@ -262,22 +262,22 @@ public class ToolsForAssistants {
         if (listOfLists.get(0).size() > 1) {
             switch (myCompanyContext) {
                 case 1:
-                    profit = (int) Math.floor(min(listOfLists.get(0), Device.DeviceAttribute.PROFIT) * 0.8);
+                    profit = (int) Math.floor(min(listOfLists.get(0), Device.DeviceAttribute.PROFIT_PER_ITEM) * 0.8);
                     break;
                 case 2:
-                    profit = (int) Math.floor(min(listOfLists.get(0), Device.DeviceAttribute.PROFIT) * 0.9);
+                    profit = (int) Math.floor(min(listOfLists.get(0), Device.DeviceAttribute.PROFIT_PER_ITEM) * 0.9);
                     break;
                 case 3:
-                    profit = (int) Math.floor(avg(listOfLists.get(0), Device.DeviceAttribute.PROFIT));
+                    profit = (int) Math.floor(avg(listOfLists.get(0), Device.DeviceAttribute.PROFIT_PER_ITEM));
                     break;
                 case 4:
                     profit = (int) Math.floor(
-                            (avg(listOfLists.get(0), Device.DeviceAttribute.PROFIT) +
-                                    max(listOfLists.get(0), Device.DeviceAttribute.PROFIT))
+                            (avg(listOfLists.get(0), Device.DeviceAttribute.PROFIT_PER_ITEM) +
+                                    max(listOfLists.get(0), Device.DeviceAttribute.PROFIT_PER_ITEM))
                                     / 2);
                     break;
                 case 5:
-                    profit = (int) (Math.floor(max(listOfLists.get(0), Device.DeviceAttribute.PROFIT)) * 1.1);
+                    profit = (int) (Math.floor(max(listOfLists.get(0), Device.DeviceAttribute.PROFIT_PER_ITEM)) * 1.1);
                     break;
             }
         } else if (listOfLists.get(0).size() == 1) {
@@ -307,22 +307,22 @@ public class ToolsForAssistants {
                 int tempProfit = 0;
                 switch (myCompanyContext) {
                     case 1:
-                        tempProfit = (int) Math.floor(min(listOfLists.get(i), Device.DeviceAttribute.PROFIT) * 0.8);
+                        tempProfit = (int) Math.floor(min(listOfLists.get(i), Device.DeviceAttribute.PROFIT_PER_ITEM) * 0.8);
                         break;
                     case 2:
-                        tempProfit = (int) Math.floor(min(listOfLists.get(i), Device.DeviceAttribute.PROFIT) * 0.9);
+                        tempProfit = (int) Math.floor(min(listOfLists.get(i), Device.DeviceAttribute.PROFIT_PER_ITEM) * 0.9);
                         break;
                     case 3:
-                        tempProfit = (int) Math.floor(avg(listOfLists.get(i), Device.DeviceAttribute.PROFIT));
+                        tempProfit = (int) Math.floor(avg(listOfLists.get(i), Device.DeviceAttribute.PROFIT_PER_ITEM));
                         break;
                     case 4:
                         tempProfit = (int) Math.floor(
-                                (avg(listOfLists.get(i), Device.DeviceAttribute.PROFIT) +
-                                        max(listOfLists.get(i), Device.DeviceAttribute.PROFIT))
+                                (avg(listOfLists.get(i), Device.DeviceAttribute.PROFIT_PER_ITEM) +
+                                        max(listOfLists.get(i), Device.DeviceAttribute.PROFIT_PER_ITEM))
                                         / 2);
                         break;
                     case 5:
-                        tempProfit = (int) Math.floor(1.1 * max(listOfLists.get(i), Device.DeviceAttribute.PROFIT));
+                        tempProfit = (int) Math.floor(1.1 * max(listOfLists.get(i), Device.DeviceAttribute.PROFIT_PER_ITEM));
                         break;
                 }
                 profit += (1 + (i * 5)) * tempProfit;
