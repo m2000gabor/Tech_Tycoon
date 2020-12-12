@@ -4,13 +4,6 @@ package com.example.techtycoon;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,70 +18,62 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.techtycoon.ui.activities.ChooseBodyActivity;
+import com.example.techtycoon.ui.activities.ChooseDisplayActivity;
 import com.example.techtycoon.ui.activities.ChooseMemoryActivity;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import static android.app.Activity.RESULT_OK;
 
-//TODO store views in array
 
 public class FragmentDeviceCreator extends Fragment {
-    private static final int NUMBER_OF_CHOOSER_ACTIVITIES=2;
     private static final int CHOOSE_MEMORY_REQUEST = 1;
     private static final int CHOOSE_BODY_REQUEST = 2;
-    public static final String BODY_RESULTS="bodyRes";
-    private int ram;
-    private int ramMaxLevel;
-    private int memory;
-    private int memoryMaxLevel;
-    private int[] bodyResults;
-    private int[] costs;
-
-    private int[] levels;
+    private static final int CHOOSE_DISPLAY_REQUEST = 3;
+    public static final String CHOOSER_RESULTS_as_intArray ="arrayResult";
 
     //layout res
     private EditText deviceNameField;
     private EditText profitField;
     private TextView currentCostField;
-    //for mem ram
-    private TextView chosenMem;
-    private TextView chosenRam;
-    private ImageView isSetMemoryImage;
-    //for the Body
-    private TextView chosenDesign;
-    private TextView chosenMaterial;
-    private TextView chosenColors;
-    private TextView chosenIp;
-    private TextView chosenBezel;
-    private ImageView isSetBodyImage;
+    private Map<Device.DeviceAttribute,TextView> attributeTextViewMap; //small labels like ram ?GB
+    private Map<Device.DeviceBudget,ImageView> budgetImageViewMap; //checked or unchecked
+
 
     private List<Company> companies;
     private DeviceViewModel deviceViewModel;
     private Spinner spin;
 
-    private boolean isMemorySet;
-    private boolean isBodySet;
-    private boolean isCompanySet=false;
-    private int myCompanysIndex=-1;
 
-    public static FragmentDeviceCreator newInstance() {
-        FragmentDeviceCreator fragment = new FragmentDeviceCreator();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
+    private HashMap<Device.DeviceBudget,Boolean> isBudgetSet;
+    private boolean isCompanySet=false;
+    private int myCompanysIndex=-1;//chosen company's position in the companies list
+
+    private Device device;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         deviceViewModel = new ViewModelProvider(this).get(DeviceViewModel.class);
         companies=deviceViewModel.getAllCompaniesList();
-        isMemorySet=false;
-        isBodySet=false;
-        costs=new int[NUMBER_OF_CHOOSER_ACTIVITIES];
+        isBudgetSet=new HashMap<>();
+        for (Device.DeviceBudget bud: Device.DeviceBudget.values()) {
+            isBudgetSet.put(bud,false);
+        }
+        device=Device.getMinimalDevice("noName",0,-1);
+        attributeTextViewMap=new HashMap<>();
+        budgetImageViewMap=new HashMap<>();
     }
 
     @Override
@@ -101,17 +86,27 @@ public class FragmentDeviceCreator extends Fragment {
         deviceNameField = root.findViewById(R.id.deviceNameInputField);
         profitField = root.findViewById(R.id.profitInputField);
         currentCostField = root.findViewById(R.id.currentCostTextView);
-        chosenMem = root.findViewById(R.id.chosenMemory);
-        chosenRam = root.findViewById(R.id.chosenRam);
-        isSetMemoryImage = root.findViewById(R.id.isSetMemory);
         spin = root.findViewById(R.id.spinner);
-        //for body
-        chosenDesign=root.findViewById(R.id.chosenDesign);
-        chosenMaterial=root.findViewById(R.id.chosenMaterial);
-        chosenColors=root.findViewById(R.id.chosenColors);
-        chosenIp=root.findViewById(R.id.chosenIp);
-        chosenBezel=root.findViewById(R.id.chosenBezel);
-        isSetBodyImage=root.findViewById(R.id.isSetBody);
+
+        //belongs to storage
+        attributeTextViewMap.put(Device.DeviceAttribute.STORAGE_MEMORY,root.findViewById(R.id.chosenMemory));
+        attributeTextViewMap.put(Device.DeviceAttribute.STORAGE_RAM,root.findViewById(R.id.chosenRam));
+        budgetImageViewMap.put(Device.DeviceBudget.STORAGE,root.findViewById(R.id.isSetMemory));
+
+        //belongs to body
+        attributeTextViewMap.put(Device.DeviceAttribute.BODY_DESIGN,root.findViewById(R.id.chosenDesign));
+        attributeTextViewMap.put(Device.DeviceAttribute.BODY_MATERIAL,root.findViewById(R.id.chosenMaterial));
+        attributeTextViewMap.put(Device.DeviceAttribute.BODY_COLOR,root.findViewById(R.id.chosenColors));
+        attributeTextViewMap.put(Device.DeviceAttribute.BODY_IP,root.findViewById(R.id.chosenIp));
+        attributeTextViewMap.put(Device.DeviceAttribute.BODY_BEZEL,root.findViewById(R.id.chosenBezel));
+        budgetImageViewMap.put(Device.DeviceBudget.BODY,root.findViewById(R.id.isSetBody));
+
+        //belongs to display
+        attributeTextViewMap.put(Device.DeviceAttribute.DISPLAY_RESOLUTION,root.findViewById(R.id.chosenResolution));
+        attributeTextViewMap.put(Device.DeviceAttribute.DISPLAY_BRIGHTNESS,root.findViewById(R.id.chosenBrightness));
+        attributeTextViewMap.put(Device.DeviceAttribute.DISPLAY_REFRESH_RATE,root.findViewById(R.id.chosenRefreshRate));
+        attributeTextViewMap.put(Device.DeviceAttribute.DISPLAY_TECHNOLOGY,root.findViewById(R.id.chosenDisplayTechnology));
+        budgetImageViewMap.put(Device.DeviceBudget.DISPLAY,root.findViewById(R.id.isSetDisplay));
 
 
         //set up the save button
@@ -167,8 +162,7 @@ public class FragmentDeviceCreator extends Fragment {
             public void onClick(View v) {
                 if(isCompanySet){
                     Intent chooseMemory = new Intent(getContext(), ChooseMemoryActivity.class);
-                    chooseMemory.putExtra(MainActivity.RAM_LVL,ramMaxLevel);
-                    chooseMemory.putExtra(MainActivity.MEMORY_LVL,memoryMaxLevel);
+                    chooseMemory.putExtra(MainActivity.LEVELS,companies.get(myCompanysIndex).getLevelByBudget(Device.DeviceBudget.STORAGE));
                     startActivityForResult(chooseMemory,CHOOSE_MEMORY_REQUEST);
                 }else {
                     Toast.makeText(getContext(),"Choose a manufacturer",Toast.LENGTH_SHORT).show();
@@ -183,8 +177,23 @@ public class FragmentDeviceCreator extends Fragment {
             public void onClick(View v) {
                 if(isCompanySet){
                     Intent chooseBody = new Intent(getContext(), ChooseBodyActivity.class);
-                    chooseBody.putExtra(MainActivity.LEVELS,levels);
+                    chooseBody.putExtra(MainActivity.LEVELS,companies.get(myCompanysIndex).getLevelByBudget(Device.DeviceBudget.BODY));
                     startActivityForResult(chooseBody,CHOOSE_BODY_REQUEST);
+                }else {
+                    Toast.makeText(getContext(),"Choose a manufacturer",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        //displayChooser
+        RelativeLayout startDisplayChooserRelativeLayout = root.findViewById(R.id.startDisplayChooserRelativeLayout);
+        startDisplayChooserRelativeLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isCompanySet){
+                    Intent chooseDisplay = new Intent(getContext(), ChooseDisplayActivity.class);
+                    chooseDisplay.putExtra(MainActivity.LEVELS,companies.get(myCompanysIndex).getLevelByBudget(Device.DeviceBudget.DISPLAY));
+                    startActivityForResult(chooseDisplay,CHOOSE_DISPLAY_REQUEST);
                 }else {
                     Toast.makeText(getContext(),"Choose a manufacturer",Toast.LENGTH_SHORT).show();
                 }
@@ -200,17 +209,16 @@ public class FragmentDeviceCreator extends Fragment {
 
 
     private void addDevice() {
-        if (!isMemorySet || !isBodySet || !isCompanySet || TextUtils.isEmpty(profitField.getText())) {
+        if (isBudgetSet.containsValue(Boolean.FALSE) || TextUtils.isEmpty(profitField.getText()) || TextUtils.isEmpty(deviceNameField.getText()) ) {
             Toast.makeText(getContext(), "All params are required", Toast.LENGTH_LONG).show();
         } else {
             String deviceName = deviceNameField.getText().toString();
             int profit = Integer.parseInt(profitField.getText().toString());
             Company maker=companies.get(spin.getSelectedItemPosition()-1);
             maker.usedSlots++;
-            Device device=new Device(deviceName,profit,0,maker.companyId,null);
-            device.setFieldByAttribute(Device.DeviceAttribute.STORAGE_RAM,ram);
-            device.setFieldByAttribute(Device.DeviceAttribute.STORAGE_MEMORY,memory);
-            device.setBodyParams(bodyResults[0],bodyResults[1],bodyResults[2],bodyResults[3],bodyResults[4]);
+            device.name=deviceName;
+            device.ownerCompanyId=maker.companyId;
+            device.profit=profit;
             device.cost=DeviceValidator.getOverallCost(device);
             deviceViewModel.insertDevice(device);
             deviceViewModel.updateCompanies(maker);
@@ -225,13 +233,13 @@ public class FragmentDeviceCreator extends Fragment {
         if (resultCode == RESULT_OK){
             switch (requestCode){
                 case CHOOSE_MEMORY_REQUEST:
-                    int r=data.getIntExtra("amountOfRam",1);
-                    int m=data.getIntExtra("amountOfMemory",1);
-                    int c=data.getIntExtra("cost",99);
-                    setupStorage(r,m,c);
+                    setup_a_budget(Device.DeviceBudget.STORAGE,data.getIntArrayExtra(CHOOSER_RESULTS_as_intArray) );
                     break;
                 case CHOOSE_BODY_REQUEST:
-                    setupBody(data.getIntExtra("cost",99),data.getIntArrayExtra(BODY_RESULTS));
+                    setup_a_budget(Device.DeviceBudget.BODY,data.getIntArrayExtra(CHOOSER_RESULTS_as_intArray));
+                    break;
+                case CHOOSE_DISPLAY_REQUEST:
+                    setup_a_budget(Device.DeviceBudget.DISPLAY,data.getIntArrayExtra(CHOOSER_RESULTS_as_intArray));
                     break;
             }
         }
@@ -275,9 +283,6 @@ public class FragmentDeviceCreator extends Fragment {
                 isCompanySet=true;
                 myCompanysIndex=position-1;
                 reset(false);
-                levels=selectedCompany.getLevels_USE_THIS();
-                ramMaxLevel=levels[0];
-                memoryMaxLevel=levels[1];
                 if(selectedCompany.maxSlots==companies.get(position-1).usedSlots){
                     noFreeSlotAlert(selectedCompany);
                 }
@@ -289,26 +294,23 @@ public class FragmentDeviceCreator extends Fragment {
     }
 
     private int getOverallCost(){
-        int overallCost=0;
-        for (int i=0;i<NUMBER_OF_CHOOSER_ACTIVITIES;i++){overallCost+=costs[i];}
-        return overallCost; }
+        return DeviceValidator.getOverallCost(device);
+    }
 
     private void reset(boolean isFullReset){
         if(isFullReset){spin.setSelection(0);deviceNameField.setText("");myCompanysIndex=-1;isCompanySet=false;}
         companies=deviceViewModel.getAllCompaniesList();
         profitField.setText("");
         currentCostField.setText("The current cost is 0$");
-        chosenMem.setVisibility(View.INVISIBLE);
-        chosenRam.setVisibility(View.INVISIBLE);
-        chosenDesign.setVisibility(View.INVISIBLE);
-        chosenMaterial.setVisibility(View.INVISIBLE);
-        chosenColors.setVisibility(View.INVISIBLE);
-        chosenBezel.setVisibility(View.INVISIBLE);
-        chosenIp.setVisibility(View.INVISIBLE);
-        isMemorySet=false;
-        isBodySet=false;
-        isSetMemoryImage.setImageDrawable(getActivity().getDrawable(R.drawable.ic_cancel_red_24dp));
-        isSetBodyImage.setImageDrawable(getActivity().getDrawable(R.drawable.ic_cancel_red_24dp));
+        for(TextView tv:attributeTextViewMap.values()){
+            tv.setVisibility(View.GONE);
+        }
+        for (Device.DeviceBudget att: Device.DeviceBudget.values()) {
+            isBudgetSet.put(att,false);
+        }
+        for(ImageView iv :budgetImageViewMap.values()){
+            iv.setImageDrawable(getActivity().getDrawable(R.drawable.ic_cancel_red_24dp));
+        }
     }
 
     private void noFreeSlotAlert(Company company){
@@ -337,49 +339,76 @@ public class FragmentDeviceCreator extends Fragment {
     }
 
     void loadInADevice(int deviceID){
-        Device device=deviceViewModel.getDevice_byID(deviceID);
-        int storageCost=(int) Math.round(DeviceValidator.getCostOfMemory(Device.DeviceAttribute.STORAGE_MEMORY,device.memory))+
-                (int) Math.round(DeviceValidator.getCostOfMemory(Device.DeviceAttribute.STORAGE_RAM,device.ram));
-        int bodyCost=0;
-        for(Device.DeviceAttribute attribute : Device.getBodyAttributes()){
-            bodyCost+=DeviceValidator.getCostOfBody(attribute,device.getFieldByAttribute(attribute));
+        Device d=deviceViewModel.getDevice_byID(deviceID);
+        /*
+        setupStorage(device.getParams()[0]);
+        setupBody(device.getParams()[1]);*/
+        for(Device.DeviceBudget budget:Device.DeviceBudget.values()){
+            int[] p=new int[Device.getAllAttribute_InBudget(budget).size()];
+            for(int i=0;i<Device.getAllAttribute_InBudget(budget).size();i++){
+                p[i]=d.getFieldByAttribute(Device.getAllAttribute_InBudget(budget).get(i));
+            }
+            setup_a_budget(budget,p);
         }
-        setupStorage(device.ram,device.memory,storageCost);
-        setupBody(bodyCost,device.getParams()[1]);
+
         deviceNameField.setText(device.name);
         profitField.setText(String.valueOf(device.profit));
     }
-
-    private void setupStorage(int ram,int memory,int storageCost){
-        this.ram=ram;
-        this.memory=memory;
-        costs[0]=storageCost;
+/*
+    private void setupStorage(int[] p){
+        device.ram=p[0];
+        device.memory=p[1];
         currentCostField.setText(String.format(Locale.getDefault(),"The current cost is %d$", getOverallCost()));
-        isMemorySet = true;
+        isBudgetSet.put(Device.DeviceBudget.STORAGE,Boolean.TRUE);
         isSetMemoryImage.setImageDrawable(getActivity().getDrawable(R.drawable.ic_check_green_24dp));
-        chosenMem.setText(String.format(Locale.getDefault(),"Memory: %dGB", (int) Math.round(Math.pow(2,memory)) ));
-        chosenRam.setText(String.format(Locale.getDefault(),"Ram: %dGB", (int) Math.round(Math.pow(2,ram))));
+        chosenMem.setText(String.format(Locale.getDefault(),"Memory: %dGB", (int) Math.round(Math.pow(2,device.memory)) ));
+        chosenRam.setText(String.format(Locale.getDefault(),"Ram: %dGB", (int) Math.round(Math.pow(2,device.ram))));
         chosenMem.setVisibility(View.VISIBLE);
         chosenRam.setVisibility(View.VISIBLE);
     }
 
-    private void setupBody(int bodyCost,int[] bodyParams){
-        bodyResults=bodyParams;
-        costs[1]=bodyCost;
+        private void setupBody(int[] bodyParams){
+        for(int i=0;i<Device.getAllAttribute_InBudget(Device.DeviceBudget.BODY).size();i++){
+            device.setFieldByAttribute(
+                    Device.getAllAttribute_InBudget(Device.DeviceBudget.BODY).get(i),bodyParams[i]);
+        }
         currentCostField.setText(String.format(Locale.getDefault(),"The current cost is %d$", getOverallCost()));
-        isBodySet=true;
+        isBudgetSet.put(Device.DeviceBudget.BODY,Boolean.TRUE);
         isSetBodyImage.setImageDrawable(getActivity().getDrawable(R.drawable.ic_check_green_24dp));
-        chosenDesign.setText(String.format(Locale.getDefault(),"Design: %dp", bodyResults[0]));
-        chosenMaterial.setText(String.format(Locale.getDefault(),"Material: %dp", bodyResults[1]));
-        chosenColors.setText(String.format(Locale.getDefault(),"Colors: %dp", bodyResults[2]));
-        chosenIp.setText(String.format(Locale.getDefault(),"Ip: %dp", bodyResults[3]));
-        chosenBezel.setText(String.format(Locale.getDefault(),"Bezel: %dp", bodyResults[4]));
+        chosenDesign.setText(String.format(Locale.getDefault(),"Design: %dp", device.getFieldByAttribute(Device.DeviceAttribute.BODY_DESIGN)));
+        chosenMaterial.setText(String.format(Locale.getDefault(),"Material: %dp", device.getFieldByAttribute(Device.DeviceAttribute.BODY_MATERIAL)));
+        chosenColors.setText(String.format(Locale.getDefault(),"Colors: %dp", device.getFieldByAttribute(Device.DeviceAttribute.BODY_COLOR)));
+        chosenIp.setText(String.format(Locale.getDefault(),"Ip: %dp", device.getFieldByAttribute(Device.DeviceAttribute.BODY_IP)));
+        chosenBezel.setText(String.format(Locale.getDefault(),"Bezel: %dp", device.getFieldByAttribute(Device.DeviceAttribute.BODY_BEZEL)));
         chosenDesign.setVisibility(View.VISIBLE);
         chosenMaterial.setVisibility(View.VISIBLE);
         chosenColors.setVisibility(View.VISIBLE);
         chosenBezel.setVisibility(View.VISIBLE);
         chosenIp.setVisibility(View.VISIBLE);
     }
+
+    */
+
+    public void setup_a_budget(Device.DeviceBudget budget,int[] params){
+        for(int i=0;i<Device.getAllAttribute_InBudget(budget).size();i++){
+            device.setFieldByAttribute(
+                    Device.getAllAttribute_InBudget(budget).get(i),params[i]);
+        }
+        currentCostField.setText(String.format(Locale.getDefault(),"The current cost is %d$", getOverallCost()));
+        isBudgetSet.put(budget,Boolean.TRUE);
+        budgetImageViewMap.get(budget).setImageDrawable(getActivity().getDrawable(R.drawable.ic_check_green_24dp));
+        for(int i=0;i<Device.getAllAttribute_InBudget(budget).size();i++){
+            Device.DeviceAttribute attribute=Device.getAllAttribute_InBudget(budget).get(i);
+            TextView t=attributeTextViewMap.get(attribute);
+            StringBuilder sb =new StringBuilder(Device.attributeToString(attribute));
+            sb.append(": ");
+            sb.append(Device.getStringFromAttributeLevel(attribute,device.getFieldByAttribute(attribute)));
+            t.setText(sb.toString());
+            t.setVisibility(View.VISIBLE);
+        }
+    }
+
+
 
 }
 

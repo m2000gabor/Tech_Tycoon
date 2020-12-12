@@ -9,6 +9,8 @@ import android.widget.Toast;
 
 import com.example.techtycoon.Assistant.AssistantManager;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -28,13 +30,6 @@ import androidx.lifecycle.ViewModelProvider;
 public class MainActivity extends AppCompatActivity {
     public static final String NAME_FIELD ="name" ;
     public static final String MAIN_MONETARILY_INFO ="profit" ;
-    public static final String TASK_OF_RECYCLER_VIEW ="dataSource" ;
-    public static final String DEVICE_COMPANY_ID ="companyId" ;
-    public static final String DEVICE_PRICE ="price" ;
-    public static final String DEVICE_COST ="cost" ;
-    public static final String DEVICE_PARAMS ="devParams" ;
-    public static final String RAM_LVL ="RAMLVL" ;
-    public static final String MEMORY_LVL ="MEMLVL" ;
     public static final String LEVELS ="LEVELS" ;
 
 
@@ -43,7 +38,11 @@ public class MainActivity extends AppCompatActivity {
     public static final int NEW_DEVICE_ACTIVITY_REQUEST_CODE = 1;
     public static final int NEW_COMPANY_ACTIVITY_REQUEST_CODE = 2;
 
-    public static final int[] STARTING_LEVELS={1,1,1,1,1,1,1};
+    public static final int[] STARTING_LEVELS;
+    static{
+        STARTING_LEVELS= new int[Device.NUMBER_OF_ATTRIBUTES];
+        Arrays.fill(STARTING_LEVELS,1);
+    }
 
     DeviceViewModel deviceViewModel;
 
@@ -167,26 +166,54 @@ public class MainActivity extends AppCompatActivity {
                 new Company("Xiaomi",1,STARTING_LEVELS),
                 new Company("Player",1,STARTING_LEVELS)};
         //Apple - applebot principle
+        companies[0].companyId=100;
+        companies[0].marketing=100;
+        companies[0].usedSlots=1;
         companies[0].assistantType=7;
         companies[0].assistantStatus=AssistantManager.getDefaultStatus(7);
 
         //Strawberry - applebot2
+        companies[1].usedSlots=1;
+        companies[1].companyId=101;
+        companies[1].marketing=100;
         companies[1].assistantType=5;
         companies[1].assistantStatus=AssistantManager.getDefaultStatus(5);
 
         //Samsung - bot1
+        companies[2].usedSlots=1;
+        companies[2].companyId=102;
+        companies[2].marketing=100;
         companies[2].assistantType=6;
         companies[2].assistantStatus=AssistantManager.getDefaultStatus(6);
 
         //Sony - Average Bot
+        companies[3].usedSlots=1;
+        companies[3].companyId=103;
+        companies[3].marketing=100;
         companies[3].assistantType=2;
         companies[3].assistantStatus=AssistantManager.getDefaultStatus(2);
 
         //Xiaomi - xiaomi bot
+        companies[4].usedSlots=1;
+        companies[4].companyId=104;
+        companies[4].marketing=100;
         companies[4].assistantType=3;
         companies[4].assistantStatus=AssistantManager.getDefaultStatus(3);
 
+        //player
+        companies[5].marketing=100;
+
         deviceViewModel.startAgain(companies);
+
+        //basic devices
+        List<Device> firstDevices=new ArrayList<>();
+        firstDevices.add(Device.getMinimalDevice("Iphone",100,100));
+        firstDevices.add(Device.getMinimalDevice("myPhone",100,101));
+        firstDevices.add(Device.getMinimalDevice("Galaxy",100,102));
+        firstDevices.add(Device.getMinimalDevice("Xperia",100,103));
+        firstDevices.add(Device.getMinimalDevice("Redmi",100,104));
+        deviceViewModel.insertDevices(firstDevices.toArray(new Device[0]));
+
         startTabbedActivityReset();
     }
 

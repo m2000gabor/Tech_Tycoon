@@ -10,7 +10,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.activities.charts.CompanyCharts"></activity>
+        <activity android:name=".ui.activities.charts.CompanyCharts">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.techtycoon.TabbedActivity" />
+        </activity>
         <activity android:name=".ui.activities.FilterActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -33,6 +37,14 @@
         <activity
             android:name=".ui.activities.ChooseBodyActivity"
             android:label="@string/title_activity_choose_body"
+            android:parentActivityName=".TabbedActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.techtycoon.TabbedActivity" />
+        </activity>
+        <activity android:name=".ui.activities.ChooseDisplayActivity"
+            android:label="@string/title_activity_choose_display"
             android:parentActivityName=".TabbedActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data

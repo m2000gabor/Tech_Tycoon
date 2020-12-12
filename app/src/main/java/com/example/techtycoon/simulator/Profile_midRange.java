@@ -5,7 +5,11 @@ import com.example.techtycoon.Device;
 import static com.example.techtycoon.simulator.Simulator.fx;
 
 class Profile_midRange implements Profile {
-    private static int[] attrWeights={6,6,5,3,3,3,3};
+    private static int[] attrWeights={
+            7,6,//storage
+            5,3,3,3,3,//body
+            5,3,2,2//design
+    };
 
     @Override
     public int getNumberOfCustomers() {return 1200;}

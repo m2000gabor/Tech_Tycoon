@@ -2,19 +2,18 @@ package com.example.techtycoon;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import static com.example.techtycoon.Device.NUMBER_OF_ATTRIBUTES;
 
@@ -51,6 +50,11 @@ public class DevelopmentActivity extends AppCompatActivity {
         actualLevelsTextViews[4]= findViewById(R.id.ColorsLevel);
         actualLevelsTextViews[5]= findViewById(R.id.IpLevel);
         actualLevelsTextViews[6]= findViewById(R.id.BezelsLevel);
+        actualLevelsTextViews[7]= findViewById(R.id.resolutionLevel);
+        actualLevelsTextViews[8]= findViewById(R.id.brightnessLevel);
+        actualLevelsTextViews[9]= findViewById(R.id.refreshRateLevel);
+        actualLevelsTextViews[10]= findViewById(R.id.displayTechnologyLevel);
+
         costsTextViews[0]= findViewById(R.id.ramUpgradeCost);
         costsTextViews[1]= findViewById(R.id.memoryUpgradeCost);
         costsTextViews[2]= findViewById(R.id.DesignUpgradeCost);
@@ -58,6 +62,12 @@ public class DevelopmentActivity extends AppCompatActivity {
         costsTextViews[4]= findViewById(R.id.ColorsUpgradeCost);
         costsTextViews[5]= findViewById(R.id.IpUpgradeCost);
         costsTextViews[6]= findViewById(R.id.BezelsUpgradeCost);
+        costsTextViews[7]= findViewById(R.id.resolutionCost);
+        costsTextViews[8]= findViewById(R.id.brightnessCost);
+        costsTextViews[9]= findViewById(R.id.refreshRateCost);
+        costsTextViews[10]= findViewById(R.id.displayTechnologyCost);
+
+
         imageButtons.add(findViewById(R.id.ImageButton_RamUpgrade));
         imageButtons.add(findViewById(R.id.ImageButton_MemoryUpgrade));
         imageButtons.add(findViewById(R.id.ImageButton_DesignUpgrade));
@@ -65,6 +75,10 @@ public class DevelopmentActivity extends AppCompatActivity {
         imageButtons.add(findViewById(R.id.ImageButton_ColorsUpgrade));
         imageButtons.add(findViewById(R.id.ImageButton_IpUpgrade));
         imageButtons.add(findViewById(R.id.ImageButton_BezelsUpgrade));
+        imageButtons.add(findViewById(R.id.ImageButton_ResolutionUpgrade));
+        imageButtons.add(findViewById(R.id.ImageButton_brightnessUpgrade));
+        imageButtons.add(findViewById(R.id.ImageButton_refreshRateUpgrade));
+        imageButtons.add(findViewById(R.id.ImageButton_displayTechnologyUpgrade));
 
         //get intent
         Intent data=getIntent();

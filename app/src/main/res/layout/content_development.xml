@@ -34,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/text_margin"
                 android:text="Ram and Memory"
-                android:textSize="22sp"
+                android:textSize="@dimen/text_size"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -147,7 +147,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/text_margin"
                 android:text="Body"
-                android:textSize="22sp"
+                android:textSize="@dimen/text_size"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -391,6 +391,163 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <TextView
+                android:textSize="@dimen/text_size"
+                android:layout_marginTop="@dimen/text_margin"
+                android:layout_marginLeft="@dimen/text_margin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Display"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/text_margin"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_size_small"
+                    android:layout_margin="@dimen/text_margin_small"
+                    android:text="Resolution"/>
+
+                <TextView
+                    android:id="@+id/resolutionLevel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_size_small"
+                    android:layout_margin="@dimen/text_margin_small"
+                    android:text="lvl1"/>
+
+                <TextView
+                    android:id="@+id/resolutionCost"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_size_small"
+                    android:layout_margin="@dimen/text_margin_small"
+                    android:text="0$"/>
+
+                <ImageButton
+                    android:id="@+id/ImageButton_ResolutionUpgrade"
+                    android:layout_width="30dp"
+                    android:layout_height="26dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_upgrade_green_24dp" />
+
+            </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/text_margin"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_size_small"
+                android:layout_margin="@dimen/text_margin_small"
+                android:text="Brightness"/>
+
+            <TextView
+                android:id="@+id/brightnessLevel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_size_small"
+                android:layout_margin="@dimen/text_margin_small"
+                android:text="lvl1"/>
+
+            <TextView
+                android:id="@+id/brightnessCost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_size_small"
+                android:layout_margin="@dimen/text_margin_small"
+                android:text="0$"/>
+
+            <ImageButton
+                android:id="@+id/ImageButton_brightnessUpgrade"
+                android:layout_width="30dp"
+                android:layout_height="26dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_upgrade_green_24dp" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/text_margin"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_size_small"
+                android:layout_margin="@dimen/text_margin_small"
+                android:text="Refresh rate"/>
+
+            <TextView
+                android:id="@+id/refreshRateLevel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_size_small"
+                android:layout_margin="@dimen/text_margin_small"
+                android:text="lvl1"/>
+
+            <TextView
+                android:id="@+id/refreshRateCost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_size_small"
+                android:layout_margin="@dimen/text_margin_small"
+                android:text="0$"/>
+
+            <ImageButton
+                android:id="@+id/ImageButton_refreshRateUpgrade"
+                android:layout_width="30dp"
+                android:layout_height="26dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_upgrade_green_24dp" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/text_margin"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_size_small"
+                android:layout_margin="@dimen/text_margin_small"
+                android:text="Display technology"/>
+
+            <TextView
+                android:id="@+id/displayTechnologyLevel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_size_small"
+                android:layout_margin="@dimen/text_margin_small"
+                android:text="lvl1"/>
+
+            <TextView
+                android:id="@+id/displayTechnologyCost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_size_small"
+                android:layout_margin="@dimen/text_margin_small"
+                android:text="0$"/>
+
+            <ImageButton
+                android:id="@+id/ImageButton_displayTechnologyUpgrade"
+                android:layout_width="30dp"
+                android:layout_height="26dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_upgrade_green_24dp" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

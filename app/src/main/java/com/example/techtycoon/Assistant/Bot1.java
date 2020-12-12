@@ -1,7 +1,5 @@
 package com.example.techtycoon.Assistant;
 
-import androidx.core.util.Pair;
-
 import com.example.techtycoon.Company;
 import com.example.techtycoon.DevelopmentValidator;
 import com.example.techtycoon.Device;
@@ -12,9 +10,15 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static com.example.techtycoon.Assistant.ToolsForAssistants.*;
+import androidx.core.util.Pair;
+
+import static com.example.techtycoon.Assistant.ToolsForAssistants.getCompanyContext;
+import static com.example.techtycoon.Assistant.ToolsForAssistants.getRegion;
+import static com.example.techtycoon.Assistant.ToolsForAssistants.max_Overall;
+import static com.example.techtycoon.Assistant.ToolsForAssistants.min_Overall;
+import static com.example.techtycoon.Assistant.ToolsForAssistants.nameBuilder;
+import static com.example.techtycoon.Assistant.ToolsForAssistants.priceMaker;
 
 
 class Bot1 implements AbstractAssistant {
@@ -40,7 +44,11 @@ class Bot1 implements AbstractAssistant {
         //profile of the assistant
         final double marketingImp=0.2;
         final int newSlotImp=10;
-        final int[] devImportance={5,5,3,3,3,3,3};
+        final int[] devImportance={
+                5,5,
+                3,3,3,3,3,
+                3,3,3,3
+        };
 
 
         //context of my company

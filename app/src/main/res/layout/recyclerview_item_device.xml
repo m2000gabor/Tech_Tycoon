@@ -47,6 +47,15 @@
             app:layout_constraintTop_toBottomOf="@+id/deviceStorageTextView" />
 
         <TextView
+            android:id="@+id/deviceDisplayTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Display:  10 (1 1 1 1 1)"
+            android:textSize="@dimen/text_size_small"
+            app:layout_constraintStart_toStartOf="@+id/deviceBodyTextView"
+            app:layout_constraintTop_toBottomOf="@+id/deviceBodyTextView" />
+
+        <TextView
             android:id="@+id/soldPiecesTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -62,7 +71,9 @@
             android:text="0"
             android:textSize="@dimen/text_size_small"
             app:layout_constraintEnd_toEndOf="@+id/soldPiecesTextView"
-            app:layout_constraintTop_toBottomOf="@+id/soldPiecesTextView" />
+            app:layout_constraintTop_toBottomOf="@+id/soldPiecesTextView"
+
+            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

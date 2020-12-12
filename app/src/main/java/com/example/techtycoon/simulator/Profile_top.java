@@ -5,7 +5,11 @@ import com.example.techtycoon.Device;
 import static com.example.techtycoon.simulator.Simulator.fx;
 
 class Profile_top implements Profile {
-    private static int[] attrWeights={10,10,4,6,3,4,4};
+    private static int[] attrWeights={
+            10,8,
+            4,6,3,4,4,
+            7,4,8,6
+    };
 
     @Override
     public int getNumberOfCustomers() {return 300;}

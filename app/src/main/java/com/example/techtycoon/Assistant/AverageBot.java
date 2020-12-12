@@ -1,9 +1,7 @@
 package com.example.techtycoon.Assistant;
 
-import androidx.core.util.Pair;
-
 import com.example.techtycoon.Company;
-import static com.example.techtycoon.Assistant.ToolsForAssistants.*;
+import com.example.techtycoon.Converter;
 import com.example.techtycoon.DevelopmentValidator;
 import com.example.techtycoon.Device;
 import com.example.techtycoon.DeviceValidator;
@@ -13,6 +11,14 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import androidx.core.util.Pair;
+
+import static com.example.techtycoon.Assistant.ToolsForAssistants.avg;
+import static com.example.techtycoon.Assistant.ToolsForAssistants.avg_marketing;
+import static com.example.techtycoon.Assistant.ToolsForAssistants.getRegion;
+import static com.example.techtycoon.Assistant.ToolsForAssistants.min_Overall;
+import static com.example.techtycoon.Assistant.ToolsForAssistants.nameBuilder;
 
 /*
                Name: Avg
@@ -51,7 +57,12 @@ public class AverageBot implements AbstractAssistant {
 
     @Override
     public String getDefaultStatus() {
-        return "10;5;3;4;2;2;2;2;2";
+        return Converter.intArrayToString(new int[]{
+                10,5,//newslot,marketing
+                3,4,//storage
+                2,2,2,2,2,//body
+                2,2,2,2//display
+        });
     }
 
     private int getImportance(int attrId){
@@ -61,7 +72,7 @@ public class AverageBot implements AbstractAssistant {
     public  Wrapped_DeviceAndCompanyList work(List<Company> companyList, List<Device> deviceList, List<Device> myDevices, Company myCompany, Wrapped_DeviceAndCompanyList ret) {
         //get profile
         String[] s=myCompany.assistantStatus.split(";");
-        profile=new int[9];
+        profile=new int[Device.NUMBER_OF_ATTRIBUTES+2];
         for(int i =0;i<s.length;i++) {
             profile[i] = Integer.parseInt(s[i]);
         }

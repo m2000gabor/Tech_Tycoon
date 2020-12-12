@@ -10,6 +10,7 @@
     <string name="title_devicecomponent_detail">DeviceComponent Detail</string>
     <string name="title_activity_device_creator">DeviceCreator</string>
     <string name="title_activity_choose_memory">ChooseMemoryActivity</string>
+    <string name="title_activity_choose_display">ChooseDisplayActivity</string>
 
     <string name="simulator_lastAvgPrice">Last Average Price</string>
     <string name="simulator_lastAvgMemory">Last Average Memory</string>

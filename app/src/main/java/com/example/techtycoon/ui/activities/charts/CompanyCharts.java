@@ -36,7 +36,7 @@ public class CompanyCharts extends AppCompatActivity implements AdapterView.OnIt
     Cartesian cartesian;
     Column column;
     List<String> statAttributes=new ArrayList<>(Arrays.asList("Profit","Value","Max slots","Marketing",
-            "Storage","Body"));
+            "Storage","Body","Display"));
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +45,6 @@ public class CompanyCharts extends AppCompatActivity implements AdapterView.OnIt
 
             anyChartView = findViewById(R.id.any_chart_view);
             anyChartView.setProgressBar(findViewById(R.id.progress_bar));
-
 
             //set up a spinner
             Spinner spinner = findViewById(R.id.companyStatSpinner);
@@ -66,18 +65,7 @@ public class CompanyCharts extends AppCompatActivity implements AdapterView.OnIt
             for(Company c : companyList){
                 data.add(new ValueDataEntry(c.name,c.lastProfit));
             }
-            /*
-            pie = AnyChart.pie();
-            pie.data(data);
-            pie.title(statAttributes.get(0));
-            pie.labels().position("outside");
 
-            pie.legend()
-                    .position("center-bottom")
-                    .itemsLayout(LegendLayout.HORIZONTAL_EXPANDABLE)
-                    .align(Align.CENTER);
-
-            anyChartView.setChart(pie);*/
             cartesian = AnyChart.column();
             column = cartesian.column(data);
 
@@ -145,7 +133,7 @@ public class CompanyCharts extends AppCompatActivity implements AdapterView.OnIt
                 }
                 break;
             case 4://storage
-                for (Device.DeviceAttribute att : Device.getStorageAttributes()){
+                for (Device.DeviceAttribute att : Device.getAllAttribute_InBudget(Device.DeviceBudget.STORAGE)){
                     List<DataEntry> dataEntries=new ArrayList<>();
                     for(Company c:companyList){
                         dataEntries.add(new ValueDataEntry(c.name,c.getLevelByAttribute(att)));
@@ -155,7 +143,17 @@ public class CompanyCharts extends AppCompatActivity implements AdapterView.OnIt
                 }
                 break;
             case 5: //body
-                for (Device.DeviceAttribute att : Device.getBodyAttributes()){
+                for (Device.DeviceAttribute att : Device.getAllAttribute_InBudget(Device.DeviceBudget.BODY)){
+                    List<DataEntry> dataEntries=new ArrayList<>();
+                    for(Company c:companyList){
+                        dataEntries.add(new ValueDataEntry(c.name,c.getLevelByAttribute(att)));
+                    }
+                    multipleDataList.add(dataEntries);
+                    seriesNames.add(Device.attributeToString(att));
+                }
+                break;
+            case 6: //display
+                for (Device.DeviceAttribute att : Device.getAllAttribute_InBudget(Device.DeviceBudget.DISPLAY)){
                     List<DataEntry> dataEntries=new ArrayList<>();
                     for(Company c:companyList){
                         dataEntries.add(new ValueDataEntry(c.name,c.getLevelByAttribute(att)));
@@ -174,9 +172,7 @@ public class CompanyCharts extends AppCompatActivity implements AdapterView.OnIt
     }
 
     @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
+    public void onNothingSelected(AdapterView<?> parent) {}
 
     public void plotTheChart(List<DataEntry> data,String chartName){
             cartesian.removeAllSeries();
@@ -190,10 +186,6 @@ public class CompanyCharts extends AppCompatActivity implements AdapterView.OnIt
         }else{
             cartesian.yAxis(0).labels().format("{%Value}{groupsSeparator: }");
         }
-        /*
-        pie.data(data);
-        pie.title(chartName);*/
-
     }
 
     public void plotTheChart_multipleColumn(List<List<DataEntry>> data,String chartName,List<String> seriesNames){
@@ -206,7 +198,6 @@ public class CompanyCharts extends AppCompatActivity implements AdapterView.OnIt
         cartesian.xAxis(0).title("Company");
         cartesian.yAxis(0).title(chartName);
         cartesian.yAxis(0).labels().format("{%Value}{groupsSeparator: }");
-
     }
 }
 

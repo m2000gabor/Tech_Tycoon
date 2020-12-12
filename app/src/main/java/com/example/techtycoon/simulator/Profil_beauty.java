@@ -5,7 +5,11 @@ import com.example.techtycoon.Device;
 import static com.example.techtycoon.simulator.Simulator.fx;
 
 class Profil_beauty implements Profile {
-    private static int[] attrWeights={2,2,10,7,8,2,5};
+    private static int[] attrWeights={
+            2,3,
+            10,7,8,2,5,
+            10,5,3,4
+    };
 
     @Override
     public int getNumberOfCustomers() {return 50;}

@@ -1,6 +1,7 @@
 package com.example.techtycoon;
 
 import java.util.Arrays;
+import java.util.List;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -123,7 +124,7 @@ public class Company {
         return true;
     }
 
-    public static Device.DeviceAttribute getDeviceAttributeFromCompanyLevel(int levelId){
+    private static Device.DeviceAttribute getDeviceAttributeFromCompanyLevel(int levelId){
         switch (levelId){
             case 0:return Device.DeviceAttribute.STORAGE_RAM;
             case 1:return Device.DeviceAttribute.STORAGE_MEMORY;
@@ -132,6 +133,10 @@ public class Company {
             case 4:return Device.DeviceAttribute.BODY_COLOR;
             case 5:return Device.DeviceAttribute.BODY_IP;
             case 6:return Device.DeviceAttribute.BODY_BEZEL;
+            case 7:return Device.DeviceAttribute.DISPLAY_RESOLUTION;
+            case 8:return Device.DeviceAttribute.DISPLAY_BRIGHTNESS;
+            case 9:return Device.DeviceAttribute.DISPLAY_REFRESH_RATE;
+            case 10:return Device.DeviceAttribute.DISPLAY_TECHNOLOGY;
             default:return null;
         }
     }
@@ -145,21 +150,27 @@ public class Company {
             case BODY_COLOR:return 4;
             case BODY_IP:return 5;
             case BODY_BEZEL:return 6;
+            case DISPLAY_RESOLUTION:return 7;
+            case DISPLAY_BRIGHTNESS:return 8;
+            case DISPLAY_REFRESH_RATE:return 9;
+            case DISPLAY_TECHNOLOGY:return 10;
             default:return -1;
         }
     }
 
 
     public int getLevelByAttribute(Device.DeviceAttribute attribute){
-        switch (attribute){
-            case STORAGE_RAM: return getLevels_USE_THIS()[0];
-            case STORAGE_MEMORY:return getLevels_USE_THIS()[1];
-            case BODY_DESIGN:return getLevels_USE_THIS()[2];
-            case BODY_MATERIAL:return getLevels_USE_THIS()[3];
-            case BODY_COLOR:return getLevels_USE_THIS()[4];
-            case BODY_IP:return getLevels_USE_THIS()[5];
-            case BODY_BEZEL:return getLevels_USE_THIS()[6];
-            default:return -1;
+        return getLevels_USE_THIS()[getLevelIdFromDeviceAttribute(attribute)];
+    }
+    public int[] getLevelByBudget(Device.DeviceBudget budget){
+        int[] r =new int[Device.getAllAttribute_InBudget(budget).size()];
+        for(int i=0;i<Device.getAllAttribute_InBudget(budget).size();i++){
+            r[i]=(this.getLevelByAttribute(Device.getAllAttribute_InBudget(budget).get(i)));
         }
+        return r;
+    }
+
+    public static Company findCompanyInListById(List<Company> list,int id){
+        return (Company) list.stream().filter(c->c.companyId==id).toArray()[0];
     }
 }

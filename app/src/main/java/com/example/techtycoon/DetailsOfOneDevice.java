@@ -36,6 +36,7 @@ public class DetailsOfOneDevice extends AppCompatActivity {
         TextView memoryTextV =findViewById(R.id.memory);
         TextView costTextV =findViewById(R.id.cost);
         TextView bodyTextV =findViewById(R.id.bodyInfos);
+        TextView displayTextV =findViewById(R.id.displayInfos);
         TextView historySoldPiecesTextView =findViewById(R.id.historySoldPiecesTextView);
 
         id=getIntent().getIntExtra("ID",-1);
@@ -53,7 +54,22 @@ public class DetailsOfOneDevice extends AppCompatActivity {
         ramTextV.setText(String.format(Locale.getDefault(),"RAM: %d GB",(int) Math.pow(2,device.getFieldByAttribute(Device.DeviceAttribute.STORAGE_RAM))));
         memoryTextV.setText(String.format(Locale.getDefault(),"Memory: %d GB",(int) Math.pow(2,device.getFieldByAttribute(Device.DeviceAttribute.STORAGE_MEMORY))));
         costTextV.setText(String.format(Locale.getDefault(),"Cost: %d$",device.cost));
-        bodyTextV.setText(String.format(Locale.getDefault(),"Body: %s$",Converter.intArrayToString(device.getParams()[1])));
+        //body
+        StringBuilder sb=new StringBuilder("Body: ");
+        for (Device.DeviceAttribute att:Device.getAllAttribute_InBudget(Device.DeviceBudget.BODY)){
+            sb.append(device.getFieldByAttribute(att));
+            sb.append(';');
+        }
+        sb.deleteCharAt(sb.length()-1);
+        bodyTextV.setText(sb.toString());
+        //display
+        sb=new StringBuilder("Display: ");
+        for (Device.DeviceAttribute att:Device.getAllAttribute_InBudget(Device.DeviceBudget.DISPLAY)){
+            sb.append(device.getFieldByAttribute(att));
+            sb.append(';');
+        }
+        sb.deleteCharAt(sb.length()-1);
+        displayTextV.setText(sb.toString());
 
     }
 

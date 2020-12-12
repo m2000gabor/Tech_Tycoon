@@ -8,10 +8,11 @@ import com.example.techtycoon.Wrapped_DeviceAndCompanyList;
 import java.util.List;
 import java.util.Random;
 
-import static com.example.techtycoon.Assistant.ToolsForAssistants.*;
+import static com.example.techtycoon.Assistant.ToolsForAssistants.avg_lastProfit;
+import static com.example.techtycoon.Assistant.ToolsForAssistants.nameBuilder;
 
 class RandomBot implements AbstractAssistant {
-
+//todo implement or delete
     @Override
     public List<String> getInputLabels() {
         return null;
@@ -46,15 +47,15 @@ class RandomBot implements AbstractAssistant {
 
                     //make newDev
                     String name =nameBuilder.buildName(myDevices.get(minIndex).name,1);
-                    int[] memory = new int[Device.CHILDREN_OF_BUDGETS[0]];
-                    for (int i = 0; i < Device.CHILDREN_OF_BUDGETS[0]; ++i) {
+                    int[] memory = new int[Device.getAllAttribute_InBudget(Device.DeviceBudget.STORAGE).size()];
+                    for (int i = 0; i < Device.getAllAttribute_InBudget(Device.DeviceBudget.STORAGE).size(); ++i) {
                         memory[i] = (int) Math.round(Math.pow(2, randomGenerator.nextInt(myCompany.getLevels_USE_THIS()[i]) - 1));
                         if (memory[i] == 0) {
                             memory[i]++;
                         }
                     }
-                    int[] body = new int[Device.CHILDREN_OF_BUDGETS[1]];
-                    for (int i = 0; i < Device.CHILDREN_OF_BUDGETS[1]; ++i) {
+                    int[] body = new int[Device.getAllAttribute_InBudget(Device.DeviceBudget.BODY).size()];
+                    for (int i = 0; i < Device.getAllAttribute_InBudget(Device.DeviceBudget.BODY).size(); ++i) {
                         body[i] = randomGenerator.nextInt(myCompany.getLevels_USE_THIS()[i + 2]);
                         if (body[i] == 0) {
                             body[i]++;

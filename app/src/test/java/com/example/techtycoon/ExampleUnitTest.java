@@ -10,7 +10,8 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 //todo implement a lot of tests
 /**
@@ -53,7 +54,7 @@ public class ExampleUnitTest {
 
     @Test
     public void turns_100(){
-        final int NUM_OF_TURNS=500;
+        final int NUM_OF_TURNS=800;
         final int NUMBER_OF_COMPANIES=5;
         final List<Integer> assistantList= Arrays.asList(2,3,5,6,7);
 
@@ -142,7 +143,12 @@ public class ExampleUnitTest {
         companyList.sort((o1, o2) -> o2.getMarketValue()-o1.getMarketValue());
         System.out.println("Results of the test after "+NUM_OF_TURNS+" turns:");
         for(Company c: companyList){
-            System.out.println(c.name+"("+AssistantManager.getAssistantName(c.assistantType)+")"+"\tvalue: "+c.getMarketValue());
+            System.out.println(c.name+"("+AssistantManager.getAssistantName(c.assistantType)+")"+
+                    "\tvalue: "+c.getMarketValue()+
+                    "\tlast profit: "+c.lastProfit+
+                    "\tmarketing: "+c.marketing+
+                    "\tslots: "+c.usedSlots
+            );
         }
 
     }

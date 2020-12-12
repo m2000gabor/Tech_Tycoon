@@ -4,28 +4,26 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Toast;
 
 import com.example.techtycoon.Assistant.AssistantManager;
 import com.example.techtycoon.dialogs.SortByDialog;
 import com.example.techtycoon.simulator.Simulator;
+import com.example.techtycoon.ui.main.SectionsPagerAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
-
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.view.View;
-import android.widget.Toast;
-
-import com.example.techtycoon.ui.main.SectionsPagerAdapter;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.viewpager.widget.ViewPager;
 
 public class TabbedActivity extends AppCompatActivity  implements ChooseADeviceDialogFragment.NoticeDialogListener, SortByDialog.SortByDialogListener {
     public static HashMap<String,Integer> NAME_newestPartOfTheSeries=new HashMap<>();
@@ -57,14 +55,10 @@ public class TabbedActivity extends AppCompatActivity  implements ChooseADeviceD
         if(getIntent().getBooleanExtra("NEED_RESET",false)){
             assistantTurn=false;
             editor.putFloat(getString(R.string.simulator_lastAvgPrice), 100);
-            editor.putFloat(getString(R.string.simulator_lastAvgMemory),1);
-            editor.putFloat(getString(R.string.simulator_lastAvgRam),1);
-            editor.putFloat(getString(R.string.simulator_lastAvgDesign),1);
-            editor.putFloat(getString(R.string.simulator_lastAvgMaterial),1);
-            editor.putFloat(getString(R.string.simulator_lastAvgColors),1);
-            editor.putFloat(getString(R.string.simulator_lastAvgIp),1);
-            editor.putFloat(getString(R.string.simulator_lastAvgBezels),1);
             editor.putFloat(getString(R.string.turn_counter),0);
+            for(int i=0;i<Device.getAllAttribute().size();i++){
+                editor.putFloat(Device.attributeToString(Device.getAllAttribute().get(i)),1);
+            }
 
             Set<String> nameTableKeysSet=NAME_newestPartOfTheSeries.keySet();
             editor.putStringSet("nameTableKeys",nameTableKeysSet);
@@ -84,29 +78,22 @@ public class TabbedActivity extends AppCompatActivity  implements ChooseADeviceD
             public void onClick(View view) {
                 if(!assistantTurn){
                 //get sharedPrefs
-                float lastAvgPrice = sharedPref.getFloat(getString(R.string.simulator_lastAvgPrice), 5);
-                float lastAvgRam = sharedPref.getFloat(getString(R.string.simulator_lastAvgRam), 1);
-                float lastAvgMemory = sharedPref.getFloat(getString(R.string.simulator_lastAvgMemory), 1);
-                float lastAvgDesign = sharedPref.getFloat(getString(R.string.simulator_lastAvgDesign), 1);
-                float lastAvgMaterial = sharedPref.getFloat(getString(R.string.simulator_lastAvgMaterial), 1);
-                float lastAvgColors = sharedPref.getFloat(getString(R.string.simulator_lastAvgColors), 1);
-                float lastAvgIp = sharedPref.getFloat(getString(R.string.simulator_lastAvgIp), 1);
-                float lastAvgBezels = sharedPref.getFloat(getString(R.string.simulator_lastAvgBezels), 1);
+                float lastAvgPrice=sharedPref.getFloat(getString(R.string.simulator_lastAvgPrice)
+                        ,Device.getMinimalDevice("",10,0).getPrice());
+                double[] savedAvgs=new double[Device.getAllAttribute().size()];
+                for(int i=0;i<Device.getAllAttribute().size();i++){
+                    savedAvgs[i]=(sharedPref.getFloat(Device.attributeToString(Device.getAllAttribute().get(i)), 1));
+                }
                 float turn = sharedPref.getFloat(getString(R.string.turn_counter), 0);
-                double[] arr={(double) lastAvgRam,(double) lastAvgMemory,(double) lastAvgDesign,(double)lastAvgMaterial,(double)lastAvgColors,(double) lastAvgIp,(double)lastAvgBezels};
-
-                simulator=new Simulator(deviceViewModel.getAllDevicesList(),deviceViewModel.getAllCompaniesList(),lastAvgPrice,arr);
+                simulator=new Simulator(deviceViewModel.getAllDevicesList(),deviceViewModel.getAllCompaniesList(),lastAvgPrice,savedAvgs);
                 Wrapped_DeviceAndCompanyList simulatorResults=simulator.simulate();
                 oneMonthSimulated(simulatorResults);
 
+                //save the avgs
+                for(int i=0;i<Device.getAllAttribute().size();i++){
+                    editor.putFloat(Device.attributeToString(Device.getAllAttribute().get(i)),(float)simulator.attrAverages[i]);
+                }
                 editor.putFloat(getString(R.string.simulator_lastAvgPrice), (float) simulator.lastAvgPrice);
-                editor.putFloat(getString(R.string.simulator_lastAvgMemory),(float) simulator.attrAverages[0]);
-                editor.putFloat(getString(R.string.simulator_lastAvgRam),(float) simulator.attrAverages[1]);
-                editor.putFloat(getString(R.string.simulator_lastAvgDesign),(float) simulator.attrAverages[2]);
-                editor.putFloat(getString(R.string.simulator_lastAvgMaterial),(float) simulator.attrAverages[3]);
-                editor.putFloat(getString(R.string.simulator_lastAvgColors),(float) simulator.attrAverages[4]);
-                editor.putFloat(getString(R.string.simulator_lastAvgIp),(float) simulator.attrAverages[5]);
-                editor.putFloat(getString(R.string.simulator_lastAvgBezels),(float) simulator.attrAverages[6]);
                 editor.putFloat(getString(R.string.turn_counter),++turn);
                 editor.apply();
                 fab.setImageResource(R.drawable.ic_account_circle_white_24dp);

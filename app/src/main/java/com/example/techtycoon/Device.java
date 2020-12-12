@@ -3,10 +3,10 @@ package com.example.techtycoon;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import androidx.annotation.Nullable;
 import androidx.core.util.Pair;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -20,10 +20,13 @@ import androidx.room.PrimaryKey;
 public class Device {
     public enum DeviceAttribute {NAME,DEVICE_ID,OWNER_ID,PERFORMANCE_OVERALL,SCORE_STORAGE,SCORE_BODY,
         PRICE, OVERALL_PROFIT,SOLD_PIECES, PROFIT_PER_ITEM, HISTORY_SOLD_PIECES,
-        STORAGE_RAM,STORAGE_MEMORY,BODY_DESIGN,BODY_MATERIAL,BODY_COLOR,BODY_IP,BODY_BEZEL};
+        STORAGE_RAM,STORAGE_MEMORY,
+        BODY_DESIGN,BODY_MATERIAL,BODY_COLOR,BODY_IP,BODY_BEZEL,
+        DISPLAY_RESOLUTION,DISPLAY_BRIGHTNESS,DISPLAY_REFRESH_RATE,DISPLAY_TECHNOLOGY
+    };
 
-    public static final int NUMBER_OF_BUDGETS=2; //rammemory,body
-    public static final int[] CHILDREN_OF_BUDGETS={2,5}; //rammemory,body
+    public enum DeviceBudget {STORAGE,BODY,DISPLAY};
+
     public final static int NUMBER_OF_ATTRIBUTES = getAllAttribute().size();
 
     @PrimaryKey(autoGenerate = true)
@@ -76,26 +79,32 @@ public class Device {
     @ColumnInfo
     public int bezel;
 
-
-/*
     //Display
     @ColumnInfo
-    public int displaySize;//3inch +
-
-    @ColumnInfo
     public int resolution;
-
-    //todo get density
-    public int getPixelDensity(){return 0;}
-
-    @ColumnInfo
-    public int displayTechnology;
 
     @ColumnInfo
     public int brightness;
 
     @ColumnInfo
-    public boolean refreshRate;*/
+    public int refreshRate;
+
+    @ColumnInfo
+    public int displayTechnology;
+
+    //todo introduce soft attributes. (attributes where not necessarily the bigger number is better)
+    //todo create a safely usable device class
+
+    /*
+    @ColumnInfo
+    public int displaySize;//3inch +
+
+    //todo get density
+    public int getPixelDensity(){return 0;}
+*/
+
+
+
 
 
     public Device(String name,int profit,int cost,int ownerCompanyId,int[] attributes) {
@@ -144,28 +153,6 @@ public class Device {
         return new Device(name,profit,DeviceValidator.getOverallCost(attributes),ownerId,attributes);
     }
 
-    public void setBodyParams(int design,int materials,int colors,int ip,int bezels){
-        this.design=design;
-        this.material=materials;
-        this.color=colors;
-        this.ip=ip;
-        this.bezel=bezels;
-    }
-
-
-    public int[][] getParams(){
-        return new int[][]{
-                {this.ram,
-                    this.memory,},
-
-                {this.design,
-                    this.material,
-                    this.color,
-                    this.ip,
-                    this.bezel}
-        };
-    }
-
     //field setters getters
     public int getSoldPieces() {
         return soldPieces;
@@ -183,45 +170,6 @@ public class Device {
     }
     public int getPrice(){return cost+profit;}
     public int getOverallProfit(){ return soldPieces*profit; }
-
-    //converters
-    public static int[] mtxToArray(int[][] mtx){
-        int length=0;
-        for (int i=0;i<NUMBER_OF_BUDGETS;i++){
-            length+=CHILDREN_OF_BUDGETS[i];
-        }
-        int[] arr =new int[length];
-        int placeInArr=0;
-
-        for (int i=0;i<NUMBER_OF_BUDGETS;i++){
-            int j=0;
-            while (j<CHILDREN_OF_BUDGETS[i]){
-                arr[placeInArr++]=mtx[i][j];
-                j++;
-            }
-        }
-        return arr;
-    }
-    static int[][] intArrayToMtx(int[] arr){
-        int maxLength=0;
-        for (int i=0;i<NUMBER_OF_BUDGETS;i++){
-            if (maxLength<CHILDREN_OF_BUDGETS[i]){maxLength=CHILDREN_OF_BUDGETS[i];}
-        }
-        int[][] mtx=new int[NUMBER_OF_BUDGETS][maxLength];
-
-        int placeInArr=0;
-        for (int i=0;i<NUMBER_OF_BUDGETS;i++){
-            int j=0;
-            while (j<CHILDREN_OF_BUDGETS[i]){
-                mtx[i][j]=arr[placeInArr];
-                placeInArr++;
-                j++;
-            }
-        }
-
-        return mtx;
-    }
-
 
     public int getFieldByAttribute(DeviceAttribute attribute){
         int i=-1;
@@ -243,6 +191,10 @@ public class Device {
             case BODY_COLOR: i=this.color;break;
             case BODY_IP: i=this.ip;break;
             case BODY_BEZEL: i=this.bezel;break;
+            case DISPLAY_RESOLUTION:i=this.resolution; break;
+            case DISPLAY_BRIGHTNESS:i=this.brightness; break;
+            case DISPLAY_REFRESH_RATE: i=this.refreshRate;break;
+            case DISPLAY_TECHNOLOGY: i=this.displayTechnology;break;
         }
         return i;
     }
@@ -257,6 +209,10 @@ public class Device {
             case BODY_COLOR:this.color=value;break;
             case BODY_IP:this.ip=value;break;
             case BODY_BEZEL:this.bezel=value;break;
+            case DISPLAY_RESOLUTION:this.resolution=value; break;
+            case DISPLAY_BRIGHTNESS:this.brightness=value; break;
+            case DISPLAY_REFRESH_RATE: this.refreshRate=value;break;
+            case DISPLAY_TECHNOLOGY: this.displayTechnology=value;break;
         }
     }
 
@@ -281,27 +237,38 @@ public class Device {
         return getScore_Body()+getScore_Storage();
     }
 
-    public static List<DeviceAttribute> getBodyAttributes(){
-        List<DeviceAttribute> list=new LinkedList<>();
-        list.add(DeviceAttribute.BODY_DESIGN);
-        list.add(DeviceAttribute.BODY_MATERIAL);
-        list.add(DeviceAttribute.BODY_COLOR);
-        list.add(DeviceAttribute.BODY_IP);
-        list.add(DeviceAttribute.BODY_BEZEL);
-        return list;
-    }
 
-    public static List<DeviceAttribute> getStorageAttributes(){
-        List<DeviceAttribute> list=new LinkedList<>();
-        list.add(DeviceAttribute.STORAGE_RAM);
-        list.add(DeviceAttribute.STORAGE_MEMORY);
-        return list;
-    }
 
     public static List<DeviceAttribute> getAllAttribute(){
         List<DeviceAttribute> list=new LinkedList<>();
-        list.addAll(getStorageAttributes());
-        list.addAll(getBodyAttributes());
+        for (DeviceBudget b :
+                DeviceBudget.values()) {
+            list.addAll(getAllAttribute_InBudget(b));
+        }
+        return list;
+    }
+
+    public static List<DeviceAttribute> getAllAttribute_InBudget(DeviceBudget b){
+        List<DeviceAttribute> list=new LinkedList<>();
+        switch (b){
+            case STORAGE:
+                list.add(DeviceAttribute.STORAGE_RAM);
+                list.add(DeviceAttribute.STORAGE_MEMORY);
+                break;
+            case BODY:
+                list.add(DeviceAttribute.BODY_DESIGN);
+                list.add(DeviceAttribute.BODY_MATERIAL);
+                list.add(DeviceAttribute.BODY_COLOR);
+                list.add(DeviceAttribute.BODY_IP);
+                list.add(DeviceAttribute.BODY_BEZEL);
+                break;
+            case DISPLAY:
+                list.add(DeviceAttribute.DISPLAY_RESOLUTION);
+                list.add(DeviceAttribute.DISPLAY_BRIGHTNESS);
+                list.add(DeviceAttribute.DISPLAY_REFRESH_RATE);
+                list.add(DeviceAttribute.DISPLAY_TECHNOLOGY);
+                break;
+        }
         return list;
     }
 
@@ -323,7 +290,11 @@ public class Device {
             new Pair<>(DeviceAttribute.BODY_MATERIAL,"Material"),
             new Pair<>(DeviceAttribute.BODY_COLOR,"Color"),
             new Pair<>(DeviceAttribute.BODY_IP,"IP"),
-            new Pair<>(DeviceAttribute.BODY_BEZEL,"Bezel")
+            new Pair<>(DeviceAttribute.BODY_BEZEL,"Bezel"),
+            new Pair<>(DeviceAttribute.DISPLAY_RESOLUTION,"Resolution"),
+            new Pair<>(DeviceAttribute.DISPLAY_BRIGHTNESS,"Brightness"),
+            new Pair<>(DeviceAttribute.DISPLAY_REFRESH_RATE,"Refresh rate"),
+            new Pair<>(DeviceAttribute.DISPLAY_TECHNOLOGY,"Display technology")
     );
 
     public static DeviceAttribute attributeFromString(String s){
@@ -336,6 +307,24 @@ public class Device {
         }catch (IndexOutOfBoundsException e){return "error";}
     }
 
+    public static String getStringFromAttributeLevel(DeviceAttribute attribute,int level){
+        StringBuilder stringBuilder=new StringBuilder();
+        switch (attribute){
+            default:stringBuilder.append(String.format(Locale.getDefault(),"%d", level));break;
+            case PRICE://intended overflow
+            case PROFIT_PER_ITEM:
+            case OVERALL_PROFIT:
+                stringBuilder.append(String.format(Locale.getDefault(),"%d$", level));
+                break;
+            case STORAGE_RAM:
+            case STORAGE_MEMORY:
+                stringBuilder.append(String.format(Locale.getDefault(),"%dGB", (int) Math.round(Math.pow(2,level)) ));
+                break;
+        }
+        return stringBuilder.toString();
+    }
+
+    /*
     @Override
     public boolean equals(@Nullable Object obj) {
         if(obj == null){return false;}
@@ -346,5 +335,5 @@ public class Device {
     @Override
     public int hashCode() {
         return this.id *31+ Arrays.deepHashCode(this.getParams());
-    }
+    }*/
 }

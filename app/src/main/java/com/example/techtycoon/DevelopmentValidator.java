@@ -1,6 +1,6 @@
 package com.example.techtycoon;
 
-import static java.lang.Integer.max;
+//todo development tree: ai have to understand
 
 public class DevelopmentValidator {
     private final static int[] SLOT_COSTS={100000,150000,200000,250000,300000,350000,400000,500000,750000,1000000};
@@ -11,7 +11,11 @@ public class DevelopmentValidator {
             /*material*/{20000, 50000, 100000, 150000, 200000, 300000, 500000, 1000000, 1500000},
             /*colors*/{50000, 75000, 100000, 150000, 200000, 250000, 300000},
             /*ip*/{250000, 500000, 1000000, 4000000},
-            /*bezels*/{100000, 200000, 250000, 300000, 400000, 600000, 800000, 1000000, 1200000}
+            /*bezels*/{150000, 200000, 250000, 300000, 400000, 600000, 800000, 1000000, 1200000},
+            /*resolution*/{90000, 130000, 160000, 200000, 300000, 400000, 500000, 800000, 1000000,1700000,3000000},
+            /*brightness*/{40000, 70000, 100000, 120000, 200000, 400000, 800000, 1300000},
+            /*refresh rate*/{300000, 500000, 900000},
+            /*display technology*/{125000, 200000, 350000, 500000,700000,1000000},
     };
 
     DevelopmentValidator(){}
@@ -21,6 +25,7 @@ public class DevelopmentValidator {
     * lowest level is 1
      */
     public static int getOneDevelopmentCost(Device.DeviceAttribute attr, int actualLvl){
+        if(actualLvl<1){throw new IllegalArgumentException("level should be greater than 0, now it's: "+actualLvl);}
         int attrID=-1;
         switch (attr){
             case STORAGE_RAM: attrID =0;break;
@@ -30,6 +35,10 @@ public class DevelopmentValidator {
             case BODY_COLOR:attrID =4;break;
             case BODY_IP:attrID =5;break;
             case BODY_BEZEL:attrID =6;break;
+            case DISPLAY_RESOLUTION:attrID =7;break;
+            case DISPLAY_BRIGHTNESS:attrID =8;break;
+            case DISPLAY_REFRESH_RATE:attrID =9;break;
+            case DISPLAY_TECHNOLOGY:attrID =10;break;
         }
         if(DEVELOPMENT_COSTS[attrID].length <= actualLvl-1){
             return -1;

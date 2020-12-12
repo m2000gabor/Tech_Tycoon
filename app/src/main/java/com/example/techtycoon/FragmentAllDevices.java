@@ -2,17 +2,6 @@ package com.example.techtycoon;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,11 +14,17 @@ import com.example.techtycoon.dialogs.SortByDialog;
 import com.example.techtycoon.ui.activities.FilterActivity;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -38,7 +33,6 @@ public class FragmentAllDevices extends Fragment {
     private DeviceViewModel deviceViewModel;
     private DeviceListAdapter adapter;
     private LiveData<List<Device>> deviceList;
-    private Spinner companySpinner;
     private boolean isDesc=true;
     private static int START_FILTER_ACTIVITY=123;
     public static String COMPANY_ID="companyId";
@@ -184,45 +178,4 @@ public class FragmentAllDevices extends Fragment {
         public void onNothingSelected(AdapterView<?> arg0) {
         }
     }
-
-
-    //set up the company spinner
-    public class CompanySpinnerAdapter implements
-            AdapterView.OnItemSelectedListener {
-        Company[] companies;
-
-        CompanySpinnerAdapter() {
-            //Getting the instance of Spinner and applying OnItemSelectedListener on it
-            companySpinner.setOnItemSelectedListener(this);
-            List<Company> companyList=deviceViewModel.getAllCompaniesList();
-            companies=new Company[companyList.size()];
-            companies=companyList.toArray(companies);
-            String[] namesOfCompanies=new String[1+companyList.size()];
-            namesOfCompanies[0]="From all Companies";
-            for (int i=1;i<companyList.size()+1;++i){namesOfCompanies[i]=companies[i-1].name;}
-
-
-            //Creating the ArrayAdapter instance having the nameOfCompanies list
-            ArrayAdapter aa = new ArrayAdapter(getContext(),android.R.layout.simple_spinner_item,
-                    namesOfCompanies );
-            aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            //Setting the ArrayAdapter data on the Spinner
-            companySpinner.setAdapter(aa);
-        }
-
-        //Performing action onItemSelected and onNothing selected
-        @Override
-        public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id) {
-            position--;
-            int companyID;
-            if(position>=0){companyID=companies[position].companyId;
-            }else{companyID=-1;}
-            deviceViewModel.filterBy(Device.DeviceAttribute.OWNER_ID,Collections.singletonList(companyID));
-            //deviceList=deviceViewModel.filter_byCompanyID(companyID);
-        }
-        @Override
-        public void onNothingSelected(AdapterView<?> arg0) {
-        }
-    }
-
 }

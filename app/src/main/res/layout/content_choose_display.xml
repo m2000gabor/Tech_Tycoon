@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".ui.activities.ChooseDisplayActivity"
+    tools:showIn="@layout/activity_choose_display">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/resolutionLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="40dp"
+            android:text="Resolution:"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <SeekBar
+            android:id="@+id/resolutionSeekBar"
+            android:layout_width="324dp"
+            android:layout_height="28dp"
+            android:layout_marginTop="32dp"
+            app:layout_constraintStart_toStartOf="@+id/resolutionLabel"
+            app:layout_constraintTop_toBottomOf="@+id/resolutionLabel" />
+
+
+        <TextView
+            android:id="@+id/resolutionCounterTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:text="0"
+            app:layout_constraintStart_toEndOf="@+id/resolutionLabel"
+            app:layout_constraintTop_toTopOf="@+id/resolutionLabel" />
+
+        <TextView
+            android:id="@+id/resolutionCost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="92dp"
+            android:text="0$"
+            app:layout_constraintStart_toEndOf="@+id/resolutionCounterTextView"
+            app:layout_constraintTop_toTopOf="@+id/resolutionCounterTextView" />
+
+
+        <View
+            android:id="@+id/divider1"
+            android:layout_width="409dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="29dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/resolutionSeekBar"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/brightnessLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="52dp"
+            android:text="Brightness:"
+            app:layout_constraintStart_toStartOf="@+id/resolutionSeekBar"
+            app:layout_constraintTop_toBottomOf="@+id/resolutionSeekBar" />
+
+        <SeekBar
+            android:id="@+id/brightnessSeekBar"
+            android:layout_width="324dp"
+            android:layout_height="28dp"
+            android:layout_marginTop="32dp"
+            app:layout_constraintStart_toStartOf="@+id/brightnessLabel"
+            app:layout_constraintTop_toBottomOf="@+id/brightnessLabel" />
+
+        <TextView
+            android:id="@+id/brightnessCounterTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:text="0"
+            app:layout_constraintStart_toEndOf="@+id/brightnessLabel"
+            app:layout_constraintTop_toTopOf="@+id/brightnessLabel" />
+
+        <TextView
+            android:id="@+id/brightnessCost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0$"
+            app:layout_constraintStart_toStartOf="@+id/resolutionCost"
+            app:layout_constraintTop_toTopOf="@+id/brightnessCounterTextView" />
+
+        <View
+            android:id="@+id/divider2"
+            android:layout_width="409dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="29dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/brightnessSeekBar"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/refreshRateLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="52dp"
+            android:text="Refresh rate:"
+            app:layout_constraintStart_toStartOf="@+id/brightnessSeekBar"
+            app:layout_constraintTop_toBottomOf="@+id/brightnessSeekBar" />
+
+        <SeekBar
+            android:id="@+id/refreshRateSeekBar"
+            android:layout_width="324dp"
+            android:layout_height="28dp"
+            android:layout_marginTop="32dp"
+            app:layout_constraintStart_toStartOf="@+id/refreshRateLabel"
+            app:layout_constraintTop_toBottomOf="@+id/refreshRateLabel" />
+
+        <TextView
+            android:id="@+id/refreshRateCounterTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:text="0"
+            app:layout_constraintStart_toEndOf="@+id/refreshRateLabel"
+            app:layout_constraintTop_toTopOf="@+id/refreshRateLabel" />
+
+        <TextView
+            android:id="@+id/refreshRateCost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0$"
+            app:layout_constraintStart_toStartOf="@+id/brightnessCost"
+            app:layout_constraintTop_toTopOf="@+id/refreshRateCounterTextView" />
+
+        <View
+            android:id="@+id/divider3"
+            android:layout_width="409dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="29dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/refreshRateSeekBar"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/displayTechnologyLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="52dp"
+            android:text="Display technology:"
+            app:layout_constraintStart_toStartOf="@+id/refreshRateSeekBar"
+            app:layout_constraintTop_toBottomOf="@+id/refreshRateSeekBar" />
+
+        <SeekBar
+            android:id="@+id/displayTechnologySeekBar"
+            android:layout_width="324dp"
+            android:layout_height="28dp"
+            android:layout_marginTop="32dp"
+            app:layout_constraintStart_toStartOf="@+id/displayTechnologyLabel"
+            app:layout_constraintTop_toBottomOf="@+id/displayTechnologyLabel" />
+
+        <TextView
+            android:id="@+id/displayTechnologyCounterTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:text="0"
+            app:layout_constraintStart_toEndOf="@+id/displayTechnologyLabel"
+            app:layout_constraintTop_toTopOf="@+id/displayTechnologyLabel" />
+
+        <TextView
+            android:id="@+id/displayTechnologyCost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0$"
+            app:layout_constraintStart_toStartOf="@+id/refreshRateCost"
+            app:layout_constraintTop_toTopOf="@+id/displayTechnologyCounterTextView" />
+
+        <View
+            android:id="@+id/divider4"
+            android:layout_width="409dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="29dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/displayTechnologySeekBar"
+            app:layout_constraintVertical_bias="0.0" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</ScrollView>

@@ -1,9 +1,6 @@
 package com.example.techtycoon;
 
 import android.content.Context;
-import androidx.recyclerview.widget.RecyclerView;
-
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +8,8 @@ import android.widget.TextView;
 
 import java.util.List;
 import java.util.Locale;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 
 public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.DeviceViewHolder> {
@@ -20,6 +19,7 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
         private final TextView deviceIncomeTextView;
         private final TextView deviceStorageTextView;
         private final TextView deviceBodyTextView;
+        private final TextView deviceDisplayTextView;
         private final TextView soldPiecesTextView;
         private final TextView performanceTextView;
 
@@ -29,6 +29,7 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
             deviceIncomeTextView = itemView.findViewById(R.id.incomeTextView);
             deviceStorageTextView = itemView.findViewById(R.id.deviceStorageTextView);
             deviceBodyTextView = itemView.findViewById(R.id.deviceBodyTextView);
+            deviceDisplayTextView = itemView.findViewById(R.id.deviceDisplayTextView);
             soldPiecesTextView = itemView.findViewById(R.id.soldPiecesTextView);
             performanceTextView = itemView.findViewById(R.id.performanceTextView);
         }
@@ -74,6 +75,14 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
                     current.getFieldByAttribute(Device.DeviceAttribute.BODY_IP),
                     current.getFieldByAttribute(Device.DeviceAttribute.BODY_BEZEL)
                     ));
+            holder.deviceDisplayTextView.setText(String.format(Locale.getDefault(),
+                    "Display: %d (%d %d %d %d)",
+                    current.getScore_Body(),
+                    current.getFieldByAttribute(Device.DeviceAttribute.DISPLAY_RESOLUTION),
+                    current.getFieldByAttribute(Device.DeviceAttribute.DISPLAY_BRIGHTNESS),
+                    current.getFieldByAttribute(Device.DeviceAttribute.DISPLAY_REFRESH_RATE),
+                    current.getFieldByAttribute(Device.DeviceAttribute.DISPLAY_TECHNOLOGY)
+            ));
             holder.soldPiecesTextView.setText(String.format(Locale.getDefault(),"Sold: %d",current.getSoldPieces()));
             holder.performanceTextView.setText(String.format(Locale.getDefault(),"Performance: %d",current.getScore_OverallPerformance()));
 

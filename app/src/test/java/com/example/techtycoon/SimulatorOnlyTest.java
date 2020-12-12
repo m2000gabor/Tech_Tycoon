@@ -46,6 +46,12 @@ public class SimulatorOnlyTest {
         Wrapped_DeviceAndCompanyList results= simulator.simulate();
 
         for(int i=0;i<deviceList.size();i++){
+            results.devices.get(i).history_SoldPieces=0;
+            results.devices.get(i).setSoldPieces(0);
+            results.devices.get(i).setTrend(0);
+            deviceList.get(i).history_SoldPieces=0;
+            deviceList.get(i).setSoldPieces(0);
+            deviceList.get(i).setTrend(0);
             assertEquals(deviceList.get(i), results.devices.get(i));
         }
         for(int i=0;i<companyList.size();i++){
