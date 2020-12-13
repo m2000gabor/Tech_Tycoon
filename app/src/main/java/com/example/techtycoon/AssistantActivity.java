@@ -2,14 +2,6 @@ package com.example.techtycoon;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import com.example.techtycoon.Assistant.AssistantManager;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.util.Pair;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -22,10 +14,17 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.techtycoon.Assistant.AssistantManager;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 public class AssistantActivity extends AppCompatActivity {
     DeviceViewModel deviceViewModel;
@@ -75,7 +74,7 @@ public class AssistantActivity extends AppCompatActivity {
         LinearLayout parentLayout=findViewById(R.id.assistantActivityRootLinearLayout);
         inputFields = new LinkedList<>();
         int i=0;
-        while(i<15){
+        while(i<AssistantManager.getInputLabels(currentAssistantType).size()){
             TextView label=new TextView(AssistantActivity.this);
             label.setText("Label:");
 
