@@ -45,6 +45,7 @@ class PrincipleBot{
             //whether is it reach the minReactScore
             if (principleImportance.get(0).second < minScoreToReact) {
                 myCompany.logs = myCompany.logs + "\n" + principles.get(principleImportance.get(0).first).name() + " is not important enough. Score: "+principleImportance.get(0).second;
+
                 break;
                 //if the repair would need a clean input
             }else if(principles.get(principleImportance.get(0).first).needsCleanInput() && !clean){
@@ -59,7 +60,11 @@ class PrincipleBot{
                 myCompany.logs = myCompany.logs + "\n" + principles.get(principleImportance.get(0).first).name() + " principle repairing was unsuccessful.";
             } else {
                 resume=true;
-                ret = result;
+                //ret = result;
+                ret.insert.addAll(result.insert);
+                ret.update.addAll(result.update);
+                ret.delete.addAll(result.delete);
+
                 myCompany=result.companies.get(0);
                 myCompany.logs = myCompany.logs + "\n" + principles.get(principleImportance.get(0).first).name() + " principle is successfully repaired";
             }

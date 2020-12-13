@@ -101,7 +101,9 @@ public class Simulator {
         List<Company> compsToDevList=new LinkedList<>();
         for (int i=0;i<deviceList.size();i++){
             int j=0;
-            while (companyList.get(j).companyId != deviceList.get(i).ownerCompanyId){j++;}
+            while (companyList.get(j).companyId != deviceList.get(i).ownerCompanyId){j++;
+                if(j==companyList.size()){throw new IndexOutOfBoundsException("Device refers to not-existing company id\nThere's no company with id:"+deviceList.get(i).ownerCompanyId);}
+            }
             compsToDevList.add(companyList.get(j));
         }
 

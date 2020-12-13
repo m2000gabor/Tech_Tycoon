@@ -10,10 +10,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.example.techtycoon.Assistant.ToolsForAssistants.*;
+import static com.example.techtycoon.Assistant.ToolsForAssistants.getRegion;
+import static com.example.techtycoon.Assistant.ToolsForAssistants.getRegionWithout;
+import static com.example.techtycoon.Assistant.ToolsForAssistants.nameBuilder;
 
 class XiaomiBot implements AbstractAssistant{
     private List<Principle> principles;
+    private final int version;
 
     @Override
     public List<String> getInputLabels() {
@@ -22,7 +25,7 @@ class XiaomiBot implements AbstractAssistant{
 
     @Override
     public String getAssistantName() {
-        return "Xiaomi bot";
+        return "Xiaomi bot"+version;
     }
 
     @Override
@@ -34,8 +37,9 @@ class XiaomiBot implements AbstractAssistant{
         sb.deleteCharAt(sb.length()-1);
         return sb.toString();
     }
-
-    XiaomiBot(){
+    XiaomiBot(){this(0);}
+    XiaomiBot(int version){
+        this.version=version;
         principles=new LinkedList<>();
         //slots
         principles.add(new Principle() {
@@ -46,6 +50,7 @@ class XiaomiBot implements AbstractAssistant{
 
             @Override
             public int defaultWeight() {
+                if(version==1){return 115;}
                 return 110;
             }
 

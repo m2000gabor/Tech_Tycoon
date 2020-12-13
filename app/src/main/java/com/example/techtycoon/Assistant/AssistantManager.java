@@ -10,14 +10,15 @@ import java.util.List;
 
 public class AssistantManager {
     private final static List<AbstractAssistant> ASSISTANTS= Arrays.asList(
-            new CoAssistant_marketingGoal(),
-            new CoAssistant_avgMarketing(),
-            new AverageBot(),
-            new XiaomiBot(),
-            new AppleBot(),
-            new AppleBot2(),
-            new Bot1(),
-            new AppleBotPrinciple()
+            new CoAssistant_marketingGoal(),//0
+            new CoAssistant_avgMarketing(),//1
+            new AverageBot(),//2
+            new XiaomiBot(),//3
+            new AppleBot(),//4
+            new AppleBot2(),//5
+            new Bot1(),//6
+            new AppleBotPrinciple(),//7
+            new XiaomiBot(1)//8
     );
 
     public static List<String> getInputLabels(int assistantId){

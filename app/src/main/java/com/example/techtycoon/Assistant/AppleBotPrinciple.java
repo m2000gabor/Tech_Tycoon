@@ -306,7 +306,7 @@ class AppleBotPrinciple implements AbstractAssistant {
                     //what should we promote?
                     Device.DeviceAttribute bestAttr=null;
                     double maxDiff=0;
-                    for(Device.DeviceAttribute att: Device.DeviceAttribute.values()){
+                    for(Device.DeviceAttribute att: Device.getAllAttribute()){
                         double diff=myCompany.getLevelByAttribute(att)-avg(allDevices,att);
                         if(diff>maxDiff){maxDiff=diff;bestAttr=att;}
                     }
