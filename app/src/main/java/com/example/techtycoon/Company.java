@@ -160,6 +160,7 @@ public class Company {
 
 
     public int getLevelByAttribute(Device.DeviceAttribute attribute){
+        //if(getLevelIdFromDeviceAttribute(attribute)==-1){System.out.println(attribute);}
         return getLevels_USE_THIS()[getLevelIdFromDeviceAttribute(attribute)];
     }
     public int[] getLevelByBudget(Device.DeviceBudget budget){

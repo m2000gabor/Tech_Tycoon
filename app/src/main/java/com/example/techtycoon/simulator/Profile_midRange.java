@@ -8,7 +8,7 @@ class Profile_midRange implements Profile {
     private static int[] attrWeights={
             7,6,//storage
             5,3,3,3,3,//body
-            5,3,2,2//design
+            5,3,2,2//display
     };
 
     @Override

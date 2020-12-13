@@ -177,8 +177,8 @@ public class Device {
             case OWNER_ID:i=this.ownerCompanyId;break;
             case DEVICE_ID:i=this.id;break;
             case PERFORMANCE_OVERALL:i=this.getScore_OverallPerformance();break;
-            case SCORE_STORAGE:i=this.getScore_Storage();break;
-            case SCORE_BODY:i=this.getScore_Body();break;
+            case SCORE_STORAGE:i=this.getScore(DeviceBudget.STORAGE);break;
+            case SCORE_BODY:i=this.getScore(DeviceBudget.BODY);break;
             case PRICE:i=this.getPrice();break;
             case OVERALL_PROFIT:i=this.getOverallProfit();break;
             case SOLD_PIECES:i=this.soldPieces;break;
@@ -227,17 +227,20 @@ public class Device {
         return diff;
     }
 
-    public final int getScore_Storage(){
-        return ram+memory;
+    public int getScore(DeviceBudget budget){
+        int sum=0;
+        for(DeviceAttribute att:getAllAttribute_InBudget(budget)){
+            sum+=getFieldByAttribute(att);
+        }
+        return sum;
     }
-    public final int getScore_Body(){
-        return design+material+color+ip+bezel;
+    public int getScore_OverallPerformance(){
+        int sum=0;
+        for(DeviceBudget b:DeviceBudget.values()){
+            sum+=getScore(b);
+        }
+        return sum;
     }
-    public final int getScore_OverallPerformance(){
-        return getScore_Body()+getScore_Storage();
-    }
-
-
 
     public static List<DeviceAttribute> getAllAttribute(){
         List<DeviceAttribute> list=new LinkedList<>();

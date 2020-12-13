@@ -63,12 +63,12 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
             holder.deviceIncomeTextView.setText(String.format(Locale.getDefault(),"%d$",current.getSoldPieces()*current.profit));
             holder.deviceStorageTextView.setText(String.format(Locale.getDefault(),
                     "Storage: %d (%d,%d)",
-                    current.getScore_Storage(),
+                    current.getScore(Device.DeviceBudget.STORAGE),
                     current.getFieldByAttribute(Device.DeviceAttribute.STORAGE_MEMORY),
                     current.getFieldByAttribute(Device.DeviceAttribute.STORAGE_RAM)));
             holder.deviceBodyTextView.setText(String.format(Locale.getDefault(),
                     "Body: %d (%d %d %d %d %d)",
-                    current.getScore_Body(),
+                    current.getScore(Device.DeviceBudget.BODY),
                     current.getFieldByAttribute(Device.DeviceAttribute.BODY_DESIGN),
                     current.getFieldByAttribute(Device.DeviceAttribute.BODY_MATERIAL),
                     current.getFieldByAttribute(Device.DeviceAttribute.BODY_COLOR),
@@ -77,7 +77,7 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
                     ));
             holder.deviceDisplayTextView.setText(String.format(Locale.getDefault(),
                     "Display: %d (%d %d %d %d)",
-                    current.getScore_Body(),
+                    current.getScore(Device.DeviceBudget.DISPLAY),
                     current.getFieldByAttribute(Device.DeviceAttribute.DISPLAY_RESOLUTION),
                     current.getFieldByAttribute(Device.DeviceAttribute.DISPLAY_BRIGHTNESS),
                     current.getFieldByAttribute(Device.DeviceAttribute.DISPLAY_REFRESH_RATE),
