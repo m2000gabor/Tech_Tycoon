@@ -340,9 +340,7 @@ public class FragmentDeviceCreator extends Fragment {
 
     void loadInADevice(int deviceID){
         Device d=deviceViewModel.getDevice_byID(deviceID);
-        /*
-        setupStorage(device.getParams()[0]);
-        setupBody(device.getParams()[1]);*/
+
         for(Device.DeviceBudget budget:Device.DeviceBudget.values()){
             int[] p=new int[Device.getAllAttribute_InBudget(budget).size()];
             for(int i=0;i<Device.getAllAttribute_InBudget(budget).size();i++){
@@ -351,43 +349,10 @@ public class FragmentDeviceCreator extends Fragment {
             setup_a_budget(budget,p);
         }
 
-        deviceNameField.setText(device.name);
-        profitField.setText(String.valueOf(device.profit));
-    }
-/*
-    private void setupStorage(int[] p){
-        device.ram=p[0];
-        device.memory=p[1];
-        currentCostField.setText(String.format(Locale.getDefault(),"The current cost is %d$", getOverallCost()));
-        isBudgetSet.put(Device.DeviceBudget.STORAGE,Boolean.TRUE);
-        isSetMemoryImage.setImageDrawable(getActivity().getDrawable(R.drawable.ic_check_green_24dp));
-        chosenMem.setText(String.format(Locale.getDefault(),"Memory: %dGB", (int) Math.round(Math.pow(2,device.memory)) ));
-        chosenRam.setText(String.format(Locale.getDefault(),"Ram: %dGB", (int) Math.round(Math.pow(2,device.ram))));
-        chosenMem.setVisibility(View.VISIBLE);
-        chosenRam.setVisibility(View.VISIBLE);
+        deviceNameField.setText(d.name);
+        profitField.setText(String.valueOf(d.profit));
     }
 
-        private void setupBody(int[] bodyParams){
-        for(int i=0;i<Device.getAllAttribute_InBudget(Device.DeviceBudget.BODY).size();i++){
-            device.setFieldByAttribute(
-                    Device.getAllAttribute_InBudget(Device.DeviceBudget.BODY).get(i),bodyParams[i]);
-        }
-        currentCostField.setText(String.format(Locale.getDefault(),"The current cost is %d$", getOverallCost()));
-        isBudgetSet.put(Device.DeviceBudget.BODY,Boolean.TRUE);
-        isSetBodyImage.setImageDrawable(getActivity().getDrawable(R.drawable.ic_check_green_24dp));
-        chosenDesign.setText(String.format(Locale.getDefault(),"Design: %dp", device.getFieldByAttribute(Device.DeviceAttribute.BODY_DESIGN)));
-        chosenMaterial.setText(String.format(Locale.getDefault(),"Material: %dp", device.getFieldByAttribute(Device.DeviceAttribute.BODY_MATERIAL)));
-        chosenColors.setText(String.format(Locale.getDefault(),"Colors: %dp", device.getFieldByAttribute(Device.DeviceAttribute.BODY_COLOR)));
-        chosenIp.setText(String.format(Locale.getDefault(),"Ip: %dp", device.getFieldByAttribute(Device.DeviceAttribute.BODY_IP)));
-        chosenBezel.setText(String.format(Locale.getDefault(),"Bezel: %dp", device.getFieldByAttribute(Device.DeviceAttribute.BODY_BEZEL)));
-        chosenDesign.setVisibility(View.VISIBLE);
-        chosenMaterial.setVisibility(View.VISIBLE);
-        chosenColors.setVisibility(View.VISIBLE);
-        chosenBezel.setVisibility(View.VISIBLE);
-        chosenIp.setVisibility(View.VISIBLE);
-    }
-
-    */
 
     public void setup_a_budget(Device.DeviceBudget budget,int[] params){
         for(int i=0;i<Device.getAllAttribute_InBudget(budget).size();i++){
