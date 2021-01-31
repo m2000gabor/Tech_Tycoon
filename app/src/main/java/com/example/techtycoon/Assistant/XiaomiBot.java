@@ -16,7 +16,8 @@ import static com.example.techtycoon.Assistant.ToolsForAssistants.nameBuilder;
 
 class XiaomiBot implements AbstractAssistant{
     private List<Principle> principles;
-    private final int version;
+    private final Version version;
+    enum Version{DEFAULT,CROWD, FOLLOW};
 
     @Override
     public List<String> getInputLabels() {
@@ -37,8 +38,8 @@ class XiaomiBot implements AbstractAssistant{
         sb.deleteCharAt(sb.length()-1);
         return sb.toString();
     }
-    XiaomiBot(){this(0);}
-    XiaomiBot(int version){
+    XiaomiBot(){this(Version.DEFAULT);}
+    XiaomiBot(Version version){
         this.version=version;
         principles=new LinkedList<>();
         //slots
@@ -50,7 +51,7 @@ class XiaomiBot implements AbstractAssistant{
 
             @Override
             public int defaultWeight() {
-                if(version==1){return 115;}
+                if(version==Version.CROWD){return 115;}
                 return 110;
             }
 
@@ -95,6 +96,7 @@ class XiaomiBot implements AbstractAssistant{
 
             @Override
             public int defaultWeight() {
+                if(version==Version.FOLLOW){return 0;}
                 return 90;
             }
 
@@ -514,14 +516,18 @@ class XiaomiBot implements AbstractAssistant{
 
     }
 
-    @Override
-    public Wrapped_DeviceAndCompanyList work(List<Company> companyList, List<Device> deviceList, List<Device> myDevices, Company myCompany, Wrapped_DeviceAndCompanyList ret) {
+    protected List<Integer> getWeights(Company myCompany){
         List<Integer> weights=new LinkedList<>();
         String[] status=myCompany.assistantStatus.split(";");
         for (String s : status) {
             weights.add(Integer.parseInt(s));
         }
-        PrincipleBot p=new PrincipleBot(100,weights,principles);
+        return weights;
+    }
+
+    @Override
+    public Wrapped_DeviceAndCompanyList work(List<Company> companyList, List<Device> deviceList, List<Device> myDevices, Company myCompany, Wrapped_DeviceAndCompanyList ret) {
+        PrincipleBot p=new PrincipleBot(100,getWeights(myCompany),principles);
         return p.work(companyList, deviceList, myDevices, myCompany, ret);
     }
 }

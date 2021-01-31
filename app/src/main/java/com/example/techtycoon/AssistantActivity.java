@@ -74,7 +74,8 @@ public class AssistantActivity extends AppCompatActivity {
         LinearLayout parentLayout=findViewById(R.id.assistantActivityRootLinearLayout);
         inputFields = new LinkedList<>();
         int i=0;
-        while(i<AssistantManager.getInputLabels(currentAssistantType).size()){
+
+        while(i<30){
             TextView label=new TextView(AssistantActivity.this);
             label.setText("Label:");
 

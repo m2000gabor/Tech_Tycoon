@@ -55,10 +55,8 @@ public class ExampleUnitTest {
     @Test
     public void turns_100(){
         final int NUM_OF_TURNS=800;
-        final int NUMBER_OF_COMPANIES=5;
-        final List<Integer> assistantList= Arrays.asList(2,3,5,6,7);
-
-        //Mockito
+        final List<Integer> assistantList= Arrays.asList(2,5,6,7,8,3);
+        final int NUMBER_OF_COMPANIES=assistantList.size();
 
         //make the companies
         List<Company> companyList=new LinkedList<>();
@@ -69,6 +67,7 @@ public class ExampleUnitTest {
             c.assistantStatus=AssistantManager.getDefaultStatus(c.assistantType);
             companyList.add(c);
         }
+        companyList.forEach(c->c.marketing=100);
 
         //assistants
         AssistantManager assistantManager=new AssistantManager();

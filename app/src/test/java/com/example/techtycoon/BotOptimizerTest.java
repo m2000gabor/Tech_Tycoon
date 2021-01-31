@@ -21,7 +21,7 @@ import static org.junit.Assert.assertTrue;
 
 public class BotOptimizerTest {
     private static int unique_id=100;
-    final int testedAssistant=3;
+    final int testedAssistant=10;
 
     @Test
     public void printDefaultWeights(){
@@ -30,37 +30,19 @@ public class BotOptimizerTest {
     }
 
     private String getWeights(int variant){
-        String r="110;90;1000;110;111;100;100;100;100;100;100;100;100;100;100;100;120";
+        //[New Slot, Marketing, Unused slot, Price run, Clone the best, Devices' attributeSTORAGE_RAM, Devices' attributeSTORAGE_MEMORY, Devices' attributeBODY_DESIGN, Devices' attributeBODY_MATERIAL, Devices' attributeBODY_COLOR, Devices' attributeBODY_IP, Devices' attributeBODY_BEZEL, Devices' attributeDISPLAY_RESOLUTION, Devices' attributeDISPLAY_BRIGHTNESS, Devices' attributeDISPLAY_REFRESH_RATE, Devices' attributeDISPLAY_TECHNOLOGY, Low profit]
+        switch (variant){
+            default:return "110;90;1000;110;111;100;100;100;100;100;100;100;100;100;100;100;120";
+            //case 0: return "110;"+0+";1000;110;111;100;100;100;100;100;100;100;100;100;100;100;120";
+        }
 
         //String r="110;90;1000;110;111;100;100;100;100;100;100;100;100;100;100;100;120";
-        return r;
-    }
-
-
-    private List<Company> initGhostCompanies(int ghostsNum,List<Integer> assistantList){
-        //make the ghost companies
-        List<Company> companyList=new LinkedList<>();
-        for(int i=0;i<ghostsNum;i++){
-            Company c=new Company("c"+Integer.toString(i),1,MainActivity.STARTING_LEVELS);
-            c.companyId=i;
-            c.assistantType=assistantList.get(i);
-            c.assistantStatus=AssistantManager.getDefaultStatus(c.assistantType);
-            companyList.add(c);
-        }
-        return companyList;
-    }
-    private Company createVariant(int variantNum,int ghostsNum){
-        Company c=new Company("variant"+Integer.toString(variantNum),1,MainActivity.STARTING_LEVELS);
-        c.companyId=ghostsNum;
-        c.assistantType=testedAssistant;
-        c.assistantStatus=getWeights(variantNum);
-        return c;
     }
 
     @Test
     public void run(){
-        final int NUM_OF_TURNS=700;
-        final List<Integer> ghostAssistantList= Arrays.asList(2,5,6,7,3,8);
+        final int NUM_OF_TURNS=600;
+        final List<Integer> ghostAssistantList= Arrays.asList(2,3,5,7,8,10,10);//type of assistant
         final int NUMBER_OF_BOT_VARIANT=10;//adjusted
         final int NUMBER_OF_GHOST_COMPANIES=ghostAssistantList.size();//not adjusted
 
@@ -71,6 +53,7 @@ public class BotOptimizerTest {
             List<Company> companyList=initGhostCompanies(NUMBER_OF_GHOST_COMPANIES,ghostAssistantList);
             Company variant=createVariant(i,NUMBER_OF_GHOST_COMPANIES);
             companyList.add(variant);
+            companyList.forEach(c->c.marketing=100);
             int result=runOneSimulation(companyList,NUM_OF_TURNS,variant);
             if(result>bestResult){
                 bestRound=i;
@@ -81,6 +64,7 @@ public class BotOptimizerTest {
         System.out.println("\n--------------------\n\nBest value: "+bestResult+" With variant"+bestRound);
         System.out.println("Best default status would be: "+getWeights(bestRound));
     }
+
 
 
 
@@ -171,6 +155,26 @@ public class BotOptimizerTest {
         return variant.getMarketValue();
     }
 
+
+    private List<Company> initGhostCompanies(int ghostsNum,List<Integer> assistantList){
+        //make the ghost companies
+        List<Company> companyList=new LinkedList<>();
+        for(int i=0;i<ghostsNum;i++){
+            Company c=new Company("c"+Integer.toString(i),1,MainActivity.STARTING_LEVELS);
+            c.companyId=i;
+            c.assistantType=assistantList.get(i);
+            c.assistantStatus=AssistantManager.getDefaultStatus(c.assistantType);
+            companyList.add(c);
+        }
+        return companyList;
+    }
+    private Company createVariant(int variantNum,int ghostsNum){
+        Company c=new Company("variant"+Integer.toString(variantNum),1,MainActivity.STARTING_LEVELS);
+        c.companyId=ghostsNum;
+        c.assistantType=testedAssistant;
+        c.assistantStatus=getWeights(variantNum);
+        return c;
+    }
     private void updateTheDatabase(List<Device> deviceList_old,List<Company> companyList_old,
                                    Wrapped_DeviceAndCompanyList results_new){
         for (Device d_new:results_new.update) {
