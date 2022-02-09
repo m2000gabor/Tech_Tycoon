@@ -13,11 +13,10 @@ A company has:
 - Devices: Phone models currently available for customers to buy
 - Development: technological level, like what's the best screen resolution, that the company can manufacture. 
 
-Add Screenshot here:
-![Alt text](/app/githubScreenshots/company.jpg?raw=true "Optional Title")
+<img src="/app/githubScreenshots/company.jpg" width="250">
 
 ### Create a device
-If the company have a free slot, then it can create a new device.
+If the company has a free slot, then it can create a new device.
 
 
 ### Market
