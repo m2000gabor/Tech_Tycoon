@@ -14,7 +14,7 @@ A company has:
 - Development: technological level, like what's the best screen resolution, that the company can manufacture. 
 
 Add Screenshot here:
-![Alt text](/githubScreenshots/company.jpg?raw=true "Optional Title")
+![Alt text](/app/githubScreenshots/company.jpg?raw=true "Optional Title")
 
 ### Create a device
 If the company have a free slot, then it can create a new device.
