@@ -19,6 +19,7 @@ A company has:
 If the company has a free slot, then it can create a new device. For device creation, select the paramters you would like to create the device with.
 The higher level technology you use, the higher the manufacturing cost.
 <br><img src="/app/githubScreenshots/createDevice.jpg" width="250">
+<img src="/app/githubScreenshots/setupParameters.jpg" width="250">
 
 ### Development Center
 Do research to be able to produce greater parts and be ahead of your competitors.
@@ -27,11 +28,15 @@ Do research to be able to produce greater parts and be ahead of your competitors
 ### Market
 Browse your opponents devices. Sort and filter by any attribute. <br>
 <br><img src="/app/githubScreenshots/deviceList.jpg" width="250">
-<br><img src="/app/githubScreenshots/filter.jpg" width="250">
+<img src="/app/githubScreenshots/filterDeviceList.jpg" width="250">
 
 ### Stats
 Discover interesting statistics about the other companies visually.
 <br><img src="/app/githubScreenshots/companyStats.jpg" width="250">
+
+### Bots
+Compete againts 5 totally different bots. Be the most valuable company!
+<br><img src="/app/githubScreenshots/companyRanking.jpg" width="250">
 
 
 
